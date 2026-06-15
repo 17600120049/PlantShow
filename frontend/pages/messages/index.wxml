@@ -1,0 +1,60 @@
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <text class="page-title">消息</text>
+    </view>
+  </view>
+
+  <!-- 消息分类 -->
+  <view class="message-tabs">
+    <view class="tab-item {{ activeTab === 'chat' ? 'active' : '' }}" bindtap="setTab" data-tab="chat">
+      <text class="tab-text">聊天</text>
+      <view class="tab-badge">5</view>
+    </view>
+    <view class="tab-item {{ activeTab === 'notify' ? 'active' : '' }}" bindtap="setTab" data-tab="notify">
+      <text class="tab-text">通知</text>
+    </view>
+    <view class="tab-item {{ activeTab === 'system' ? 'active' : '' }}" bindtap="setTab" data-tab="system">
+      <text class="tab-text">系统</text>
+    </view>
+  </view>
+
+  <!-- 聊天列表 -->
+  <view class="chat-list" wx:if="{{ activeTab === 'chat' }}">
+    <view class="chat-item glass" wx:for="{{ chatList }}" wx:key="id" bindtap="goToChat" data-id="{{ item.id }}">
+      <view class="chat-avatar">{{ item.avatar }}</view>
+      <view class="chat-info">
+        <view class="chat-header">
+          <text class="chat-name">{{ item.name }}</text>
+          <text class="chat-time">{{ item.time }}</text>
+        </view>
+        <view class="chat-content">
+          <text class="chat-message">{{ item.lastMessage }}</text>
+          <view class="unread-badge" wx:if="{{ item.unread > 0 }}">{{ item.unread }}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知列表 -->
+  <view class="notify-list" wx:if="{{ activeTab === 'notify' }}">
+    <view class="notify-item glass" wx:for="{{ notifyList }}" wx:key="id">
+      <view class="notify-icon {{ item.type }}">{{ item.icon }}</view>
+      <view class="notify-info">
+        <text class="notify-title">{{ item.title }}</text>
+        <text class="notify-desc">{{ item.description }}</text>
+        <text class="notify-time">{{ item.time }}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 系统消息 -->
+  <view class="system-list" wx:if="{{ activeTab === 'system' }}">
+    <view class="system-item glass" wx:for="{{ systemList }}" wx:key="id">
+      <text class="system-title">{{ item.title }}</text>
+      <text class="system-desc">{{ item.description }}</text>
+      <text class="system-time">{{ item.time }}</text>
+    </view>
+  </view>
+</view>

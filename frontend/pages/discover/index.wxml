@@ -1,0 +1,49 @@
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <text class="page-title">发现</text>
+      <view class="filter-btn" bindtap="showFilter">
+        <text class="filter-icon">⚙️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分类标签 -->
+  <scroll-view class="category-scroll" scroll-x>
+    <view class="category-list">
+      <view class="category-item {{ activeCategory === 'all' ? 'active' : '' }}" bindtap="setCategory" data-category="all">全部</view>
+      <view class="category-item {{ activeCategory === 'free' ? 'active' : '' }}" bindtap="setCategory" data-category="free">免费</view>
+      <view class="category-item {{ activeCategory === 'trade' ? 'active' : '' }}" bindtap="setCategory" data-category="trade">交换</view>
+      <view class="category-item {{ activeCategory === 'succulent' ? 'active' : '' }}" bindtap="setCategory" data-category="succulent">多肉</view>
+      <view class="category-item {{ activeCategory === 'foliage' ? 'active' : '' }}" bindtap="setCategory" data-category="foliage">观叶</view>
+      <view class="category-item {{ activeCategory === 'flowering' ? 'active' : '' }}" bindtap="setCategory" data-category="flowering">花卉</view>
+    </view>
+  </scroll-view>
+
+  <!-- 植物瀑布流 -->
+  <view class="plant-grid">
+    <view class="grid-card glass" wx:for="{{ plants }}" wx:key="id" bindtap="goToDetail" data-id="{{ item.id }}">
+      <view class="card-image">
+        <view class="card-emoji">{{ item.emoji }}</view>
+        <view class="card-tag {{ item.status === '换植物' ? 'tag-trade' : 'tag-free' }}">{{ item.status }}</view>
+      </view>
+      <view class="card-content">
+        <text class="card-title">{{ item.name }}</text>
+        <text class="card-desc">{{ item.description }}</text>
+        <view class="card-footer">
+          <view class="card-user">
+            <view class="user-mini-avatar">{{ item.authorAvatar }}</view>
+            <text class="user-mini-name">{{ item.author }}</text>
+          </view>
+          <view class="card-location">📍 {{ item.location }}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more">
+    <text class="load-text">— 加载更多 —</text>
+  </view>
+</view>

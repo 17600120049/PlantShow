@@ -1,0 +1,26 @@
+<view class="tab-bar">
+  <view 
+    wx:for="{{list}}" 
+    wx:key="index" 
+    class="tab-bar-item"
+    data-path="{{item.pagePath}}"
+    data-is-center="{{item.isCenter}}"
+    bindtap="switchTab"
+  >
+    <view wx:if="{{item.isCenter}}" class="center-btn">
+      <view class="center-icon">
+        <text class="plus">+</text>
+      </view>
+    </view>
+    <view wx:else class="tab-icon-wrap">
+      <image 
+        class="tab-icon" 
+        src="{{selected === index ? item.selectedIconPath : item.iconPath}}" 
+        mode="aspectFit"
+      />
+      <text class="tab-text" style="color: {{selected === index ? selectedColor : color}}">
+        {{item.text}}
+      </text>
+    </view>
+  </view>
+</view>

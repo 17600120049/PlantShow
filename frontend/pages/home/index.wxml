@@ -1,0 +1,129 @@
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <view class="location">
+        <text class="location-icon">📍</text>
+        <text class="location-text">杭州</text>
+        <text class="location-arrow">▾</text>
+      </view>
+      <view class="search-box glass">
+        <text class="search-icon">🔍</text>
+        <input class="search-input" placeholder="搜索植物、品种或用户" placeholder-class="search-placeholder" />
+      </view>
+      <view class="notification">
+        <text class="notif-icon">🔔</text>
+        <view class="notif-badge">3</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主内容区域 -->
+  <view class="content">
+    <!-- Logo 区域 -->
+    <view class="logo-section">
+      <view class="logo-title">流浪植物</view>
+      <view class="logo-subtitle">Plant Wander</view>
+    </view>
+
+    <!-- Banner 卡片 -->
+    <view class="banner glass">
+      <view class="banner-content">
+        <view class="banner-tag">流浪植物计划</view>
+        <view class="banner-title">让每一株植物</view>
+        <view class="banner-title">找到下一位主人</view>
+        <view class="banner-btn">了解更多 →</view>
+      </view>
+      <view class="banner-image">
+        <view class="leaf-decoration">🌿</view>
+      </view>
+    </view>
+
+    <!-- 功能入口 -->
+    <view class="features">
+      <view class="feature-item" bindtap="goToPage" data-page="discover">
+        <view class="feature-icon glass-light">🍃</view>
+        <text class="feature-text">流浪植物</text>
+      </view>
+      <view class="feature-item" bindtap="goToCircle">
+        <view class="feature-icon glass-light">📱</view>
+        <text class="feature-text">植物动态</text>
+      </view>
+      <view class="feature-item" bindtap="goToArchive">
+        <view class="feature-icon glass-light">📁</view>
+        <text class="feature-text">植物档案</text>
+      </view>
+      <view class="feature-item" bindtap="goToMap">
+        <view class="feature-icon glass-light">🗺️</view>
+        <text class="feature-text">植物地图</text>
+      </view>
+      <view class="feature-item" bindtap="goToPage" data-page="discover">
+        <view class="feature-icon glass-light">👥</view>
+        <text class="feature-text">植物圈子</text>
+      </view>
+    </view>
+
+    <!-- 推荐动态 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">推荐动态</text>
+        <text class="section-more" bindtap="goToCircle">查看更多 ›</text>
+      </view>
+      <scroll-view class="post-scroll" scroll-x>
+        <view class="post-card glass" wx:for="{{ recommendPosts }}" wx:key="id" bindtap="goToPost" data-id="{{ item.id }}">
+          <view class="post-image-wrap">
+            <view class="post-image">{{ item.emoji }}</view>
+            <view class="post-type">{{ item.type }}</view>
+          </view>
+          <view class="post-info">
+            <text class="post-title">{{ item.title }}</text>
+            <view class="post-meta">
+              <text class="post-author">👤 {{ item.author }}</text>
+              <view class="post-likes">
+                <text class="like-icon">🤍</text>
+                <text class="like-num">{{ item.likes }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 最新流浪 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">最新流浪</text>
+        <text class="section-more" bindtap="goToPage" data-page="discover">查看更多 ›</text>
+      </view>
+      <view class="plant-list">
+        <view class="plant-item glass" wx:for="{{ newPlants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+          <view class="plant-thumb">
+            <view class="plant-emoji-large">{{ item.emoji }}</view>
+          </view>
+          <view class="plant-info">
+            <view class="plant-header">
+              <text class="plant-name">{{ item.name }}</text>
+              <view class="plant-tag {{ item.status === '换植物' ? 'tag-trade' : 'tag-free' }}">
+                {{ item.status }}
+              </view>
+            </view>
+            <text class="plant-desc">{{ item.description }}</text>
+            <view class="plant-tags">
+              <text class="plant-tag-item">📍 {{ item.location }}</text>
+              <text class="plant-tag-item">💚 {{ item.status }}</text>
+            </view>
+            <view class="plant-author">
+              <view class="author-avatar">{{ item.authorAvatar }}</view>
+              <text class="author-name">{{ item.author }}</text>
+            </view>
+          </view>
+          <view class="plant-action">
+            <view class="action-btn {{ item.status === '换植物' ? 'btn-trade' : 'btn-free' }}">
+              {{ item.status === '换植物' ? '交换' : '免费领养' }}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

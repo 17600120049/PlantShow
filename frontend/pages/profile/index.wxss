@@ -1,0 +1,244 @@
+/* 液态玻璃效果（不模糊文字版） */
+.glass {
+  position: relative;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1rpx solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 8rpx 32rpx rgba(0, 0, 0, 0.08),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.9);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1rpx solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 4rpx 16rpx rgba(0, 0, 0, 0.05),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 文字清晰保证 */
+.glass text,
+.glass view,
+.glass input,
+.glass-light text,
+.glass-light view {
+  position: relative;
+  z-index: 1;
+  text-shadow: none;
+  filter: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #faf8f5 0%, #f0ebe3 100%);
+  padding-bottom: 200rpx;
+}
+
+.navbar {
+  background: transparent;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+}
+
+.page-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #2d3e2f;
+}
+
+.settings-btn {
+  width: 72rpx;
+  height: 72rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.settings-icon {
+  font-size: 32rpx;
+}
+
+.user-card {
+  margin: 30rpx;
+  padding: 40rpx 30rpx;
+  border-radius: 32rpx;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.user-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1rpx solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 8rpx 32rpx rgba(0, 0, 0, 0.08),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.9);
+}
+
+.user-card-user-info,
+.user-card-user-stats,
+.user-card-menu-card {
+  position: relative;
+  z-index: 1;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.user-avatar-large {
+  width: 140rpx;
+  height: 140rpx;
+  background: linear-gradient(135deg, #d4e4d0 0%, #b8d4b0 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60rpx;
+  margin-right: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(58, 90, 64, 0.2);
+}
+
+.user-detail {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #2d3e2f;
+  margin-bottom: 8rpx;
+}
+
+.user-id {
+  font-size: 22rpx;
+  color: #8b8680;
+  margin-bottom: 8rpx;
+  font-family: monospace;
+}
+
+.user-bio {
+  font-size: 24rpx;
+  color: #6b665e;
+}
+
+.user-stats {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 20rpx;
+  padding: 24rpx 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-num {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #3a5a40;
+  margin-bottom: 6rpx;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #8b8680;
+}
+
+.stat-divider {
+  width: 1rpx;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.menu-card {
+  margin: 0 30rpx 20rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 30rpx;
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  margin-right: 20rpx;
+}
+
+.plant-icon {
+  background: rgba(58, 90, 64, 0.15);
+}
+
+.archive-icon {
+  background: rgba(184, 212, 176, 0.2);
+}
+
+.trade-icon {
+  background: rgba(255, 159, 67, 0.15);
+}
+
+.like-icon {
+  background: rgba(255, 71, 87, 0.15);
+}
+
+.collect-icon {
+  background: rgba(255, 193, 7, 0.15);
+}
+
+.comment-icon {
+  background: rgba(116, 192, 255, 0.15);
+}
+
+.help-icon {
+  background: rgba(168, 163, 156, 0.15);
+}
+
+.about-icon {
+  background: rgba(139, 134, 128, 0.15);
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #2d3e2f;
+  font-weight: 500;
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  color: #a8a39c;
+}

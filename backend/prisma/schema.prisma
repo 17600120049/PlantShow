@@ -1,0 +1,227 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(cuid())
+  openid        String     @unique
+  nickname      String
+  avatar        String?
+  city          String?
+  bio           String?
+  plants        Plant[]    @relation("PlantOwner")
+  bredPlants    Plant[]    @relation("PlantBreeder")
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  followings    Follow[]   @relation("FollowFollowing")
+  followers     Follow[]   @relation("FollowFollower")
+  messages      Message[]
+  sentTrades    Trade[]    @relation("TradeOwner")
+  receivedTrades Trade[]   @relation("TradeReceiver")
+  conversations1 Conversation[] @relation("ConversationUser1")
+  conversations2 Conversation[] @relation("ConversationUser2")
+  plantHistories PlantHistory[] @relation("PlantHistoryOwner")
+  reports       Report[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Admin {
+  id            String     @id @default(cuid())
+  username      String     @unique
+  passwordHash  String
+  role          AdminRole  @default(ADMIN)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Plant {
+  id             String        @id @default(cuid())
+  plantCode      String        @unique
+  name           String
+  species        String
+  source         String
+  breederId      String
+  generation     Int           @default(1)
+  wanderCount    Int           @default(0)
+  status         PlantStatus   @default(ACTIVE)
+  currentOwnerId String
+  description    String?
+  histories      PlantHistory[]
+  posts          Post[]
+  trades         Trade[]
+  owner          User          @relation("PlantOwner", fields: [currentOwnerId], references: [id])
+  breeder        User          @relation("PlantBreeder", fields: [breederId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model PlantHistory {
+  id        String   @id @default(cuid())
+  plantId   String
+  ownerId   String
+  action    HistoryAction
+  timestamp DateTime @default(now())
+  note      String?
+  photoUrl  String?
+  plant     Plant    @relation(fields: [plantId], references: [id])
+  owner     User     @relation("PlantHistoryOwner", fields: [ownerId], references: [id])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  userId    String
+  plantId   String?
+  content   String
+  images    Json?
+  type      PostType
+  comments  Comment[]
+  likes     Like[]
+  user      User     @relation(fields: [userId], references: [id])
+  plant     Plant?   @relation(fields: [plantId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  content   String
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  
+  @@unique([postId, userId])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  follower    User     @relation("FollowFollower", fields: [followerId], references: [id])
+  following   User     @relation("FollowFollowing", fields: [followingId], references: [id])
+  createdAt   DateTime @default(now())
+  
+  @@unique([followerId, followingId])
+}
+
+model Trade {
+  id           String      @id @default(cuid())
+  plantId      String
+  ownerId      String
+  receiverId   String
+  type         TradeType
+  status       TradeStatus @default(PENDING)
+  offerContent String?
+  plant        Plant       @relation(fields: [plantId], references: [id])
+  owner        User        @relation("TradeOwner", fields: [ownerId], references: [id])
+  receiver     User        @relation("TradeReceiver", fields: [receiverId], references: [id])
+  createdAt    DateTime    @default(now())
+  completedAt  DateTime?
+}
+
+model Conversation {
+  id           String    @id @default(cuid())
+  user1Id      String
+  user2Id      String
+  lastMessage  String?
+  unreadCount  Int       @default(0)
+  messages     Message[]
+  user1        User      @relation("ConversationUser1", fields: [user1Id], references: [id])
+  user2        User      @relation("ConversationUser2", fields: [user2Id], references: [id])
+  updatedAt    DateTime  @updatedAt
+  
+  @@unique([user1Id, user2Id])
+}
+
+model Message {
+  id             String      @id @default(cuid())
+  conversationId String
+  senderId       String
+  content        String
+  type           MessageType
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User        @relation(fields: [senderId], references: [id])
+  createdAt      DateTime    @default(now())
+}
+
+model Report {
+  id        String     @id @default(cuid())
+  userId    String
+  targetId  String
+  targetType ReportTargetType
+  reason    String
+  status    ReportStatus @default(PENDING)
+  user      User       @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now())
+}
+
+enum PlantStatus {
+  ACTIVE
+  ADOPTED
+  DEAD
+}
+
+enum HistoryAction {
+  ADOPT
+  GIFT
+  TRADE
+  WANDER
+}
+
+enum PostType {
+  DAILY
+  GROWTH
+  WANDER
+  TRADE
+}
+
+enum TradeType {
+  EXCHANGE
+  ADOPT
+  FREE
+}
+
+enum TradeStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  OPERATOR
+}
+
+enum ReportTargetType {
+  POST
+  COMMENT
+  USER
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  IGNORED
+}

@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: plant-wander-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: plant123
+      MYSQL_DATABASE: plant_wander
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - plant-wander-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: plant-wander-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - plant-wander-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  backend:
+    build: ./backend
+    container_name: plant-wander-backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://root:plant123@mysql:3306/plant_wander
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: plant-wander-jwt-secret-key-2024
+      JWT_EXPIRES_IN: 7d
+      PORT: 3000
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - plant-wander-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: plant-wander-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./frontend/dist:/usr/share/nginx/html
+    depends_on:
+      - backend
+    networks:
+      - plant-wander-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  plant-wander-network:
+    driver: bridge

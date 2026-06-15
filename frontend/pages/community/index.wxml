@@ -1,0 +1,324 @@
+<template>
+  <view class="container">
+    <!-- 顶部导航 -->
+    <view class="header">
+      <text class="header-title">📷 植物社区</text>
+      <view class="post-btn" bindtap="goToPost">✏️</view>
+    </view>
+
+    <!-- 分类筛选 -->
+    <scroll-view class="category-scroll" scroll-x>
+      <view class="category-list">
+        <view class="category-item {{ activeCategory === 'all' ? 'active' : '' }}" bindtap="setCategory" data-category="all">全部</view>
+        <view class="category-item {{ activeCategory === 'share' ? 'active' : '' }}" bindtap="setCategory" data-category="share">成长分享</view>
+        <view class="category-item {{ activeCategory === 'ask' ? 'active' : '' }}" bindtap="setCategory" data-category="ask">问题求助</view>
+        <view class="category-item {{ activeCategory === 'trade' ? 'active' : '' }}" bindtap="setCategory" data-category="trade">交换信息</view>
+        <view class="category-item {{ activeCategory === 'story' ? 'active' : '' }}" bindtap="setCategory" data-category="story">植物故事</view>
+      </view>
+    </scroll-view>
+
+    <!-- 动态列表 -->
+    <view class="post-list">
+      <view class="post-card" wx:for="{{ posts }}" wx:key="id" bindtap="goToDetail" data-id="{{ item.id }}">
+        <view class="post-header">
+          <view class="avatar">{{ item.avatar }}</view>
+          <view class="user-info">
+            <text class="username">{{ item.username }}</text>
+            <text class="time">{{ item.createdAt }}</text>
+          </view>
+        </view>
+        
+        <view class="post-content">
+          <text class="content-text">{{ item.content }}</text>
+        </view>
+
+        <view class="post-images" wx:if="{{ item.images.length > 0 }}">
+          <image wx:for="{{ item.images }}" wx:key="*this" src="{{ item }}" class="post-img" mode="widthFix" />
+        </view>
+
+        <view class="post-footer">
+          <view class="action" bindtap="onLike" data-id="{{ item.id }}">
+            <text class="action-icon">{{ item.liked ? '❤️' : '🤍' }}</text>
+            <text class="action-text">{{ item.likes }}</text>
+          </view>
+          <view class="action" bindtap="goToDetail" data-id="{{ item.id }}">
+            <text class="action-icon">💬</text>
+            <text class="action-text">{{ item.comments }}</text>
+          </view>
+          <view class="action">
+            <text class="action-icon">🔄</text>
+            <text class="action-text">{{ item.shares }}</text>
+          </view>
+          <view class="action">
+            <text class="action-icon">📌</text>
+            <text class="action-text">收藏</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more">
+      <text class="load-text">加载更多...</text>
+    </view>
+  </view>
+</template>
+
+<script>
+Page({
+  data: {
+    activeCategory: 'all',
+    posts: [
+      {
+        id: 1,
+        userId: 1,
+        username: '小花匠',
+        avatar: '👤',
+        content: '今天给我的绿萝换了新花盆，希望它能茁壮成长！🌿 已经养了三年了，从一小枝长成了一大盆，满满的成就感！',
+        images: [],
+        likes: 23,
+        liked: false,
+        comments: 5,
+        shares: 3,
+        createdAt: '2小时前'
+      },
+      {
+        id: 2,
+        userId: 2,
+        username: '绿植达人',
+        avatar: '👩',
+        content: '分享一下我的多肉拼盘，终于凑齐了12种不同的多肉！🪴 每一盆都有自己的故事，欢迎交流养护心得！',
+        images: [],
+        likes: 45,
+        liked: true,
+        comments: 12,
+        shares: 8,
+        createdAt: '5小时前'
+      },
+      {
+        id: 3,
+        userId: 3,
+        username: '阳光花园',
+        avatar: '👨',
+        content: '今年春天种的向日葵开花了！🌻 太开心了！从种子开始培育，每天都期待着它长大，现在终于开花了！',
+        images: [],
+        likes: 89,
+        liked: false,
+        comments: 23,
+        shares: 15,
+        createdAt: '1天前'
+      },
+      {
+        id: 4,
+        userId: 4,
+        username: '植物爱好者',
+        avatar: '👧',
+        content: '求助！我的月季叶子发黄怎么办？🍃 最近发现叶子开始变黄脱落，浇水频率和以前一样，有没有大神帮忙看看？',
+        images: [],
+        likes: 15,
+        liked: false,
+        comments: 8,
+        shares: 2,
+        createdAt: '2天前'
+      }
+    ]
+  },
+
+  onLoad: function () {
+    console.log('社区页面加载');
+  },
+
+  goToPost: function () {
+    wx.navigateTo({
+      url: '/pages/post/index'
+    });
+  },
+
+  setCategory: function (e) {
+    const category = e.currentTarget.dataset.category;
+    this.setData({ activeCategory: category });
+  },
+
+  onLike: function (e) {
+    const id = e.currentTarget.dataset.id;
+    const posts = this.data.posts.map(post => {
+      if (post.id === id) {
+        return {
+          ...post,
+          liked: !post.liked,
+          likes: post.liked ? post.likes - 1 : post.likes + 1
+        };
+      }
+      return post;
+    });
+    this.setData({ posts });
+  },
+
+  goToDetail: function (e) {
+    const id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/post-detail/index?id=${id}`
+    });
+  }
+});
+</script>
+
+<style lang="scss">
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60rpx 30rpx 30rpx;
+  background: linear-gradient(135deg, #9C27B0 0%, #E1BEE7 100%);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.post-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: #ffffff;
+}
+
+.category-scroll {
+  white-space: nowrap;
+  background: #ffffff;
+  padding: 20rpx 0;
+}
+
+.category-list {
+  display: inline-flex;
+  padding: 0 20rpx;
+}
+
+.category-item {
+  padding: 15rpx 30rpx;
+  margin-right: 20rpx;
+  background: #f5f5f5;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.category-item.active {
+  background: linear-gradient(135deg, #9C27B0 0%, #E1BEE7 100%);
+  color: #ffffff;
+}
+
+.post-list {
+  padding: 20rpx;
+}
+
+.post-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.05);
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.avatar {
+  width: 70rpx;
+  height: 70rpx;
+  background: linear-gradient(135deg, #9C27B0 0%, #E1BEE7 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  margin-right: 15rpx;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.time {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.post-content {
+  margin-bottom: 15rpx;
+}
+
+.content-text {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.6;
+}
+
+.post-images {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15rpx;
+}
+
+.post-img {
+  width: calc(33.33% - 10rpx);
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+  border-radius: 10rpx;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 15rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+}
+
+.action-icon {
+  font-size: 32rpx;
+  margin-right: 8rpx;
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.load-more {
+  text-align: center;
+  padding: 30rpx;
+}
+
+.load-text {
+  font-size: 26rpx;
+  color: #999999;
+}
+</style>
