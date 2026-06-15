@@ -1,30 +1,30 @@
 <view class="page">
   <!-- 自定义导航栏 -->
-  <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="nav-content">
-      <view class="location">
-        <text class="location-icon">📍</text>
-        <text class="location-text">杭州</text>
-        <text class="location-arrow">▾</text>
+  <view style="padding-top: 104rpx; padding-left: 30rpx; padding-right: 30rpx; padding-bottom: 20rpx;">
+    <!-- 第一行：定位和通知 -->
+    <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rpx;">
+      <view style="display: flex; align-items: center; background: rgba(255,255,255,0.9); padding: 16rpx 24rpx; border-radius: 40rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);">
+        <text style="font-size:24rpx;margin-right:8rpx;">📍</text>
+        <text style="font-size:26rpx;color:#3a5a40;font-weight:500;margin-right:8rpx;">杭州</text>
+        <text style="font-size:20rpx;color:#3a5a40;">▾</text>
       </view>
-      <view class="search-box glass">
-        <text class="search-icon">🔍</text>
-        <input class="search-input" placeholder="搜索植物、品种或用户" placeholder-class="search-placeholder" />
+      <view style="display: flex; align-items: center; margin-right: 155rpx;">
+        <view style="position:relative;width:72rpx;height:72rpx;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4rpx 16rpx rgba(0,0,0,0.05);">
+          <text style="font-size:32rpx;">🔔</text>
+          <view style="position:absolute;top:8rpx;right:8rpx;background:#ff4757;color:#ffffff;font-size:20rpx;padding:2rpx 10rpx;border-radius:20rpx;min-width:28rpx;text-align:center;">3</view>
+        </view>
       </view>
-      <view class="notification">
-        <text class="notif-icon">🔔</text>
-        <view class="notif-badge">3</view>
-      </view>
+    </view>
+    <!-- 第二行：搜索框 -->
+    <view style="display: flex; align-items: center; height: 72rpx; margin-top: 16rpx; border-radius: 40rpx; background: rgba(255,255,255,0.9); box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05); padding: 8rpx;">
+      <text style="font-size:28rpx;color:#8b8680;margin-right:12rpx;">🔍</text>
+      <input placeholder="搜索植物、品种或用户" style="flex:1;font-size:26rpx;color:#3a3a3a;padding-left:8rpx;" placeholder-style="color:#a8a39c;font-size:26rpx;" />
+      <view style="background:#3a5a40;color:#fff;font-size:24rpx;padding:12rpx 28rpx;border-radius:32rpx;margin-left:12rpx;line-height:1;">搜索</view>
     </view>
   </view>
 
   <!-- 主内容区域 -->
   <view class="content">
-    <!-- Logo 区域 -->
-    <view class="logo-section">
-      <view class="logo-title">流浪植物</view>
-      <view class="logo-subtitle">Plant Wander</view>
-    </view>
 
     <!-- Banner 卡片 -->
     <view class="banner glass">

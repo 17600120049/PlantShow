@@ -1,6 +1,6 @@
 Page({
   data: {
-    statusBarHeight: 20,
+    statusBarHeight: 44,
     activeTab: 'chat',
     chatList: [
       { id: 1, name: '叶上森林', avatar: '👤', lastMessage: '好的，那明天见！', time: '14:32', unread: 2 },

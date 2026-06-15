@@ -34,6 +34,7 @@
   min-height: 100vh;
   background: linear-gradient(180deg, #faf8f5 0%, #f0ebe3 100%);
   padding-bottom: 200rpx;
+  overflow-x: hidden;
 }
 
 /* 自定义导航栏 */
@@ -41,13 +42,48 @@
   background: transparent;
   position: relative;
   z-index: 100;
+  padding-top: 88rpx !important;
 }
 
-.nav-content {
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-right {
   display: flex;
   align-items: center;
-  padding: 20rpx 30rpx;
-  gap: 20rpx;
+  justify-content: flex-end;
+  flex: 1;
+  max-width: 150rpx;
+}
+
+.navbar .nav-row .notification {
+  position: relative !important;
+  width: 72rpx !important;
+  height: 72rpx !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05) !important;
+  margin-left: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.search-row {
+  padding: 16rpx 30rpx 20rpx;
+}
+
+.search-box {
+  width: 100%;
+  flex: none;
 }
 
 .location {
@@ -114,6 +150,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  margin-left: 0;
 }
 
 .notif-icon {
@@ -167,6 +204,7 @@
   display: flex;
   align-items: center;
   min-height: 280rpx;
+  box-sizing: border-box;
 }
 
 .banner-content {
@@ -229,6 +267,7 @@
   margin: 0 30rpx;
   border-radius: 24rpx;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
 }
 
 .feature-item {

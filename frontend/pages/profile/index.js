@@ -1,6 +1,6 @@
 Page({
   data: {
-    statusBarHeight: 20,
+    statusBarHeight: 44,
     userInfo: {
       avatar: '👤',
       nickname: '植物爱好者',

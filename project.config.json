@@ -1,25 +1,25 @@
 {
+  "miniprogramRoot": "dist/",
+  "projectname": "taro_template",
+  "description": "taro_template",
+  "appid": "touristappid",
   "setting": {
-    "es6": true,
-    "postcss": true,
-    "minified": true,
-    "uglifyFileName": false,
-    "enhance": true,
-    "packNpmRelationList": [],
-    "babelSetting": {
-      "ignore": [],
-      "disablePlugins": [],
-      "outputPath": ""
-    },
-    "useCompilerPlugins": false,
-    "minifyWXML": true
+    "urlCheck": true,
+    "es6": false,
+    "enhance": false,
+    "compileHotReLoad": false,
+    "postcss": false,
+    "preloadBackgroundData": false,
+    "minified": false,
+    "newFeature": true,
+    "autoAudits": false,
+    "coverView": true,
+    "showShadowRootInWxmlPanel": false,
+    "scopeDataCheck": false,
+    "useCompilerModule": false
   },
   "compileType": "miniprogram",
+  "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
-  "packOptions": {
-    "ignore": [],
-    "include": []
-  },
-  "appid": "wx00965c2515dbd2f1",
-  "editorSetting": {}
+  "condition": {}
 }

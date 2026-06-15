@@ -38,6 +38,7 @@
 
 .navbar {
   background: transparent;
+  padding-top: 60rpx;
 }
 
 .nav-content {

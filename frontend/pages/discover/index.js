@@ -1,6 +1,6 @@
 Page({
   data: {
-    statusBarHeight: 20,
+    statusBarHeight: 44,
     activeCategory: 'all',
     plants: [
       { id: 1, name: '鹿角蕨 P. willinckii', description: '爆侧芽，适合新手', status: '换植物', location: '杭州', emoji: '🌿', author: '叶上森林', authorAvatar: '👤' },

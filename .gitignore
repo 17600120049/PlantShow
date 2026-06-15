@@ -27,3 +27,16 @@ Thumbs.db
 # npm
 package-lock.json
 yarn.lock
+
+# 临时文件和工具生成
+.pai/
+.pai-preview-server.lock
+
+# 模板和配置文件生成
+babel.config.js
+config/
+src/
+types/
+tsconfig.json
+package.json
+project.tt.json

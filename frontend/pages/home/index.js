@@ -63,13 +63,15 @@ Page({
 
   onLoad: function () {
     try {
-      const windowInfo = wx.getWindowInfo();
+      const systemInfo = wx.getSystemInfoSync();
+      const windowInfo = wx.getWindowInfo?.();
+      const statusBarHeight = windowInfo?.statusBarHeight || systemInfo.statusBarHeight || 44;
       this.setData({
-        statusBarHeight: windowInfo.statusBarHeight || 20
+        statusBarHeight: Math.max(statusBarHeight, 44)
       });
     } catch (e) {
       this.setData({
-        statusBarHeight: 20
+        statusBarHeight: 60
       });
     }
   },
