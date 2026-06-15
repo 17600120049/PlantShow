@@ -1,26 +1,27 @@
 <view class="tab-bar">
-  <view 
-    wx:for="{{list}}" 
-    wx:key="index" 
-    class="tab-bar-item"
-    data-path="{{item.pagePath}}"
-    data-is-center="{{item.isCenter}}"
-    bindtap="switchTab"
-  >
-    <view wx:if="{{item.isCenter}}" class="center-btn">
-      <view class="center-icon">
-        <text class="plus">+</text>
+  <block wx:for="{{list}}" wx:key="index">
+    <view 
+      wx:if="{{!item.isPublish}}"
+      class="tab-bar-item"
+      data-path="{{item.pagePath}}"
+      data-ispublish="{{false}}"
+      bindtap="switchTab"
+    >
+      <view class="tab-text" style="color: {{selected === index ? selectedColor : color}}">
+        {{item.text}}
       </view>
     </view>
-    <view wx:else class="tab-icon-wrap">
-      <image 
-        class="tab-icon" 
-        src="{{selected === index ? item.selectedIconPath : item.iconPath}}" 
-        mode="aspectFit"
-      />
-      <text class="tab-text" style="color: {{selected === index ? selectedColor : color}}">
-        {{item.text}}
-      </text>
+    
+    <view 
+      wx:else
+      class="tab-bar-item tab-bar-item-publish"
+      data-path="{{item.pagePath}}"
+      data-ispublish="{{true}}"
+      bindtap="switchTab"
+    >
+      <view class="publish-btn">
+        <text class="publish-icon">+</text>
+      </view>
     </view>
-  </view>
+  </block>
 </view>

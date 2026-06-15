@@ -1,55 +1,63 @@
 Component({
   data: {
     selected: 0,
-    color: '#999999',
-    selectedColor: '#3a5a40',
+    color: "#999999",
+    selectedColor: "#3a5a40",
     list: [
       {
-        pagePath: '/pages/home/index',
-        text: '首页',
-        iconPath: '/static/icons/home.png',
-        selectedIconPath: '/static/icons/home-active.png'
+        pagePath: "/pages/home/index",
+        text: "首页",
+        iconPath: "/static/icons/home.png",
+        selectedIconPath: "/static/icons/home-active.png",
+        emoji: "🏡"
       },
       {
-        pagePath: '/pages/discover/index',
-        text: '发现',
-        iconPath: '/static/icons/plant.png',
-        selectedIconPath: '/static/icons/plant-active.png'
+        pagePath: "/pages/discover/index",
+        text: "发现",
+        iconPath: "/static/icons/community.png",
+        selectedIconPath: "/static/icons/community-active.png",
+        emoji: "🔍"
       },
       {
-        pagePath: '/pages/publish/index',
-        text: '发布',
-        iconPath: '/static/icons/publish.png',
-        selectedIconPath: '/static/icons/publish.png',
-        isCenter: true
+        pagePath: "/pages/publish/index",
+        text: "发布",
+        isPublish: true
       },
       {
-        pagePath: '/pages/messages/index',
-        text: '消息',
-        iconPath: '/static/icons/community.png',
-        selectedIconPath: '/static/icons/community-active.png'
+        pagePath: "/pages/messages/index",
+        text: "消息",
+        iconPath: "/static/icons/plant.png",
+        selectedIconPath: "/static/icons/plant-active.png",
+        emoji: "💬"
       },
       {
-        pagePath: '/pages/profile/index',
-        text: '我的',
-        iconPath: '/static/icons/profile.png',
-        selectedIconPath: '/static/icons/profile-active.png'
+        pagePath: "/pages/profile/index",
+        text: "我的",
+        iconPath: "/static/icons/profile.png",
+        selectedIconPath: "/static/icons/profile-active.png",
+        emoji: "👤"
       }
     ]
   },
 
-  attached() {
-  },
-
   methods: {
     switchTab(e) {
-      const data = e.currentTarget.dataset
-      const url = data.path
-      if (data.isCenter) {
-        wx.navigateTo({ url: '/pages/publish/index' })
-        return
+      const dataset = e.currentTarget.dataset
+      console.log('[TabBar] 点击事件', dataset)
+      
+      if (dataset.ispublish) {
+        console.log('[TabBar] 跳转到发布页')
+        wx.navigateTo({
+          url: '/pages/publish/index',
+          fail(err) {
+            console.error('[TabBar] 跳转失败', err)
+          }
+        })
+      } else {
+        const url = dataset.path
+        console.log('[TabBar] 切换tab', url)
+        wx.switchTab({ url })
       }
-      wx.switchTab({ url })
     }
   }
 })
