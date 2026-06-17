@@ -1,97 +1,70 @@
 <view class="page">
-  <!-- 自定义导航栏 -->
-  <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="nav-content">
-      <text class="page-title">我的</text>
+  <!-- 头部背景 -->
+  <view class="header-bg">
+    <view class="user-section">
+      <view class="avatar-wrap">
+        <view class="avatar"></view>
+      </view>
+      <view class="user-info">
+        <text class="nickname">{{ userInfo.nickname }}</text>
+        <view class="points-wrap">
+          <view class="points-icon">★</view>
+          <text class="points-count">{{ userInfo.points }}</text>
+          <text class="points-label">积分</text>
+        </view>
+      </view>
       <view class="settings-btn" bindtap="goToSettings">
-        <text class="settings-icon">⚙️</text>
+        <view class="icon-settings"></view>
       </view>
     </view>
   </view>
 
-  <!-- 用户信息卡片 -->
-  <view class="user-card glass">
-    <view class="user-info">
-      <view class="user-avatar-large">{{ userInfo.avatar }}</view>
-      <view class="user-detail">
-        <text class="user-name">{{ userInfo.nickname }}</text>
-        <text class="user-id">Plant ID: {{ userInfo.plantCode }}</text>
-        <text class="user-bio">{{ userInfo.bio }}</text>
-      </view>
+  <!-- 统计数据 -->
+  <view class="stats-card">
+    <view class="stat-item" bindtap="goToDonations">
+      <text class="stat-count">{{ stats.donatedCount }}</text>
+      <text class="stat-label">累计送养</text>
     </view>
+    <view class="stat-item" bindtap="goToAdoptions">
+      <text class="stat-count">{{ stats.adoptedCount }}</text>
+      <text class="stat-label">累计领养</text>
+    </view>
+    <view class="stat-item" bindtap="goToReservations">
+      <text class="stat-count">{{ stats.currentReservation }}</text>
+      <text class="stat-label">当前预约</text>
+    </view>
+  </view>
 
-    <view class="user-stats">
-      <view class="stat-item">
-        <text class="stat-num">{{ userInfo.plantCount }}</text>
-        <text class="stat-label">植物</text>
+  <!-- 菜单列表 -->
+  <view class="menu-section">
+    <view class="menu-card">
+      <view class="menu-item" bindtap="goToDonations">
+        <view class="menu-icon-wrap donate"><view class="icon-plant"></view></view>
+        <text class="menu-text">我的送养</text>
+        <view class="icon-arrow-right menu-arrow"></view>
       </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-num">{{ userInfo.following }}</text>
-        <text class="stat-label">关注</text>
+      <view class="menu-item" bindtap="goToAdoptions">
+        <view class="menu-icon-wrap adopt"><view class="icon-gift"></view></view>
+        <text class="menu-text">我的领养</text>
+        <view class="icon-arrow-right menu-arrow"></view>
       </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-num">{{ userInfo.followers }}</text>
-        <text class="stat-label">粉丝</text>
+      <view class="menu-item" bindtap="goToPoints">
+        <view class="menu-icon-wrap points"><view class="icon-star"></view></view>
+        <text class="menu-text">积分记录</text>
+        <view class="icon-arrow-right menu-arrow"></view>
       </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-num">{{ userInfo.likes }}</text>
-        <text class="stat-label">获赞</text>
+      <view class="menu-item" bindtap="goToSettings">
+        <view class="menu-icon-wrap settings"><view class="icon-settings"></view></view>
+        <text class="menu-text">设置</text>
+        <view class="icon-arrow-right menu-arrow"></view>
       </view>
     </view>
   </view>
 
-  <!-- 我的植物 -->
-  <view class="menu-card glass">
-    <view class="menu-item" bindtap="goToPage" data-page="plant-archive">
-      <view class="menu-icon-wrap plant-icon">🌿</view>
-      <text class="menu-text">我的植物</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item" bindtap="goToPage" data-page="plant-archive">
-      <view class="menu-icon-wrap archive-icon">📁</view>
-      <text class="menu-text">植物档案</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item">
-      <view class="menu-icon-wrap trade-icon">🔄</view>
-      <text class="menu-text">交换记录</text>
-      <text class="menu-arrow">›</text>
-    </view>
-  </view>
+  <view class="divider"></view>
 
-  <!-- 互动 -->
-  <view class="menu-card glass">
-    <view class="menu-item">
-      <view class="menu-icon-wrap like-icon">❤️</view>
-      <text class="menu-text">我的点赞</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item">
-      <view class="menu-icon-wrap collect-icon">📌</view>
-      <text class="menu-text">我的收藏</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item">
-      <view class="menu-icon-wrap comment-icon">💬</view>
-      <text class="menu-text">我的评论</text>
-      <text class="menu-arrow">›</text>
-    </view>
-  </view>
-
-  <!-- 其他 -->
-  <view class="menu-card glass">
-    <view class="menu-item">
-      <view class="menu-icon-wrap help-icon">❓</view>
-      <text class="menu-text">帮助与反馈</text>
-      <text class="menu-arrow">›</text>
-    </view>
-    <view class="menu-item">
-      <view class="menu-icon-wrap about-icon">ℹ️</view>
-      <text class="menu-text">关于我们</text>
-      <text class="menu-arrow">›</text>
-    </view>
+  <view class="about-section">
+    <text class="about-title">流浪植物驿站</text>
+    <text class="about-version">版本 1.0.0</text>
   </view>
 </view>

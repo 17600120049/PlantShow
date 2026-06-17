@@ -1,0 +1,70 @@
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-content">
+      <text class="page-title">我的收藏</text>
+    </view>
+  </view>
+
+  <!-- Tab 切换 -->
+  <view class="tabs">
+    <view class="tab-item {{ activeTab === 'plants' ? 'active' : '' }}" bindtap="setTab" data-tab="plants">
+      <text class="tab-text">收藏植物</text>
+    </view>
+    <view class="tab-item {{ activeTab === 'stations' ? 'active' : '' }}" bindtap="setTab" data-tab="stations">
+      <text class="tab-text">收藏中转站</text>
+    </view>
+  </view>
+
+  <!-- 收藏植物列表 -->
+  <view class="content" wx:if="{{ activeTab === 'plants' }}">
+    <view wx:if="{{ favoritePlants.length === 0 }}" class="empty-state">
+        <view class="empty-icon-wrap"><view class="empty-icon plant"></view></view>
+        <text class="empty-text">暂无收藏的植物</text>
+        <text class="empty-hint">去首页看看有哪些可爱的植物吧</text>
+      </view>
+    <view wx:else class="plant-list">
+      <view class="plant-card glass" wx:for="{{ favoritePlants }}" wx:key="id">
+        <view class="plant-image-wrap" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+          <view class="plant-emoji">{{ item.image }}</view>
+        </view>
+        <view class="plant-info" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+          <text class="plant-name">{{ item.name }}</text>
+          <text class="plant-category">{{ item.category }}</text>
+          <view class="plant-footer">
+            <text class="plant-station">{{ item.station }}</text>
+            <view class="plant-status-tag">{{ item.status }}</view>
+          </view>
+        </view>
+        <view class="plant-action" bindtap="removeFavorite" data-type="plant" data-id="{{ item.id }}">
+          <view class="icon-heart-fill"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收藏中转站列表 -->
+  <view class="content" wx:if="{{ activeTab === 'stations' }}">
+    <view wx:if="{{ favoriteStations.length === 0 }}" class="empty-state">
+        <view class="empty-icon-wrap"><view class="empty-icon home"></view></view>
+        <text class="empty-text">暂无收藏的中转站</text>
+        <text class="empty-hint">去首页发现附近的中转站吧</text>
+      </view>
+    <view wx:else class="station-list">
+      <view class="station-card glass" wx:for="{{ favoriteStations }}" wx:key="id">
+        <view class="station-image" bindtap="goToStationDetail" data-id="{{ item.id }}">{{ item.image }}</view>
+        <view class="station-info" bindtap="goToStationDetail" data-id="{{ item.id }}">
+          <text class="station-name">{{ item.name }}</text>
+          <text class="station-address">{{ item.address }}</text>
+          <view class="station-meta">
+            <text class="station-plants">{{ item.plants }}株植物</text>
+            <text class="station-distance">{{ item.distance }}</text>
+          </view>
+        </view>
+        <view class="station-action" bindtap="removeFavorite" data-type="station" data-id="{{ item.id }}">
+          <view class="icon-heart-fill"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

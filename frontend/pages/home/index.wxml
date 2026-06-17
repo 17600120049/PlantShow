@@ -1,129 +1,89 @@
 <view class="page">
-  <!-- 自定义导航栏 -->
-  <view style="padding-top: 104rpx; padding-left: 30rpx; padding-right: 30rpx; padding-bottom: 20rpx;">
-    <!-- 第一行：定位和通知 -->
-    <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rpx;">
-      <view style="display: flex; align-items: center; background: rgba(255,255,255,0.9); padding: 16rpx 24rpx; border-radius: 40rpx; box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05);">
-        <text style="font-size:24rpx;margin-right:8rpx;">📍</text>
-        <text style="font-size:26rpx;color:#3a5a40;font-weight:500;margin-right:8rpx;">杭州</text>
-        <text style="font-size:20rpx;color:#3a5a40;">▾</text>
+  <!-- 顶部区域 -->
+  <view class="header" style="padding-top: {{statusBarHeight}}px;">
+    <view class="logo-section">
+      <view class="logo-icon-wrap"><view class="logo-icon"></view></view>
+      <view class="logo-text">
+        <text class="logo-title">流浪植物驿站</text>
+        <text class="logo-slogan">让每一株植物都能找到下一位主人</text>
       </view>
-      <view style="display: flex; align-items: center; margin-right: 155rpx;">
-        <view style="position:relative;width:72rpx;height:72rpx;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4rpx 16rpx rgba(0,0,0,0.05);">
-          <text style="font-size:32rpx;">🔔</text>
-          <view style="position:absolute;top:8rpx;right:8rpx;background:#ff4757;color:#ffffff;font-size:20rpx;padding:2rpx 10rpx;border-radius:20rpx;min-width:28rpx;text-align:center;">3</view>
-        </view>
-      </view>
-    </view>
-    <!-- 第二行：搜索框 -->
-    <view style="display: flex; align-items: center; height: 72rpx; margin-top: 16rpx; border-radius: 40rpx; background: rgba(255,255,255,0.9); box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.05); padding: 8rpx;">
-      <text style="font-size:28rpx;color:#8b8680;margin-right:12rpx;">🔍</text>
-      <input placeholder="搜索植物、品种或用户" style="flex:1;font-size:26rpx;color:#3a3a3a;padding-left:8rpx;" placeholder-style="color:#a8a39c;font-size:26rpx;" />
-      <view style="background:#3a5a40;color:#fff;font-size:24rpx;padding:12rpx 28rpx;border-radius:32rpx;margin-left:12rpx;line-height:1;">搜索</view>
     </view>
   </view>
 
-  <!-- 主内容区域 -->
-  <view class="content">
-
-    <!-- Banner 卡片 -->
-    <view class="banner glass">
-      <view class="banner-content">
-        <view class="banner-tag">流浪植物计划</view>
-        <view class="banner-title">让每一株植物</view>
-        <view class="banner-title">找到下一位主人</view>
-        <view class="banner-btn">了解更多 →</view>
+  <!-- 功能入口 -->
+  <view class="function-section">
+    <view class="function-card donate-card" bindtap="goToScanDonate">
+      <view class="function-icon-wrap donate-icon">
+        <view class="icon-white-scan"></view>
       </view>
-      <view class="banner-image">
-        <view class="leaf-decoration">🌿</view>
+      <view class="function-info">
+        <text class="function-title">扫码送养植物</text>
+        <text class="function-desc">捐赠植物，获得积分</text>
       </view>
+      <view class="function-arrow">→</view>
     </view>
-
-    <!-- 功能入口 -->
-    <view class="features">
-      <view class="feature-item" bindtap="goToPage" data-page="discover">
-        <view class="feature-icon glass-light">🍃</view>
-        <text class="feature-text">流浪植物</text>
+    <view class="function-card adopt-card" bindtap="goToScanAdopt">
+      <view class="function-icon-wrap adopt-icon">
+        <view class="icon-white-qrcode"></view>
       </view>
-      <view class="feature-item" bindtap="goToCircle">
-        <view class="feature-icon glass-light">📱</view>
-        <text class="feature-text">植物动态</text>
+      <view class="function-info">
+        <text class="function-title">扫码领取植物</text>
+        <text class="function-desc">领养植物，开启新缘分</text>
       </view>
-      <view class="feature-item" bindtap="goToArchive">
-        <view class="feature-icon glass-light">📁</view>
-        <text class="feature-text">植物档案</text>
-      </view>
-      <view class="feature-item" bindtap="goToMap">
-        <view class="feature-icon glass-light">🗺️</view>
-        <text class="feature-text">植物地图</text>
-      </view>
-      <view class="feature-item" bindtap="goToPage" data-page="discover">
-        <view class="feature-icon glass-light">👥</view>
-        <text class="feature-text">植物圈子</text>
-      </view>
+      <view class="function-arrow">→</view>
     </view>
+  </view>
 
-    <!-- 推荐动态 -->
-    <view class="section">
-      <view class="section-header">
-        <text class="section-title">推荐动态</text>
-        <text class="section-more" bindtap="goToCircle">查看更多 ›</text>
-      </view>
-      <scroll-view class="post-scroll" scroll-x>
-        <view class="post-card glass" wx:for="{{ recommendPosts }}" wx:key="id" bindtap="goToPost" data-id="{{ item.id }}">
-          <view class="post-image-wrap">
-            <view class="post-image">{{ item.emoji }}</view>
-            <view class="post-type">{{ item.type }}</view>
-          </view>
-          <view class="post-info">
-            <text class="post-title">{{ item.title }}</text>
-            <view class="post-meta">
-              <text class="post-author">👤 {{ item.author }}</text>
-              <view class="post-likes">
-                <text class="like-icon">🤍</text>
-                <text class="like-num">{{ item.likes }}</text>
-              </view>
+  <!-- 中转站列表 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">附近中转站</text>
+      <text class="section-more" bindtap="viewAllStations">查看全部 ›</text>
+    </view>
+    <view class="station-list">
+      <view class="station-card glass" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">
+        <view class="station-image">{{ item.image }}</view>
+        <view class="station-info">
+          <view class="station-header">
+            <text class="station-name">{{ item.name }}</text>
+            <view class="station-status {{ item.isActive ? 'status-open' : 'status-closed' }}">
+              {{ item.isActive ? '营业中' : '休息中' }}
             </view>
+          </view>
+          <text class="station-address">{{ item.address }}</text>
+          <view class="station-meta">
+            <text class="station-hours">{{ item.hours }}</text>
+            <text class="station-distance">{{ item.distance }}</text>
           </view>
         </view>
-      </scroll-view>
-    </view>
-
-    <!-- 最新流浪 -->
-    <view class="section">
-      <view class="section-header">
-        <text class="section-title">最新流浪</text>
-        <text class="section-more" bindtap="goToPage" data-page="discover">查看更多 ›</text>
-      </view>
-      <view class="plant-list">
-        <view class="plant-item glass" wx:for="{{ newPlants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
-          <view class="plant-thumb">
-            <view class="plant-emoji-large">{{ item.emoji }}</view>
-          </view>
-          <view class="plant-info">
-            <view class="plant-header">
-              <text class="plant-name">{{ item.name }}</text>
-              <view class="plant-tag {{ item.status === '换植物' ? 'tag-trade' : 'tag-free' }}">
-                {{ item.status }}
-              </view>
-            </view>
-            <text class="plant-desc">{{ item.description }}</text>
-            <view class="plant-tags">
-              <text class="plant-tag-item">📍 {{ item.location }}</text>
-              <text class="plant-tag-item">💚 {{ item.status }}</text>
-            </view>
-            <view class="plant-author">
-              <view class="author-avatar">{{ item.authorAvatar }}</view>
-              <text class="author-name">{{ item.author }}</text>
-            </view>
-          </view>
-          <view class="plant-action">
-            <view class="action-btn {{ item.status === '换植物' ? 'btn-trade' : 'btn-free' }}">
-              {{ item.status === '换植物' ? '交换' : '免费领养' }}
-            </view>
-          </view>
+        <view class="station-plants">
+          <text class="plants-count">{{ item.plants }}</text>
+          <text class="plants-label">株植物</text>
         </view>
       </view>
     </view>
+  </view>
+
+  <!-- 最新植物 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最新植物</text>
+      <text class="section-more" bindtap="viewAllPlants">查看全部 ›</text>
+    </view>
+    <scroll-view class="plant-scroll" scroll-x>
+      <view class="plant-card glass" wx:for="{{ newPlants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+        <view class="plant-image-wrap">
+          <view class="plant-emoji">{{ item.image }}</view>
+        </view>
+        <view class="plant-info">
+          <text class="plant-name">{{ item.name }}</text>
+          <text class="plant-category">{{ item.category }}</text>
+          <view class="plant-footer">
+            <text class="plant-station">{{ item.station }}</text>
+            <view class="plant-status-tag">{{ item.status }}</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
   </view>
 </view>

@@ -1,11 +1,13 @@
+@import '../styles/icons.wxss';
+
 .tab-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90rpx;
-  background: #ffffff;
-  border-top: 1rpx solid #f5f5f5;
+  height: 110rpx;
+  background: #FDFCFB;
+  border-top: 1rpx solid rgba(139, 134, 128, 0.1);
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -20,38 +22,43 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  transition: all 0.3s ease;
+}
+
+.tab-bar-item.active {
+  transform: translateY(-4rpx);
+}
+
+.tab-icon {
+  margin-bottom: 8rpx;
+}
+
+.tab-bar-item .svg-home,
+.tab-bar-item .icon-heart-lg,
+.tab-bar-item .icon-user-lg {
+  color: #8b8680;
+  transition: all 0.3s ease;
+}
+
+.tab-bar-item.active .svg-home,
+.tab-bar-item.active .icon-heart-lg,
+.tab-bar-item.active .icon-user-lg {
+  color: #2D4739;
+}
+
+.svg-home {
+  width: 48rpx;
+  height: 48rpx;
 }
 
 .tab-text {
-  font-size: 28rpx;
+  font-size: 24rpx;
   font-weight: 500;
   line-height: 1;
+  color: #8b8680;
+  transition: color 0.3s ease;
 }
 
-/* 发布按钮样式 */
-.tab-bar-item-publish {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.publish-btn {
-  width: 76rpx;
-  height: 76rpx;
-  background: linear-gradient(135deg, #3a5a40 0%, #2d4a33 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2rpx 8rpx rgba(58, 90, 64, 0.25);
-}
-
-.publish-icon {
-  font-size: 42rpx;
-  color: #ffffff;
-  font-weight: 300;
-  line-height: 1;
+.tab-bar-item.active .tab-text {
+  color: #2D4739;
 }

@@ -1,0 +1,33 @@
+@import './styles/icons.wxss';
+
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+  color: #333333;
+  background-color: #FDFCFB;
+  box-sizing: border-box;
+}
+
+view, text {
+  box-sizing: border-box;
+}
+
+image {
+  display: block;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+button::after {
+  border: none;
+}
+
+scroll-view {
+  -webkit-overflow-scrolling: touch;
+}
