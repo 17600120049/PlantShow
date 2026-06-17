@@ -15,24 +15,10 @@ services:
       - plant-wander-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  redis:
-    image: redis:7-alpine
-    container_name: plant-wander-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - plant-wander-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   backend:
     build: ./backend
@@ -41,35 +27,38 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: mysql://root:plant123@mysql:3306/plant_wander
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
       JWT_SECRET: plant-wander-jwt-secret-key-2024
       JWT_EXPIRES_IN: 7d
+      ADMIN_JWT_SECRET: plant-wander-admin-jwt-secret-2024
+      ADMIN_JWT_EXPIRES_IN: 1d
       PORT: 3000
     depends_on:
       mysql:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     networks:
       - plant-wander-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/stations"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
 
   nginx:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
     container_name: plant-wander-nginx
     ports:
       - "80:80"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./admin-frontend/dist:/usr/share/nginx/html/admin
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - plant-wander-network
 
 volumes:
   mysql_data:
-  redis_data:
 
 networks:
   plant-wander-network:

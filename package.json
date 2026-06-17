@@ -13,7 +13,9 @@
     "backend:seed": "npm run prisma:seed -w plant-wander-backend",
     "admin:dev": "npm run dev -w plant-wander-admin",
     "admin:build": "npm run build -w plant-wander-admin",
-    "docker:up": "docker compose up -d",
-    "docker:down": "docker compose down"
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:deploy": "docker compose up -d --build",
+    "docker:logs": "docker compose logs -f"
   }
 }
