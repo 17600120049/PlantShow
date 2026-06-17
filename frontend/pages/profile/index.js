@@ -3,13 +3,13 @@ Page({
     statusBarHeight: 44,
     userInfo: {
       avatar: '👤',
-      nickname: '植物爱好者',
-      plantCode: 'PW-2024-001',
-      bio: '🌱 热爱植物，传播绿色',
-      plantCount: 12,
-      following: 128,
-      followers: 89,
-      likes: 1234
+      nickname: '叶子先生',
+      points: 186
+    },
+    stats: {
+      donatedCount: 23,
+      adoptedCount: 15,
+      currentReservation: 2
     }
   },
 
@@ -23,21 +23,20 @@ Page({
   onShow: function () {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({
-        selected: 4
+        selected: 2
       });
     }
   },
 
-  goToSettings: function () {
+  goToScanDonate: function () {
     wx.navigateTo({
-      url: '/pages/settings/index'
+      url: '/pages/scan-donate/index'
     });
   },
 
-  goToPage: function (e) {
-    const page = e.currentTarget.dataset.page;
+  goToScanAdopt: function () {
     wx.navigateTo({
-      url: `/pages/${page}/index`
+      url: '/pages/scan-adopt/index'
     });
   }
 });

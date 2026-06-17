@@ -1,4 +1,4 @@
-// pages/plant-detail/index.js
+// pages/scan-adopt/index.js
 Page({
   data: {},
 

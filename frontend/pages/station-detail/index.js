@@ -1,4 +1,4 @@
-// pages/plant-detail/index.js
+// pages/station-detail/index.js
 Page({
   data: {},
 

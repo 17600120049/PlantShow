@@ -1,62 +1,77 @@
 Page({
   data: {
     statusBarHeight: 20,
-    recommendPosts: [
+    stations: [
       {
         id: 1,
-        type: '开箱记录',
-        title: 'P. willinckii \'OMG\' 新居展开的瞬间',
-        author: '鹿角蕨小王子',
-        likes: 128,
-        emoji: '🌿'
+        name: '城市根系驿站',
+        image: '🏡',
+        address: '杭州市余杭区良渚街道好运街99号',
+        hours: '09:00-20:00',
+        phone: '0571 8723 5456',
+        plants: 45,
+        distance: '1.2km',
+        isActive: true
       },
       {
         id: 2,
-        type: '日常分享',
-        title: '龙舌兰 · 笹之雪 今日状态',
-        author: '植物不语',
-        likes: 96,
-        emoji: '🌵'
+        name: '自丛驿站',
+        image: '🌿',
+        address: '杭州市西湖区转塘街道象山艺术公社21号',
+        hours: '10:00-19:00',
+        phone: '0571 8675 3210',
+        plants: 28,
+        distance: '3.5km',
+        isActive: true
       },
       {
         id: 3,
-        type: '成长记录',
-        title: '我的第一株龟背竹 一年的变化',
-        author: '绿野仙踪',
-        likes: 245,
-        emoji: '🌱'
+        name: '绿野中转站',
+        image: '🌱',
+        address: '杭州市拱墅区运河上街购物中心B1层',
+        hours: '10:00-22:00',
+        phone: '0571 8899 1234',
+        plants: 56,
+        distance: '5.8km',
+        isActive: false
       }
     ],
     newPlants: [
       {
         id: 1,
-        name: '鹿角蕨 P. willinckii \'Bacteria\'',
-        description: '爆侧芽，适合新手养护',
-        status: '换植物',
-        location: '杭州',
-        emoji: '🌿',
-        author: '叶上森林',
-        authorAvatar: '👤'
+        name: '鹿角蕨 OMG',
+        category: '蕨类',
+        status: '待领养',
+        image: '🌿',
+        station: '城市根系驿站',
+        donateTime: '2024-05-21'
       },
       {
         id: 2,
-        name: '龙舌兰 Agave titanota \'蓝鲸\'',
-        description: '根系健康，叶片紧凑',
-        status: '免费',
-        location: '杭州',
-        emoji: '🌵',
-        author: '多肉小筑',
-        authorAvatar: '👩'
+        name: '龙舌兰 蓝鲸',
+        category: '多肉',
+        status: '待领养',
+        image: '🌵',
+        station: '自丛驿站',
+        donateTime: '2024-05-18'
       },
       {
         id: 3,
-        name: '龟背竹 Monstera Deliciosa',
-        description: '两年生，有开背',
-        status: '换植物',
-        location: '上海',
-        emoji: '🌱',
-        author: '城市农夫',
-        authorAvatar: '👨'
+        name: '龟背竹',
+        category: '观叶',
+        status: '待领养',
+        image: '🍃',
+        station: '城市根系驿站',
+        donateTime: '2024-05-15'
+      },
+      {
+        id: 4,
+        name: '观音莲',
+        category: '多肉',
+        status: '待领养',
+        image: '🪴',
+        station: '绿野中转站',
+        donateTime: '2024-05-14'
       }
     ]
   },
@@ -84,35 +99,22 @@ Page({
     }
   },
 
-  goToPage: function (e) {
-    const page = e.currentTarget.dataset.page;
-    wx.switchTab({
-      url: `/pages/${page}/index`
-    });
-  },
-
-  goToCircle: function () {
-    wx.navigateTo({
-      url: '/pages/plant-circle/index'
-    });
-  },
-
-  goToArchive: function () {
-    wx.navigateTo({
-      url: '/pages/plant-archive/index'
-    });
-  },
-
-  goToMap: function () {
-    wx.navigateTo({
-      url: '/pages/plant-map/index'
-    });
-  },
-
-  goToPost: function (e) {
+  goToStationDetail: function (e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
-      url: `/pages/post-detail/index?id=${id}`
+      url: `/pages/station-detail/index?id=${id}`
+    });
+  },
+
+  goToScanDonate: function () {
+    wx.navigateTo({
+      url: '/pages/scan-donate/index'
+    });
+  },
+
+  goToScanAdopt: function () {
+    wx.navigateTo({
+      url: '/pages/scan-adopt/index'
     });
   },
 
@@ -120,12 +122,6 @@ Page({
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/plant-detail/index?id=${id}`
-    });
-  },
-
-  goToPublish: function () {
-    wx.navigateTo({
-      url: '/pages/publish/index'
     });
   }
 });
