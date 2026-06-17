@@ -1,4 +1,4 @@
-import {
+﻿import {
   BadRequestException,
   Injectable,
   NotFoundException,
@@ -34,7 +34,7 @@ export class AdminStationsService {
         address: dto.address,
         hours: dto.hours,
         phone: dto.phone,
-        imageEmoji: dto.imageEmoji || '🏡',
+        logoUrl: dto.logoUrl,
       },
       include: {
         _count: {
@@ -66,7 +66,7 @@ export class AdminStationsService {
   async remove(id: number) {
     const count = await this.prisma.plant.count({ where: { stationId: id } });
     if (count > 0) {
-      throw new BadRequestException('驿站下仍有植物，无法删除');
+      throw new BadRequestException('中转站下仍有植物，无法删除');
     }
     await this.prisma.station.delete({ where: { id } });
     return { success: true };
@@ -75,7 +75,7 @@ export class AdminStationsService {
   private async ensureStation(id: number) {
     const station = await this.prisma.station.findUnique({ where: { id } });
     if (!station) {
-      throw new NotFoundException('驿站不存在');
+      throw new NotFoundException('中转站不存在');
     }
     return station;
   }

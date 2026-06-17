@@ -27,7 +27,7 @@ export class CreateStationDto {
 
   @IsOptional()
   @IsString()
-  imageEmoji?: string;
+  logoUrl?: string;
 }
 
 export class UpdateStationDto {
@@ -53,5 +53,5 @@ export class UpdateStationDto {
 
   @IsOptional()
   @IsString()
-  imageEmoji?: string;
+  logoUrl?: string | null;
 }

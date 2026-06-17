@@ -6,7 +6,7 @@
         <pw-icon name="sprout" size="52" color="#FFFFFF" strokeWidth="2.2" />
       </view>
       <view class="logo-text">
-        <text class="logo-title">流浪植物驿站</text>
+        <text class="logo-title">流浪植物中转站</text>
         <text class="logo-slogan">让每一株植物都能找到下一位主人</text>
       </view>
     </view>
@@ -19,7 +19,7 @@
       </view>
       <view class="function-info">
         <text class="function-title">扫码送养植物</text>
-        <text class="function-desc">捐赠植物，获得积分</text>
+        <text class="function-desc">扫描中转站二维码送养</text>
       </view>
       <pw-icon name="chevron-right" size="36" color="rgba(255,255,255,0.75)" strokeWidth="2" />
     </view>
@@ -35,6 +35,11 @@
     </view>
   </view>
 
+  <view class="load-error glass" wx:if="{{loadError}}">
+    <text>{{loadError}}</text>
+    <text class="load-error-hint">请确认后端已启动，并在开发者工具中勾选「不校验合法域名」</text>
+  </view>
+
   <view class="section">
     <view class="section-header">
       <text class="section-title">附近中转站</text>
@@ -45,7 +50,8 @@
     </view>
     <view class="station-list">
       <view class="station-card glass" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">
-        <view class="station-image">{{ item.image }}</view>
+        <image wx:if="{{item.logoUrl}}" class="station-logo" src="{{item.logoUrl}}" mode="aspectFill" />
+        <view wx:else class="station-image">{{ item.image }}</view>
         <view class="station-info">
           <view class="station-header">
             <text class="station-name">{{ item.name }}</text>
@@ -87,7 +93,8 @@
     <scroll-view class="plant-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="plant-card glass" wx:for="{{ newPlants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
         <view class="plant-image-wrap">
-          <view class="plant-emoji">{{ item.image }}</view>
+          <image wx:if="{{item.photoUrl}}" class="plant-photo-cover" src="{{item.photoUrl}}" mode="aspectFill" />
+          <view wx:else class="plant-emoji">{{ item.image }}</view>
         </view>
         <view class="plant-info">
           <text class="plant-name">{{ item.name }}</text>

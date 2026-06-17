@@ -1,7 +1,24 @@
-import { Button, Form, Input, Modal, Select, Space, Table, Tag, message } from 'antd';
+﻿import { Button, Form, Input, Modal, Select, Space, Table, Tag, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import MultiImageUpload from '../components/MultiImageUpload';
 import type { Plant, Station } from '../types';
+
+function PlantThumb({ plant }: { plant: Plant }) {
+  const cover = plant.photos?.[0] || plant.photoUrl;
+  if (cover) {
+    return (
+      <img
+        src={cover}
+        alt={plant.name}
+        width={36}
+        height={36}
+        style={{ objectFit: 'cover', borderRadius: 6, marginRight: 8, verticalAlign: 'middle' }}
+      />
+    );
+  }
+  return null;
+}
 
 export default function PlantsPage() {
   const [plants, setPlants] = useState<Plant[]>([]);
@@ -37,7 +54,7 @@ export default function PlantsPage() {
       name: plant.name,
       species: plant.category,
       description: plant.description,
-      imageEmoji: plant.image,
+      photos: plant.photos || (plant.photoUrl ? [plant.photoUrl] : []),
       listStatus: plant.listStatus,
       status: plant.plantStatus,
       stationId: plant.stationId,
@@ -80,10 +97,23 @@ export default function PlantsPage() {
         pagination={{ pageSize: 10 }}
         columns={[
           { title: '编号', dataIndex: 'plantCode', width: 120 },
-          { title: '名称', render: (_, r) => `${r.image} ${r.name}` },
+          {
+            title: '名称',
+            render: (_, r) => (
+              <span>
+                <PlantThumb plant={r} />
+                {r.name}
+              </span>
+            ),
+          },
           { title: '品种', dataIndex: 'category' },
+          {
+            title: '照片',
+            width: 120,
+            render: (_, r) => (r.photos?.length || 0) + ' 张',
+          },
           { title: '状态', dataIndex: 'status', render: (v: string) => <Tag>{v}</Tag> },
-          { title: '驿站', dataIndex: 'station' },
+          { title: '中转站', dataIndex: 'station' },
           { title: '主人', dataIndex: 'ownerName' },
           { title: '送养时间', dataIndex: 'donateTime' },
           {
@@ -123,10 +153,10 @@ export default function PlantsPage() {
           <Form.Item name="species" label="品种" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="imageEmoji" label="图标 Emoji">
-            <Input />
+          <Form.Item name="photos" label="植物照片" extra="支持上传多张，第一张作为封面">
+            <MultiImageUpload />
           </Form.Item>
-          <Form.Item name="stationId" label="所属驿站">
+          <Form.Item name="stationId" label="所属中转站">
             <Select
               allowClear
               options={stations.map((s) => ({ value: s.id, label: s.name }))}

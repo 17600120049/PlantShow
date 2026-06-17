@@ -27,11 +27,19 @@ Page({
 
   refreshStats: function () {
     const that = this;
+    const app = getApp();
     plantStore.getUserStats().then(function (stats) {
+      const userInfo = app.globalData.userInfo || {};
       that.setData({
         stats: stats,
-        'userInfo.points': stats.points
+        userInfo: {
+          avatar: userInfo.avatar || '👤',
+          nickname: userInfo.nickname || '叶子先生',
+          points: stats.points
+        }
       });
+    }).catch(function () {
+      // 积分加载失败时保留当前展示
     });
   },
 

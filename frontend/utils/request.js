@@ -1,13 +1,33 @@
+const config = require('../config');
+
 function getAppInstance() {
-  return getApp();
+  try {
+    const app = getApp({ allowDefault: true });
+    if (app && app.globalData) {
+      return app;
+    }
+  } catch (e) {
+    // App may not be registered yet during onLaunch
+  }
+  return null;
 }
 
+const DEFAULT_API_BASE_URL = config.getApiBaseUrl();
+
 function getBaseUrl() {
-  return getAppInstance().globalData.apiBaseUrl;
+  const app = getAppInstance();
+  if (app && app.globalData && app.globalData.apiBaseUrl) {
+    return app.globalData.apiBaseUrl;
+  }
+  return DEFAULT_API_BASE_URL;
 }
 
 function getToken() {
-  return getAppInstance().globalData.token || '';
+  const app = getAppInstance();
+  if (app && app.globalData) {
+    return app.globalData.token || '';
+  }
+  return '';
 }
 
 function request(options) {
@@ -16,6 +36,7 @@ function request(options) {
       url: getBaseUrl() + options.url,
       method: options.method || 'GET',
       data: options.data,
+      timeout: options.timeout || 15000,
       header: Object.assign(
         {
           'Content-Type': 'application/json',
@@ -53,9 +74,21 @@ function getQrImageUrl(type, id, size) {
   return getBaseUrl() + '/qr/station/' + id + '?size=' + qrSize;
 }
 
+function resolveMediaUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return '';
+  }
+  if (/^https?:\/\//.test(url) || /^wxfile:/.test(url)) {
+    return url;
+  }
+  const origin = getBaseUrl().replace(/\/api\/?$/, '');
+  return origin + (url.indexOf('/') === 0 ? url : '/' + url);
+}
+
 module.exports = {
   getBaseUrl: getBaseUrl,
   get: get,
   post: post,
-  getQrImageUrl: getQrImageUrl
+  getQrImageUrl: getQrImageUrl,
+  resolveMediaUrl: resolveMediaUrl
 };

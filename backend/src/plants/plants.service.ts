@@ -1,4 +1,4 @@
-import {
+﻿import {
   BadRequestException,
   Injectable,
   NotFoundException,
@@ -12,6 +12,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { isStationOpenByHours } from '../common/station-hours';
 import { DONATE_POINTS, toPlantDto } from '../common/mappers';
+import { photosToPrismaJson } from '../common/plant-photos';
 import { DonatePlantDto } from './dto/donate-plant.dto';
 
 @Injectable()
@@ -35,7 +36,7 @@ export class PlantsService {
   async findAvailableByStation(stationId: number) {
     const station = await this.prisma.station.findUnique({ where: { id: stationId } });
     if (!station) {
-      throw new NotFoundException('驿站不存在');
+      throw new NotFoundException('中转站不存在');
     }
 
     const plants = await this.prisma.plant.findMany({
@@ -82,10 +83,10 @@ export class PlantsService {
     });
 
     if (!station) {
-      throw new NotFoundException('驿站不存在');
+      throw new NotFoundException('中转站不存在');
     }
     if (!isStationOpenByHours(station.hours)) {
-      throw new BadRequestException('该驿站当前不在营业时间内，请选择其他驿站');
+      throw new BadRequestException('该中转站当前不在营业时间内，请选择其他中转站');
     }
 
     const plantCode = (dto.plantCode || this.generatePlantCode()).toUpperCase();
@@ -95,10 +96,11 @@ export class PlantsService {
     });
 
     if (existing?.listStatus === PlantListStatus.AVAILABLE) {
-      throw new BadRequestException('该植物已在驿站待领养中');
+      throw new BadRequestException('该植物已在中转站待领养中');
     }
 
     const now = new Date();
+    const donatePhotos = dto.photoUrl ? [dto.photoUrl] : [];
 
     const result = await this.prisma.$transaction(async (tx) => {
       let plant;
@@ -112,6 +114,9 @@ export class PlantsService {
             description: dto.description,
             imageEmoji: dto.image || existing.imageEmoji || '🌿',
             photoUrl: dto.photoUrl || existing.photoUrl,
+            photos: photosToPrismaJson(
+              dto.photoUrl ? [dto.photoUrl] : undefined,
+            ),
             stationId: station.id,
             listStatus: PlantListStatus.AVAILABLE,
             listedAt: now,
@@ -132,6 +137,7 @@ export class PlantsService {
             description: dto.description,
             imageEmoji: dto.image || '🌿',
             photoUrl: dto.photoUrl,
+            photos: photosToPrismaJson(donatePhotos.length ? donatePhotos : undefined),
             stationId: station.id,
             listStatus: PlantListStatus.AVAILABLE,
             listedAt: now,

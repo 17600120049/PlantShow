@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+﻿import { Injectable, NotFoundException } from '@nestjs/common';
 import { PlantListStatus } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { toStationDto } from '../common/mappers';
@@ -43,7 +43,7 @@ export class StationsService {
     });
 
     if (!station) {
-      throw new NotFoundException('驿站不存在');
+      throw new NotFoundException('中转站不存在');
     }
 
     return toStationDto(station);

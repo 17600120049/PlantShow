@@ -34,7 +34,9 @@ export interface Station {
   address: string;
   hours: string;
   phone: string | null;
-  imageEmoji: string;
+  imageEmoji?: string;
+  logoUrl: string | null;
+  image?: string | null;
   plants: number;
   isActive: boolean;
 }
@@ -46,6 +48,8 @@ export interface Plant {
   category: string;
   status: string;
   image: string;
+  photoUrl: string | null;
+  photos: string[];
   station: string | null;
   stationId: number | null;
   ownerName: string;

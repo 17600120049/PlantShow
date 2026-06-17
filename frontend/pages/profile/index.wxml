@@ -73,7 +73,7 @@
     <view class="about-logo">
       <pw-icon name="sprout" size="40" color="#2D4739" strokeWidth="2" />
     </view>
-    <text class="about-title">流浪植物驿站</text>
+    <text class="about-title">流浪植物中转站</text>
     <text class="about-version">版本 1.0.0</text>
   </view>
 </view>

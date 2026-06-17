@@ -21,16 +21,26 @@ function loadAppFonts() {
 
 App({
   onLaunch: function () {
-    loadAppFonts();
+    const config = require('./config');
+    this.globalData.apiBaseUrl = config.getApiBaseUrl();
+    console.log('[api] baseUrl =', this.globalData.apiBaseUrl);
+
     const auth = require('./utils/auth');
-    auth.ensureLogin().catch(function (err) {
-      console.warn('[auth] 自动登录失败，将使用本地模式', err);
+    const plantStore = require('./utils/plantStore');
+    auth.ensureLogin(this).catch(function (err) {
+      console.warn('[auth] 自动登录失败', err);
     });
+    plantStore.probeApi().then(function (online) {
+      if (!online) {
+        console.warn('[api] 无法连接后端，请确认 apiBaseUrl 配置正确且后端已启动');
+      }
+    });
+    setTimeout(loadAppFonts, 0);
   },
 
   globalData: {
     userInfo: null,
     token: '',
-    apiBaseUrl: 'http://localhost:3000/api'
+    apiBaseUrl: ''
   }
 });

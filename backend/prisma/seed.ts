@@ -1,4 +1,4 @@
-import { PrismaClient, PlantListStatus, PlantStatus } from '@prisma/client';
+﻿import { PrismaClient, PlantListStatus, PlantStatus } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -32,7 +32,7 @@ async function main() {
     {
       id: 1,
       stationCode: 'ST-001',
-      name: '城市根系驿站',
+      name: '城市根系中转站',
       address: '杭州市余杭区良渚街道好运街99号',
       hours: '09:00-20:00',
       phone: '0571 8723 5456',
@@ -41,7 +41,7 @@ async function main() {
     {
       id: 2,
       stationCode: 'ST-002',
-      name: '自丛驿站',
+      name: '自丛中转站',
       address: '杭州市西湖区转塘街道象山艺术公社21号',
       hours: '10:00-19:00',
       phone: '0571 8675 3210',
@@ -133,7 +133,7 @@ async function main() {
   console.log('✅ 种子数据初始化完成');
   console.log('📝 管理员: admin / admin123');
   console.log('👤 演示用户:', demoUser.nickname, demoUser.id);
-  console.log('🏡 驿站数量:', stations.length);
+  console.log('🏡 中转站数量:', stations.length);
   console.log('🌿 待领养植物:', seedPlants.length);
   console.log('💰 送养积分:', DONATE_POINTS, '分/株');
 }

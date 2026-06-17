@@ -23,6 +23,29 @@
   margin-top: 8rpx;
 }
 
+.load-error {
+  margin: 0 32rpx 24rpx;
+  padding: 20rpx 24rpx;
+  background: rgba(196, 120, 90, 0.1);
+  color: #9A4A2E;
+  border-radius: var(--radius-md);
+  font-size: 26rpx;
+}
+
+.plant-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+}
+
+.station-status.open {
+  color: var(--color-primary);
+}
+
+.station-status.closed {
+  color: var(--color-text-tertiary);
+}
+
 .tabs {
   display: flex;
   margin: 0 32rpx 32rpx;

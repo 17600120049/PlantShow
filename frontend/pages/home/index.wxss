@@ -130,6 +130,23 @@
   margin-top: 6rpx;
 }
 
+.load-error {
+  margin: 24rpx 32rpx 0;
+  padding: 24rpx;
+  border-radius: var(--radius-lg);
+  background: rgba(196, 120, 90, 0.1);
+  color: #9A4A2E;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.load-error-hint {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+}
+
 .section {
   margin-top: 48rpx;
 }
@@ -178,6 +195,19 @@
   font-size: 52rpx;
   margin-right: 24rpx;
   flex-shrink: 0;
+}
+
+.station-logo {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: var(--radius-md);
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.plant-photo-cover {
+  width: 100%;
+  height: 100%;
 }
 
 .station-info {

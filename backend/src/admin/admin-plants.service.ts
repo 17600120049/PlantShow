@@ -1,7 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+﻿import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PlantListStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { toPlantDto } from '../common/mappers';
+import { photosToPrismaJson } from '../common/plant-photos';
 import { UpdatePlantDto } from './dto/update-plant.dto';
 
 @Injectable()
@@ -51,7 +52,7 @@ export class AdminPlantsService {
     if (dto.listStatus === PlantListStatus.AVAILABLE && dto.stationId === undefined) {
       const current = await this.prisma.plant.findUnique({ where: { id } });
       if (!current?.stationId) {
-        throw new BadRequestException('待领养植物必须关联驿站');
+        throw new BadRequestException('待领养植物必须关联中转站');
       }
     }
 
@@ -61,7 +62,8 @@ export class AdminPlantsService {
         name: dto.name,
         species: dto.species,
         description: dto.description,
-        imageEmoji: dto.imageEmoji,
+        photos: photosToPrismaJson(dto.photos),
+        photoUrl: dto.photos === undefined ? undefined : dto.photos[0] || null,
         status: dto.status,
         listStatus: dto.listStatus,
         stationId: dto.stationId === undefined ? undefined : dto.stationId,

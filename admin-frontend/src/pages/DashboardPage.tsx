@@ -1,4 +1,4 @@
-import { Card, Col, Row, Statistic } from 'antd';
+﻿import { Card, Col, Row, Statistic } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import type { DashboardStats } from '../types';
@@ -12,7 +12,7 @@ export default function DashboardPage() {
 
   const items = [
     { title: '注册用户', value: stats?.userCount ?? 0 },
-    { title: '驿站数量', value: stats?.stationCount ?? 0 },
+    { title: '中转站数量', value: stats?.stationCount ?? 0 },
     { title: '植物总数', value: stats?.plantCount ?? 0 },
     { title: '待领养', value: stats?.availablePlants ?? 0 },
     { title: '积分总量', value: stats?.totalPoints ?? 0 },

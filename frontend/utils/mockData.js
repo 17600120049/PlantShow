@@ -1,7 +1,7 @@
 const stations = [
   {
     id: 1,
-    name: '城市根系驿站',
+    name: '城市根系中转站',
     image: '🏡',
     address: '杭州市余杭区良渚街道好运街99号',
     hours: '09:00-20:00',
@@ -11,7 +11,7 @@ const stations = [
   },
   {
     id: 2,
-    name: '自丛驿站',
+    name: '自丛中转站',
     image: '🌿',
     address: '杭州市西湖区转塘街道象山艺术公社21号',
     hours: '10:00-19:00',
@@ -39,7 +39,7 @@ const newPlants = [
     category: '蕨类',
     status: '待领养',
     image: '🌿',
-    station: '城市根系驿站',
+    station: '城市根系中转站',
     stationId: 1,
     donateTime: '2024-05-21'
   },
@@ -50,7 +50,7 @@ const newPlants = [
     category: '多肉',
     status: '待领养',
     image: '🌵',
-    station: '自丛驿站',
+    station: '自丛中转站',
     stationId: 2,
     donateTime: '2024-05-18'
   },
@@ -61,7 +61,7 @@ const newPlants = [
     category: '观叶',
     status: '待领养',
     image: '🍃',
-    station: '城市根系驿站',
+    station: '城市根系中转站',
     stationId: 1,
     donateTime: '2024-05-15'
   },
@@ -84,7 +84,7 @@ const favoritePlants = [
     name: '鹿角蕨 OMG',
     category: '蕨类',
     image: '🌿',
-    station: '城市根系驿站',
+    station: '城市根系中转站',
     status: '待领养'
   },
   {
@@ -92,7 +92,7 @@ const favoritePlants = [
     name: '龟背竹',
     category: '观叶',
     image: '🍃',
-    station: '城市根系驿站',
+    station: '城市根系中转站',
     status: '待领养'
   },
   {
@@ -100,7 +100,7 @@ const favoritePlants = [
     name: '白锦龟背竹',
     category: '观叶',
     image: '🌿',
-    station: '自丛驿站',
+    station: '自丛中转站',
     status: '待领养'
   }
 ];

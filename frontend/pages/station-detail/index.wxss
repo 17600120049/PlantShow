@@ -1,1 +1,127 @@
-/* pages/station-detail/index.wxss */
+@import "../scan-donate/index.wxss";
+
+.station-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex-wrap: wrap;
+}
+
+.station-status {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+}
+
+.station-status.open {
+  background: rgba(45, 71, 57, 0.1);
+  color: var(--color-primary);
+}
+
+.station-status.closed {
+  background: rgba(156, 150, 144, 0.15);
+  color: var(--color-text-tertiary);
+}
+
+.station-phone {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  margin-top: 8rpx;
+}
+
+.section-label {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 8rpx 0 24rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid var(--color-secondary);
+}
+
+.plant-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx;
+  border-radius: var(--radius-lg);
+  margin-bottom: 20rpx;
+}
+
+.plant-emoji,
+.plant-photo {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.plant-emoji {
+  background: rgba(45, 71, 57, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+}
+
+.plant-detail {
+  flex: 1;
+  min-width: 0;
+}
+
+.plant-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.plant-category {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  margin-top: 4rpx;
+}
+
+.plant-time {
+  display: block;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+  margin-top: 8rpx;
+}
+
+.empty-card {
+  padding: 48rpx 32rpx;
+  text-align: center;
+  border-radius: var(--radius-lg);
+}
+
+.empty-emoji {
+  display: block;
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+}
+
+.empty-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.empty-desc {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  margin-top: 8rpx;
+}
+
+.load-error {
+  margin-bottom: 24rpx;
+  padding: 20rpx 24rpx;
+  background: rgba(196, 120, 90, 0.1);
+  color: #9A4A2E;
+  border-radius: var(--radius-md);
+  font-size: 26rpx;
+}

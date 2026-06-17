@@ -1,6 +1,7 @@
 const { initStatusBarHeight } = require('../../utils/system');
 const { parseQrResult } = require('../../utils/qr');
 const plantStore = require('../../utils/plantStore');
+const media = require('../../utils/media');
 
 Page({
   data: {
@@ -62,7 +63,7 @@ Page({
     const that = this;
     const parsed = parseQrResult(raw);
     if (parsed.type !== 'station') {
-      wx.showToast({ title: '请扫描驿站二维码', icon: 'none' });
+      wx.showToast({ title: '请扫描中转站二维码', icon: 'none' });
       return;
     }
 
@@ -75,26 +76,31 @@ Page({
       const plants = results[1];
 
       if (!station) {
-        wx.showToast({ title: '驿站不存在', icon: 'none' });
+        wx.showToast({ title: '中转站不存在', icon: 'none' });
         return;
       }
       if (!station.isActive) {
         wx.showModal({
-          title: '驿站休息中',
+          title: '中转站休息中',
           content: '「' + station.name + '」当前不在营业时间内（' + station.hours + '），请稍后再来。',
           showCancel: false
         });
         return;
       }
 
-      that.setData({
-        step: 'plants',
-        station: station,
-        stationQrUrl: plantStore.getQrImageUrl('station', station.id),
-        plants: plants,
-        selectedPlantId: plants.length === 1 ? plants[0].id : null,
-        selectedPlant: plants.length === 1 ? plants[0] : null
+      const qrRemote = plantStore.getQrImageUrl('station', station.id);
+      media.downloadToLocal(qrRemote).then(function (qrLocal) {
+        that.setData({
+          step: 'plants',
+          station: station,
+          stationQrUrl: qrLocal || qrRemote,
+          plants: plants,
+          selectedPlantId: plants.length === 1 ? plants[0].id : null,
+          selectedPlant: plants.length === 1 ? plants[0] : null
+        });
       });
+    }).catch(function (err) {
+      wx.showToast({ title: (err && err.message) || '无法加载中转站数据', icon: 'none' });
     });
   },
 

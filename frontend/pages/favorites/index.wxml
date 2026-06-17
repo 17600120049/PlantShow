@@ -1,34 +1,37 @@
 <view class="page">
   <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
-    <text class="page-title">我的收藏</text>
-    <text class="page-subtitle">珍藏你喜爱的植物与中转站</text>
+    <text class="page-title">植物与中转站</text>
+    <text class="page-subtitle">数据来自后台，与管理系统同步</text>
   </view>
 
   <view class="tabs">
     <view class="tab-item {{ activeTab === 'plants' ? 'active' : '' }}" bindtap="setTab" data-tab="plants">
       <pw-icon name="leaf" size="32" color="{{ activeTab === 'plants' ? '#FFFFFF' : '#9C9690' }}" strokeWidth="2" />
-      <text class="tab-text">收藏植物</text>
+      <text class="tab-text">待领养植物</text>
     </view>
     <view class="tab-item {{ activeTab === 'stations' ? 'active' : '' }}" bindtap="setTab" data-tab="stations">
       <pw-icon name="building-2" size="32" color="{{ activeTab === 'stations' ? '#FFFFFF' : '#9C9690' }}" strokeWidth="2" />
-      <text class="tab-text">收藏中转站</text>
+      <text class="tab-text">全部中转站</text>
     </view>
   </view>
 
+  <view class="load-error" wx:if="{{loadError}}">{{loadError}}</view>
+
   <view class="content" wx:if="{{ activeTab === 'plants' }}">
-    <view wx:if="{{ favoritePlants.length === 0 }}" class="empty-state">
+    <view wx:if="{{ !loading && plants.length === 0 }}" class="empty-state">
       <view class="empty-icon-wrap">
         <pw-icon name="leaf" size="80" color="#2D4739" strokeWidth="1.6" />
       </view>
-      <text class="empty-text">暂无收藏的植物</text>
-      <text class="empty-hint">去首页看看有哪些可爱的植物吧</text>
+      <text class="empty-text">暂无待领养植物</text>
+      <text class="empty-hint">送养植物后会显示在这里</text>
     </view>
     <view wx:else class="plant-list">
-      <view class="plant-card glass" wx:for="{{ favoritePlants }}" wx:key="id">
-        <view class="plant-image-wrap" bindtap="goToPlantDetail" data-id="{{ item.id }}">
-          <view class="plant-emoji">{{ item.image }}</view>
+      <view class="plant-card glass" wx:for="{{ plants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+        <view class="plant-image-wrap">
+          <image wx:if="{{item.photoUrl}}" class="plant-photo" src="{{item.photoUrl}}" mode="aspectFill" />
+          <view wx:else class="plant-emoji">{{ item.image }}</view>
         </view>
-        <view class="plant-info" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+        <view class="plant-info">
           <text class="plant-name">{{ item.name }}</text>
           <text class="plant-category">{{ item.category }}</text>
           <view class="plant-footer">
@@ -36,34 +39,29 @@
             <view class="plant-status-tag">{{ item.status }}</view>
           </view>
         </view>
-        <view class="plant-action" bindtap="removeFavorite" data-type="plant" data-id="{{ item.id }}">
-          <pw-icon name="heart" size="36" color="#C4785A" filled="{{true}}" />
-        </view>
       </view>
     </view>
   </view>
 
   <view class="content" wx:if="{{ activeTab === 'stations' }}">
-    <view wx:if="{{ favoriteStations.length === 0 }}" class="empty-state">
+    <view wx:if="{{ !loading && stations.length === 0 }}" class="empty-state">
       <view class="empty-icon-wrap">
         <pw-icon name="building-2" size="80" color="#2D4739" strokeWidth="1.6" />
       </view>
-      <text class="empty-text">暂无收藏的中转站</text>
-      <text class="empty-hint">去首页发现附近的中转站吧</text>
+      <text class="empty-text">暂无中转站</text>
+      <text class="empty-hint">请在后台添加中转站</text>
     </view>
     <view wx:else class="station-list">
-      <view class="station-card glass" wx:for="{{ favoriteStations }}" wx:key="id">
-        <view class="station-image" bindtap="goToStationDetail" data-id="{{ item.id }}">{{ item.image }}</view>
-        <view class="station-info" bindtap="goToStationDetail" data-id="{{ item.id }}">
+      <view class="station-card glass" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">
+        <image wx:if="{{item.logoUrl}}" class="station-logo" src="{{item.logoUrl}}" mode="aspectFill" />
+        <view wx:else class="station-image">{{ item.image }}</view>
+        <view class="station-info">
           <text class="station-name">{{ item.name }}</text>
           <text class="station-address">{{ item.address }}</text>
           <view class="station-meta">
-            <text class="station-plants">{{ item.plants }}株植物</text>
-            <text class="station-distance">{{ item.distance }}</text>
+            <text class="station-plants">{{ item.plants }}株待领养</text>
+            <text class="station-status {{ item.isActive ? 'open' : 'closed' }}">{{ item.isActive ? '营业中' : '休息中' }}</text>
           </view>
-        </view>
-        <view class="station-action" bindtap="removeFavorite" data-type="station" data-id="{{ item.id }}">
-          <pw-icon name="heart" size="36" color="#C4785A" filled="{{true}}" />
         </view>
       </view>
     </view>

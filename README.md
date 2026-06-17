@@ -1,12 +1,12 @@
-# 流浪植物驿站 (Plant Wander)
+﻿# 流浪植物中转站 (Plant Wander)
 
-微信小程序 + NestJS 后端 + React 管理后台，支持扫码送养、扫码领养、驿站管理与二维码生成。
+微信小程序 + NestJS 后端 + React 管理后台，支持扫码送养、扫码领养、中转站管理与二维码生成。
 
 ## 功能概览
 
-- **微信小程序**：首页浏览驿站与待领养植物、扫码送养 / 领养、收藏、个人中心
-- **后端 API**：驿站与植物 CRUD、送养 / 领养流程、积分、JWT 鉴权、二维码 PNG 生成
-- **管理后台**：仪表盘、用户 / 驿站 / 植物管理（Ant Design）
+- **微信小程序**：首页浏览中转站与待领养植物、扫码送养 / 领养、收藏、个人中心
+- **后端 API**：中转站与植物 CRUD、送养 / 领养流程、积分、JWT 鉴权、二维码 PNG 生成
+- **管理后台**：仪表盘、用户 / 中转站 / 植物管理（Ant Design）
 - **Docker 部署**：一键拉起 MySQL + 后端 + Nginx（含管理后台静态资源）
 
 ## 技术栈
@@ -65,7 +65,7 @@ npm run docker:deploy
 |------|------|------|
 | 管理员 | `admin` | `admin123` |
 
-种子数据还会创建演示用户、3 个驿站、4 株待领养植物。
+种子数据还会创建演示用户、3 个中转站、4 株待领养植物。
 
 ### 常用命令
 
@@ -154,9 +154,9 @@ npm run admin:dev
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | POST | `/auth/dev-login` | 开发环境登录（openid + nickname） |
-| GET | `/stations` | 驿站列表（`?activeOnly=1` 仅营业中） |
-| GET | `/stations/:id` | 驿站详情 |
-| GET | `/stations/:id/plants` | 驿站待领养植物 |
+| GET | `/stations` | 中转站列表（`?activeOnly=1` 仅营业中） |
+| GET | `/stations/:id` | 中转站详情 |
+| GET | `/stations/:id/plants` | 中转站待领养植物 |
 | GET | `/plants` | 全部待领养植物 |
 | GET | `/plants/code/:plantCode` | 按编号查询植物 |
 | GET | `/plants/:id` | 植物详情 |
@@ -165,7 +165,7 @@ npm run admin:dev
 | GET | `/users/me` | 当前用户（需 JWT） |
 | GET | `/users/me/stats` | 用户统计（需 JWT） |
 | GET | `/qr/plant/:plantCode` | 植物二维码 PNG（`?format=json` 返回 JSON） |
-| GET | `/qr/station/:id` | 驿站二维码 PNG |
+| GET | `/qr/station/:id` | 中转站二维码 PNG |
 
 ### 管理后台（需 Admin JWT）
 
@@ -175,10 +175,10 @@ npm run admin:dev
 | GET | `/admin/dashboard` | 仪表盘统计 |
 | GET/PATCH/DELETE | `/admin/users` … | 用户管理 |
 | POST | `/admin/users/:id/points` | 调整积分 |
-| GET/POST/PATCH/DELETE | `/admin/stations` … | 驿站管理 |
+| GET/POST/PATCH/DELETE | `/admin/stations` … | 中转站管理 |
 | GET/PATCH/DELETE | `/admin/plants` … | 植物管理 |
 
-驿站 **营业状态** 根据 `hours` 字段（如 `09:00-20:00`）自动计算，无需手动开关。
+中转站 **营业状态** 根据 `hours` 字段（如 `09:00-20:00`）自动计算，无需手动开关。
 
 ---
 
@@ -188,7 +188,7 @@ npm run admin:dev
 
 ```
 plantwander://plant/PW-000001    # 植物编号
-plantwander://station/1          # 驿站 ID
+plantwander://station/1          # 中转站 ID
 ```
 
 也可通过 API 获取 PNG 图片：

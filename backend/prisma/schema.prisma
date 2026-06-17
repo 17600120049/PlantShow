@@ -50,6 +50,7 @@ model Station {
   hours      String
   phone      String?
   imageEmoji String   @default("🏡")
+  logoUrl    String?
   isActive   Boolean  @default(true) @ignore
   plants     Plant[]
   createdAt  DateTime @default(now())
@@ -72,6 +73,7 @@ model Plant {
   description    String?         @db.Text
   imageEmoji     String          @default("🌿")
   photoUrl       String?
+  photos         Json?
   listedAt       DateTime?
   adoptedAt      DateTime?
   histories      PlantHistory[]

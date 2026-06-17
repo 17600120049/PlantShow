@@ -1,4 +1,4 @@
-import {
+﻿import {
   Controller,
   Get,
   NotFoundException,
@@ -65,7 +65,7 @@ export class QrController {
   ) {
     const station = await this.prisma.station.findUnique({ where: { id } });
     if (!station) {
-      throw new NotFoundException('驿站不存在');
+      throw new NotFoundException('中转站不存在');
     }
 
     const qrSize = size ? Number(size) : 320;

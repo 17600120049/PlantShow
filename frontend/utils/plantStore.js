@@ -3,12 +3,54 @@ const request = require('./request');
 const auth = require('./auth');
 const { withStationOpenStatus, isStationOpenByHours } = require('./stationHours');
 
+function isMediaUrl(value) {
+  return !!value && (value.indexOf('/api/') === 0 || value.indexOf('http') === 0);
+}
+
+function normalizeStation(station) {
+  if (!station) {
+    return station;
+  }
+  const rawLogo = station.logoUrl || (isMediaUrl(station.image) ? station.image : '');
+  return Object.assign({}, station, {
+    logoUrl: request.resolveMediaUrl(rawLogo),
+    image: isMediaUrl(station.image) ? station.imageEmoji || '🏡' : station.image || station.imageEmoji || '🏡'
+  });
+}
+
+function normalizePlant(plant) {
+  if (!plant) {
+    return plant;
+  }
+  const photos = (plant.photos || []).map(request.resolveMediaUrl).filter(Boolean);
+  const photoUrl = request.resolveMediaUrl(plant.photoUrl || photos[0] || '');
+  return Object.assign({}, plant, { photos: photos, photoUrl: photoUrl });
+}
+
 const STORAGE_KEY = 'plantWanderData';
 const DONATE_POINTS = 10;
 let useLocalMode = false;
 
 function markLocalMode() {
   useLocalMode = true;
+}
+
+function clearLocalMode() {
+  useLocalMode = false;
+}
+
+function normalizeError(err) {
+  if (!err) {
+    return { message: '请求失败' };
+  }
+  let message = err.message;
+  if (Array.isArray(message)) {
+    message = message.join('；');
+  }
+  if (typeof message !== 'string' || !message) {
+    message = '请求失败';
+  }
+  return Object.assign({}, err, { message: message });
 }
 
 function isLocalMode() {
@@ -111,7 +153,7 @@ function saveLocalData(data) {
 
 function getStationsLocal(activeOnly) {
   const data = getLocalData();
-  const stations = data.stations.map(withStationOpenStatus);
+  const stations = data.stations.map(withStationOpenStatus).map(normalizeStation);
   if (!activeOnly) {
     return stations;
   }
@@ -176,19 +218,20 @@ function donatePlantLocal(payload) {
   const data = getLocalData();
   const station = getStationByIdLocal(payload.stationId);
   if (!station) {
-    return { success: false, message: '驿站不存在' };
+    return { success: false, message: '中转站不存在' };
   }
   if (!isStationOpenByHours(station.hours)) {
-    return { success: false, message: '该驿站当前不在营业时间内，请选择其他驿站' };
+    return { success: false, message: '该中转站当前不在营业时间内，请选择其他中转站' };
   }
 
   const plantCode = (payload.plantCode || generatePlantCode()).toUpperCase();
   let plant = getPlantByCodeLocal(plantCode);
 
   if (plant && plant.status === '待领养') {
-    return { success: false, message: '该植物已在驿站待领养中' };
+    return { success: false, message: '该植物已在中转站待领养中' };
   }
 
+  const photoUrl = payload.photoPath || payload.photoUrl || '';
   const now = formatDate();
   if (plant) {
     plant = Object.assign({}, plant, {
@@ -199,7 +242,8 @@ function donatePlantLocal(payload) {
       name: payload.name || plant.name,
       category: payload.category || plant.category,
       description: payload.description || plant.description || '',
-      image: payload.image || plant.image || '🌿'
+      image: payload.image || plant.image || '🌿',
+      photoUrl: photoUrl || plant.photoUrl || ''
     });
     data.plants = data.plants.map(function (item) {
       return item.id === plant.id ? plant : item;
@@ -212,6 +256,7 @@ function donatePlantLocal(payload) {
       category: payload.category,
       status: '待领养',
       image: payload.image || '🌿',
+      photoUrl: photoUrl,
       station: station.name,
       stationId: station.id,
       donateTime: now,
@@ -312,70 +357,93 @@ function getUserStatsLocal() {
 }
 
 function getStations(activeOnly) {
-  if (useLocalMode) {
-    return Promise.resolve(getStationsLocal(activeOnly));
-  }
   return request
     .get('/stations', { activeOnly: activeOnly ? 'true' : 'false' })
-    .catch(function () {
-      markLocalMode();
-      return getStationsLocal(activeOnly);
+    .then(function (stations) {
+      clearLocalMode();
+      return stations.map(normalizeStation);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
     });
 }
 
 function getStationById(stationId) {
-  if (useLocalMode) {
-    return Promise.resolve(getStationByIdLocal(stationId));
-  }
-  return request.get('/stations/' + stationId).catch(function () {
-    markLocalMode();
-    return getStationByIdLocal(stationId);
-  });
+  return request
+    .get('/stations/' + stationId)
+    .then(function (station) {
+      clearLocalMode();
+      return normalizeStation(station);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
 }
 
 function getPlantByCode(plantCode) {
-  if (useLocalMode) {
-    return Promise.resolve(getPlantByCodeLocal(plantCode));
-  }
   return request
     .get('/plants/code/' + encodeURIComponent(plantCode))
     .then(function (plant) {
-      return plant;
+      clearLocalMode();
+      return normalizePlant(plant);
     })
     .catch(function (err) {
       if (err && (err.statusCode === 404 || err.message === '植物不存在')) {
         return null;
       }
-      markLocalMode();
-      return getPlantByCodeLocal(plantCode);
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function getPlantById(plantId) {
+  return request
+    .get('/plants/' + plantId)
+    .then(function (plant) {
+      clearLocalMode();
+      return normalizePlant(plant);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
     });
 }
 
 function getAvailablePlantsByStation(stationId) {
-  if (useLocalMode) {
-    return Promise.resolve(getAvailablePlantsByStationLocal(stationId));
-  }
-  return request.get('/stations/' + stationId + '/plants').catch(function () {
-    markLocalMode();
-    return getAvailablePlantsByStationLocal(stationId);
-  });
+  return request
+    .get('/stations/' + stationId + '/plants')
+    .then(function (plants) {
+      clearLocalMode();
+      return plants.map(normalizePlant);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
 }
 
 function getNewPlants() {
-  if (useLocalMode) {
-    return Promise.resolve(getNewPlantsLocal());
-  }
-  return request.get('/plants').catch(function () {
-    markLocalMode();
-    return getNewPlantsLocal();
-  });
+  return request
+    .get('/plants')
+    .then(function (plants) {
+      clearLocalMode();
+      return plants.map(normalizePlant);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function probeApi() {
+  return request
+    .get('/stations', { activeOnly: 'false' })
+    .then(function () {
+      clearLocalMode();
+      return true;
+    })
+    .catch(function () {
+      return false;
+    });
 }
 
 function donatePlant(payload) {
-  if (useLocalMode) {
-    return Promise.resolve(donatePlantLocal(payload));
-  }
-
   return auth
     .ensureLogin()
     .then(function () {
@@ -390,45 +458,43 @@ function donatePlant(payload) {
       });
     })
     .then(function (result) {
+      clearLocalMode();
       return Object.assign({}, result, {
         qrImageUrl: request.getQrImageUrl('plant', result.plant.plantCode)
       });
     })
-    .catch(function () {
-      markLocalMode();
-      return donatePlantLocal(payload);
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
     });
 }
 
 function adoptPlant(plantId) {
-  if (useLocalMode) {
-    return Promise.resolve(adoptPlantLocal(plantId));
-  }
-
   return auth
     .ensureLogin()
     .then(function () {
       return request.post('/plants/' + plantId + '/adopt', {});
     })
-    .catch(function () {
-      markLocalMode();
-      return adoptPlantLocal(plantId);
+    .then(function (result) {
+      clearLocalMode();
+      return result;
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
     });
 }
 
 function getUserStats() {
-  if (useLocalMode) {
-    return Promise.resolve(getUserStatsLocal());
-  }
-
   return auth
     .ensureLogin()
     .then(function () {
       return request.get('/users/me/stats');
     })
-    .catch(function () {
-      markLocalMode();
-      return getUserStatsLocal();
+    .then(function (stats) {
+      clearLocalMode();
+      return stats;
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
     });
 }
 
@@ -454,9 +520,12 @@ function scanCode() {
 module.exports = {
   DONATE_POINTS,
   isLocalMode,
+  clearLocalMode,
+  probeApi,
   getStations,
   getStationById,
   getPlantByCode,
+  getPlantById,
   getAvailablePlantsByStation,
   getNewPlants,
   generatePlantCode,

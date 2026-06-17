@@ -13,6 +13,7 @@ import { AdminStationsService } from './admin-stations.service';
 import { AdminStationsController } from './admin-stations.controller';
 import { AdminPlantsService } from './admin-plants.service';
 import { AdminPlantsController } from './admin-plants.controller';
+import { AdminUploadController } from './admin-upload.controller';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AdminPlantsController } from './admin-plants.controller';
     AdminUsersController,
     AdminStationsController,
     AdminPlantsController,
+    AdminUploadController,
   ],
   providers: [
     AdminAuthService,

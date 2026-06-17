@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsArray, IsEnum, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 import { PlantListStatus, PlantStatus } from '@prisma/client';
 
 export class UpdatePlantDto {
@@ -16,8 +16,9 @@ export class UpdatePlantDto {
   description?: string;
 
   @IsOptional()
-  @IsString()
-  imageEmoji?: string;
+  @IsArray()
+  @IsString({ each: true })
+  photos?: string[];
 
   @IsOptional()
   @IsEnum(PlantStatus)

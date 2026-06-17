@@ -110,4 +110,36 @@ export const api = {
 
   deletePlant: (id: string) =>
     request(`/api/admin/plants/${id}`, { method: 'DELETE' }),
+
+  getStationQrUrl: (stationId: number, size = 320) =>
+    `/api/qr/station/${stationId}?size=${size}`,
+
+  getStationQrPayload: (stationId: number) => `plantwander://station/${stationId}`,
+
+  uploadImage: async (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    const token = getToken();
+    const response = await fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    });
+
+    let data: Record<string, unknown> = {};
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      data = await response.json().catch(() => ({}));
+    }
+
+    if (!response.ok) {
+      const message =
+        (typeof data.message === 'string' && data.message) ||
+        (typeof data.error === 'string' && data.error) ||
+        `上传失败 (${response.status})`;
+      throw new Error(message);
+    }
+
+    return data as { url: string; filename: string };
+  },
 };
