@@ -29,6 +29,8 @@ model User {
   conversations2 Conversation[] @relation("ConversationUser2")
   plantHistories PlantHistory[] @relation("PlantHistoryOwner")
   reports        Report[]
+  plantFavorites PlantFavorite[]
+  stationFavorites StationFavorite[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }
@@ -53,6 +55,7 @@ model Station {
   logoUrl    String?
   isActive   Boolean  @default(true) @ignore
   plants     Plant[]
+  favorites  StationFavorite[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -72,7 +75,6 @@ model Plant {
   stationId      Int?
   description    String?         @db.Text
   imageEmoji     String          @default("🌿")
-  photoUrl       String?
   photos         Json?
   listedAt       DateTime?
   adoptedAt      DateTime?
@@ -82,6 +84,7 @@ model Plant {
   owner          User            @relation("PlantOwner", fields: [currentOwnerId], references: [id])
   breeder        User            @relation("PlantBreeder", fields: [breederId], references: [id])
   station        Station?        @relation(fields: [stationId], references: [id])
+  favorites      PlantFavorite[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 
@@ -256,4 +259,28 @@ enum ReportStatus {
   PENDING
   RESOLVED
   IGNORED
+}
+
+model PlantFavorite {
+  id        String   @id @default(cuid())
+  userId    String
+  plantId   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plant     Plant    @relation(fields: [plantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, plantId])
+  @@index([userId])
+}
+
+model StationFavorite {
+  id        String   @id @default(cuid())
+  userId    String
+  stationId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  station   Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, stationId])
+  @@index([userId])
 }

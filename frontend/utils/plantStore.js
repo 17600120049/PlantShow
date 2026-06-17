@@ -498,6 +498,105 @@ function getUserStats() {
     });
 }
 
+function getFavorites() {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/favorites');
+    })
+    .then(function (result) {
+      clearLocalMode();
+      return {
+        plants: (result.plants || []).map(normalizePlant),
+        stations: (result.stations || []).map(normalizeStation)
+      };
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function checkPlantFavorite(plantId) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/favorites/check', { plantId: plantId });
+    })
+    .then(function (result) {
+      clearLocalMode();
+      return !!(result && result.favorited);
+    })
+    .catch(function () {
+      return false;
+    });
+}
+
+function checkStationFavorite(stationId) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/favorites/check', { stationId: stationId });
+    })
+    .then(function (result) {
+      clearLocalMode();
+      return !!(result && result.favorited);
+    })
+    .catch(function () {
+      return false;
+    });
+}
+
+function addFavorite(payload) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.post('/users/me/favorites', payload);
+    })
+    .then(function (result) {
+      clearLocalMode();
+      return result;
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function removeFavorite(payload) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      const query = { targetType: payload.targetType };
+      if (payload.plantId) {
+        query.plantId = payload.plantId;
+      }
+      if (payload.stationId != null) {
+        query.stationId = payload.stationId;
+      }
+      return request.del('/users/me/favorites', query);
+    })
+    .then(function (result) {
+      clearLocalMode();
+      return result;
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function togglePlantFavorite(plantId, favorited) {
+  if (favorited) {
+    return removeFavorite({ targetType: 'plant', plantId: plantId });
+  }
+  return addFavorite({ targetType: 'plant', plantId: plantId });
+}
+
+function toggleStationFavorite(stationId, favorited) {
+  if (favorited) {
+    return removeFavorite({ targetType: 'station', stationId: stationId });
+  }
+  return addFavorite({ targetType: 'station', stationId: stationId });
+}
+
 function scanCode() {
   return new Promise(function (resolve, reject) {
     wx.scanCode({
@@ -532,6 +631,13 @@ module.exports = {
   donatePlant,
   adoptPlant,
   getUserStats,
+  getFavorites,
+  checkPlantFavorite,
+  checkStationFavorite,
+  addFavorite,
+  removeFavorite,
+  togglePlantFavorite,
+  toggleStationFavorite,
   scanCode,
   getQrImageUrl: request.getQrImageUrl
 };

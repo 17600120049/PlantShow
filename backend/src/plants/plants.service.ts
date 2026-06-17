@@ -12,7 +12,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { isStationOpenByHours } from '../common/station-hours';
 import { DONATE_POINTS, toPlantDto } from '../common/mappers';
-import { photosToPrismaJson } from '../common/plant-photos';
+import { photosToPrismaJson, normalizePhotosInput, getPlantCoverPhoto } from '../common/plant-photos';
 import { DonatePlantDto } from './dto/donate-plant.dto';
 
 @Injectable()
@@ -100,7 +100,10 @@ export class PlantsService {
     }
 
     const now = new Date();
-    const donatePhotos = dto.photoUrl ? [dto.photoUrl] : [];
+    const donatePhotos = normalizePhotosInput(
+      dto.photos?.length ? dto.photos : dto.photoUrl ? [dto.photoUrl] : [],
+    );
+    const coverPhoto = donatePhotos[0] || null;
 
     const result = await this.prisma.$transaction(async (tx) => {
       let plant;
@@ -113,9 +116,8 @@ export class PlantsService {
             species: dto.category,
             description: dto.description,
             imageEmoji: dto.image || existing.imageEmoji || '🌿',
-            photoUrl: dto.photoUrl || existing.photoUrl,
             photos: photosToPrismaJson(
-              dto.photoUrl ? [dto.photoUrl] : undefined,
+              donatePhotos.length ? donatePhotos : undefined,
             ),
             stationId: station.id,
             listStatus: PlantListStatus.AVAILABLE,
@@ -136,8 +138,7 @@ export class PlantsService {
             currentOwnerId: user.id,
             description: dto.description,
             imageEmoji: dto.image || '🌿',
-            photoUrl: dto.photoUrl,
-            photos: photosToPrismaJson(donatePhotos.length ? donatePhotos : undefined),
+            photos: photosToPrismaJson(donatePhotos),
             stationId: station.id,
             listStatus: PlantListStatus.AVAILABLE,
             listedAt: now,
@@ -153,7 +154,7 @@ export class PlantsService {
           ownerId: user.id,
           action: HistoryAction.GIFT,
           note: `送养至 ${station.name}`,
-          photoUrl: dto.photoUrl,
+          photoUrl: coverPhoto || getPlantCoverPhoto(plant),
         },
       });
 

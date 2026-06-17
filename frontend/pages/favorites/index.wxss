@@ -193,6 +193,18 @@
   flex-shrink: 0;
 }
 
+.plant-status-tag.adopted {
+  background: rgba(156, 150, 144, 0.15);
+  color: var(--color-text-tertiary);
+}
+
+.station-logo {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
 .plant-action {
   width: 72rpx;
   height: 72rpx;

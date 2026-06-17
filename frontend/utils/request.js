@@ -66,6 +66,10 @@ function post(url, data) {
   return request({ url: url, method: 'POST', data: data });
 }
 
+function del(url, data) {
+  return request({ url: url, method: 'DELETE', data: data });
+}
+
 function getQrImageUrl(type, id, size) {
   const qrSize = size || 280;
   if (type === 'plant') {
@@ -89,6 +93,7 @@ module.exports = {
   getBaseUrl: getBaseUrl,
   get: get,
   post: post,
+  del: del,
   getQrImageUrl: getQrImageUrl,
   resolveMediaUrl: resolveMediaUrl
 };

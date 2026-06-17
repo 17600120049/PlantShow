@@ -63,7 +63,6 @@ export class AdminPlantsService {
         species: dto.species,
         description: dto.description,
         photos: photosToPrismaJson(dto.photos),
-        photoUrl: dto.photos === undefined ? undefined : dto.photos[0] || null,
         status: dto.status,
         listStatus: dto.listStatus,
         stationId: dto.stationId === undefined ? undefined : dto.stationId,

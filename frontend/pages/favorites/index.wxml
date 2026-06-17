@@ -1,17 +1,17 @@
 <view class="page">
   <view class="navbar" style="padding-top: {{statusBarHeight}}px;">
-    <text class="page-title">植物与中转站</text>
-    <text class="page-subtitle">数据来自后台，与管理系统同步</text>
+    <text class="page-title">我的收藏</text>
+    <text class="page-subtitle">收藏的植物与中转站，含已领养内容</text>
   </view>
 
   <view class="tabs">
     <view class="tab-item {{ activeTab === 'plants' ? 'active' : '' }}" bindtap="setTab" data-tab="plants">
       <pw-icon name="leaf" size="32" color="{{ activeTab === 'plants' ? '#FFFFFF' : '#9C9690' }}" strokeWidth="2" />
-      <text class="tab-text">待领养植物</text>
+      <text class="tab-text">收藏植物</text>
     </view>
     <view class="tab-item {{ activeTab === 'stations' ? 'active' : '' }}" bindtap="setTab" data-tab="stations">
       <pw-icon name="building-2" size="32" color="{{ activeTab === 'stations' ? '#FFFFFF' : '#9C9690' }}" strokeWidth="2" />
-      <text class="tab-text">全部中转站</text>
+      <text class="tab-text">收藏中转站</text>
     </view>
   </view>
 
@@ -20,10 +20,10 @@
   <view class="content" wx:if="{{ activeTab === 'plants' }}">
     <view wx:if="{{ !loading && plants.length === 0 }}" class="empty-state">
       <view class="empty-icon-wrap">
-        <pw-icon name="leaf" size="80" color="#2D4739" strokeWidth="1.6" />
+        <pw-icon name="heart" size="80" color="#2D4739" strokeWidth="1.6" />
       </view>
-      <text class="empty-text">暂无待领养植物</text>
-      <text class="empty-hint">送养植物后会显示在这里</text>
+      <text class="empty-text">暂无收藏植物</text>
+      <text class="empty-hint">在植物详情页点击右上角爱心收藏</text>
     </view>
     <view wx:else class="plant-list">
       <view class="plant-card glass" wx:for="{{ plants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
@@ -35,8 +35,8 @@
           <text class="plant-name">{{ item.name }}</text>
           <text class="plant-category">{{ item.category }}</text>
           <view class="plant-footer">
-            <text class="plant-station">{{ item.station }}</text>
-            <view class="plant-status-tag">{{ item.status }}</view>
+            <text class="plant-station">{{ item.station || '暂无中转站' }}</text>
+            <view class="plant-status-tag {{ item.status === '已领养' ? 'adopted' : '' }}">{{ item.status }}</view>
           </view>
         </view>
       </view>
@@ -46,10 +46,10 @@
   <view class="content" wx:if="{{ activeTab === 'stations' }}">
     <view wx:if="{{ !loading && stations.length === 0 }}" class="empty-state">
       <view class="empty-icon-wrap">
-        <pw-icon name="building-2" size="80" color="#2D4739" strokeWidth="1.6" />
+        <pw-icon name="heart" size="80" color="#2D4739" strokeWidth="1.6" />
       </view>
-      <text class="empty-text">暂无中转站</text>
-      <text class="empty-hint">请在后台添加中转站</text>
+      <text class="empty-text">暂无收藏中转站</text>
+      <text class="empty-hint">在中转站详情页点击右上角爱心收藏</text>
     </view>
     <view wx:else class="station-list">
       <view class="station-card glass" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">

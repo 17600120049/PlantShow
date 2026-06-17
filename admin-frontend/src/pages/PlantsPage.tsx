@@ -5,7 +5,7 @@ import MultiImageUpload from '../components/MultiImageUpload';
 import type { Plant, Station } from '../types';
 
 function PlantThumb({ plant }: { plant: Plant }) {
-  const cover = plant.photos?.[0] || plant.photoUrl;
+  const cover = plant.photos?.[0];
   if (cover) {
     return (
       <img
@@ -54,7 +54,7 @@ export default function PlantsPage() {
       name: plant.name,
       species: plant.category,
       description: plant.description,
-      photos: plant.photos || (plant.photoUrl ? [plant.photoUrl] : []),
+      photos: plant.photos || [],
       listStatus: plant.listStatus,
       status: plant.plantStatus,
       stationId: plant.stationId,

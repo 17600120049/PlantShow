@@ -1,6 +1,6 @@
 import { Plant, PlantListStatus, PlantStatus, Station } from '@prisma/client';
 import { isStationOpenByHours } from './station-hours';
-import { parsePlantPhotos } from './plant-photos';
+import { parsePlantPhotos, getPlantCoverPhoto } from './plant-photos';
 
 export const DONATE_POINTS = 10;
 export const QR_PREFIX = 'plantwander://';
@@ -36,7 +36,7 @@ export function toPlantDto(plant: PlantWithStation) {
     status: toPlantStatusLabel(plant),
     image: plant.imageEmoji || '🌿',
     imageEmoji: plant.imageEmoji || '🌿',
-    photoUrl: photos[0] || plant.photoUrl || null,
+    photoUrl: getPlantCoverPhoto(plant),
     photos,
     station: plant.station?.name || null,
     stationId: plant.stationId,

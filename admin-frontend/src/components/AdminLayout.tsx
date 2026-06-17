@@ -22,8 +22,8 @@ export default function AdminLayout() {
 
   return (
     <Layout className="admin-layout">
-      <Sider width={220} theme="dark" style={{ background: '#1a2e24' }}>
-        <div className="admin-logo">🌿 流浪植物中转站</div>
+      <Sider className="admin-sider" width={168} theme="dark" style={{ background: '#1a2e24' }}>
+        <div className="admin-logo">流浪植物中转站</div>
         <Menu
           theme="dark"
           mode="inline"

@@ -1,17 +1,30 @@
 <view class="page">
-  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="nav-back" bindtap="goBack">
-      <pw-icon name="chevron-right" size="36" color="#2D4739" strokeWidth="2" class="nav-back-icon" />
-      <text class="nav-back-text">返回</text>
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <text class="detail-nav-title">植物详情</text>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
     </view>
-    <text class="nav-title">植物详情</text>
-    <view class="nav-placeholder"></view>
   </view>
 
   <view class="load-error" wx:if="{{loadError}}">{{loadError}}</view>
 
   <block wx:if="{{plant}}">
-    <view class="hero-card glass">
+    <view class="hero-card glass detail-card-with-favorite">
+      <view class="detail-favorite-btn {{favorited ? 'active' : ''}}" bindtap="toggleFavorite">
+        <image
+          class="detail-favorite-icon"
+          src="{{ favorited ? '/static/icons/tab/heart-active.png' : '/static/icons/tab/heart.png' }}"
+          mode="aspectFit"
+        />
+      </view>
       <image wx:if="{{currentPhoto || plant.photoUrl}}" class="hero-photo" src="{{currentPhoto || plant.photoUrl}}" mode="aspectFill" />
       <view wx:else class="hero-emoji">{{plant.image}}</view>
       <view class="hero-info">

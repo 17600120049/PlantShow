@@ -7,6 +7,7 @@ import { PlantsModule } from './plants/plants.module';
 import { QrModule } from './qr/qr.module';
 import { UsersModule } from './users/users.module';
 import { AdminModule } from './admin/admin.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminModule } from './admin/admin.module';
     PlantsModule,
     QrModule,
     UsersModule,
+    FavoritesModule,
     AdminModule,
   ],
 })

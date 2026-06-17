@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class DonatePlantDto {
   @IsOptional()
@@ -27,4 +27,9 @@ export class DonatePlantDto {
   @IsOptional()
   @IsString()
   photoUrl?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  photos?: string[];
 }

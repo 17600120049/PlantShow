@@ -21,30 +21,39 @@ Page({
 
   refreshData: function () {
     const that = this;
-    Promise.all([plantStore.getStations(), plantStore.getNewPlants()])
+    Promise.allSettled([plantStore.getStations(), plantStore.getNewPlants()])
       .then(function (results) {
-        that.setData({
-          stations: results[0],
-          newPlants: results[1],
-          loadError: ''
-        });
-        media.hydrateStations(results[0]).then(function (stations) {
-          that.setData({ stations: stations });
-        });
-        media.hydratePlants(results[1]).then(function (plants) {
-          that.setData({ newPlants: plants });
-        });
-      })
-      .catch(function (err) {
-        that.setData({
-          stations: [],
-          newPlants: [],
-          loadError: (err && err.message) || '无法加载数据'
-        });
-        wx.showToast({
-          title: '无法连接后台数据',
-          icon: 'none'
-        });
+        const stationsResult = results[0];
+        const plantsResult = results[1];
+        const errors = [];
+
+        if (stationsResult.status === 'fulfilled') {
+          that.setData({ stations: stationsResult.value, loadError: '' });
+          media.hydrateStations(stationsResult.value).then(function (stations) {
+            that.setData({ stations: stations });
+          });
+        } else {
+          errors.push((stationsResult.reason && stationsResult.reason.message) || '中转站加载失败');
+        }
+
+        if (plantsResult.status === 'fulfilled') {
+          that.setData({ newPlants: plantsResult.value });
+          media.hydratePlants(plantsResult.value).then(function (plants) {
+            that.setData({ newPlants: plants });
+          });
+        } else {
+          errors.push((plantsResult.reason && plantsResult.reason.message) || '植物列表加载失败');
+        }
+
+        if (errors.length) {
+          that.setData({ loadError: errors.join('；') });
+          wx.showToast({
+            title: errors.length > 1 ? '部分数据加载失败' : '无法连接后台数据',
+            icon: 'none'
+          });
+        } else {
+          that.setData({ loadError: '' });
+        }
       });
   },
 

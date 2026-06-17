@@ -24,18 +24,19 @@ Page({
   loadData: function () {
     const that = this;
     that.setData({ loading: true, loadError: '' });
-    Promise.all([plantStore.getNewPlants(), plantStore.getStations()])
-      .then(function (results) {
+    plantStore
+      .getFavorites()
+      .then(function (result) {
         that.setData({
-          plants: results[0],
-          stations: results[1],
+          plants: result.plants,
+          stations: result.stations,
           loading: false,
           loadError: ''
         });
-        media.hydratePlants(results[0]).then(function (plants) {
+        media.hydratePlants(result.plants).then(function (plants) {
           that.setData({ plants: plants });
         });
-        media.hydrateStations(results[1]).then(function (stations) {
+        media.hydrateStations(result.stations).then(function (stations) {
           that.setData({ stations: stations });
         });
       })
@@ -44,7 +45,7 @@ Page({
           plants: [],
           stations: [],
           loading: false,
-          loadError: (err && err.message) || '无法加载数据'
+          loadError: (err && err.message) || '无法加载收藏'
         });
       });
   },

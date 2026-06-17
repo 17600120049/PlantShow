@@ -39,6 +39,14 @@
   min-width: 120rpx;
 }
 
+.nav-favorite {
+  min-width: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8rpx;
+}
+
 .hero {
   background: linear-gradient(145deg, #3F5F4E 0%, #1A2E24 100%);
   border-radius: var(--radius-xl);

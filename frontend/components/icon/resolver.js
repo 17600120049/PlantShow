@@ -16,8 +16,11 @@ const COLOR_VARIANT = {
 };
 
 function resolveIconSrc(name, color, strokeWidth, filled) {
+  if (name === 'heart') {
+    return filled ? '/static/icons/tab/heart-active.png' : '/static/icons/tab/heart.png';
+  }
+
   if (filled) {
-    if (name === 'heart') return '/static/icons/heart/accent-fill.png';
     if (name === 'star' && color === '#D4A017') return '/static/icons/star/gold-fill.png';
   }
 

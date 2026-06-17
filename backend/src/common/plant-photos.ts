@@ -1,23 +1,80 @@
 import { Prisma } from '@prisma/client';
 
-export function parsePlantPhotos(
-  plant: { photos?: unknown; photoUrl?: string | null },
-): string[] {
-  if (plant.photos) {
-    const value = plant.photos;
-    if (Array.isArray(value)) {
-      return value.filter((item): item is string => typeof item === 'string');
-    }
+export type PlantPhotoRecord = {
+  photos?: unknown;
+};
+
+/** Extract upload path from full or relative URL, e.g. /api/uploads/abc.jpg */
+export function normalizePhotoPath(url: unknown): string {
+  if (typeof url !== 'string') {
+    return '';
   }
-  if (plant.photoUrl) {
-    return [plant.photoUrl];
+  const trimmed = url.trim();
+  if (!trimmed) {
+    return '';
   }
-  return [];
+
+  const uploadsMatch = trimmed.match(/\/api\/uploads\/[^?#]+/);
+  if (uploadsMatch) {
+    return uploadsMatch[0];
+  }
+  if (trimmed.startsWith('/api/')) {
+    return trimmed.split('?')[0];
+  }
+  return trimmed;
 }
 
-export function photosToPrismaJson(photos?: string[]): Prisma.InputJsonValue | undefined {
+/** Deduplicated, normalized photo paths for persistence */
+export function normalizePhotosInput(photos?: string[] | null): string[] {
+  if (!photos?.length) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  for (const item of photos) {
+    const path = normalizePhotoPath(item);
+    if (path && !seen.has(path)) {
+      seen.add(path);
+      result.push(path);
+    }
+  }
+
+  return result;
+}
+
+export function parsePlantPhotos(plant: PlantPhotoRecord): string[] {
+  if (!plant.photos) {
+    return [];
+  }
+
+  const value = plant.photos;
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map(normalizePhotoPath)
+    .filter(Boolean);
+}
+
+export function getPlantCoverPhoto(plant: PlantPhotoRecord): string | null {
+  const photos = parsePlantPhotos(plant);
+  return photos[0] || null;
+}
+
+export function photosToPrismaJson(
+  photos?: string[] | null,
+): Prisma.InputJsonValue | typeof Prisma.JsonNull | undefined {
   if (photos === undefined) {
     return undefined;
   }
-  return photos;
+
+  const normalized = normalizePhotosInput(photos);
+  if (!normalized.length) {
+    return Prisma.JsonNull;
+  }
+
+  return normalized;
 }
