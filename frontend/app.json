@@ -11,10 +11,10 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#FDFCFB",
+    "navigationBarBackgroundColor": "#FAF9F7",
     "navigationBarTitleText": "流浪植物驿站",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#FDFCFB",
+    "backgroundColor": "#FAF9F7",
     "navigationStyle": "custom"
   },
   "tabBar": {
@@ -39,5 +39,8 @@
     ]
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "usingComponents": {
+    "pw-icon": "/components/icon/index"
+  }
 }

@@ -1,12 +1,12 @@
 # Dependencies
 node_modules/
-admin-frontend/node_modules/
-frontend/node_modules/
+**/node_modules/
 
 # Build outputs
 dist/
 build/
 *.log
+*.tsbuildinfo
 
 # Environment files
 .env
@@ -24,19 +24,17 @@ build/
 .DS_Store
 Thumbs.db
 
-# npm
+# Lock files (optional — remove if you prefer committing lockfiles)
 package-lock.json
 yarn.lock
 
-# 临时文件和工具生成
+# WeChat DevTools
+project.private.config.json
+**/project.private.config.json
+
+# Temporary tooling
 .pai/
 .pai-preview-server.lock
 
-# 模板和配置文件生成
-babel.config.js
-config/
-src/
-types/
-tsconfig.json
-package.json
-project.tt.json
+# Miniprogram build cache
+frontend/miniprogram_npm/

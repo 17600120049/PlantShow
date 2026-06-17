@@ -1,0 +1,60 @@
+/**
+ * 流浪植物驿站 — 设计令牌
+ */
+
+page {
+  --color-primary: #2D4739;
+  --color-primary-dark: #1A2E24;
+  --color-primary-light: #3F5F4E;
+  --color-secondary: #6B8B7A;
+  --color-accent: #C4785A;
+  --color-accent-soft: rgba(196, 120, 90, 0.14);
+  --color-gold: #D4A017;
+  --color-bg: #FAF9F7;
+  --color-bg-warm: #F3F0EB;
+  --color-bg-card: rgba(255, 255, 255, 0.88);
+  --color-text: #1C1B19;
+  --color-text-secondary: #6B6560;
+  --color-text-tertiary: #9C9690;
+  --color-border: rgba(45, 71, 57, 0.08);
+  --shadow-sm: 0 2rpx 12rpx rgba(28, 27, 25, 0.04);
+  --shadow-md: 0 8rpx 32rpx rgba(28, 27, 25, 0.07), 0 2rpx 8rpx rgba(28, 27, 25, 0.03);
+  --shadow-lg: 0 20rpx 60rpx rgba(28, 27, 25, 0.09), 0 4rpx 16rpx rgba(28, 27, 25, 0.04);
+  --radius-sm: 14rpx;
+  --radius-md: 22rpx;
+  --radius-lg: 28rpx;
+  --radius-xl: 36rpx;
+  --font-display: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-body: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --tab-bar-content-height: 84rpx;
+  --page-tab-padding: calc(84rpx + constant(safe-area-inset-bottom) + 16rpx);
+  --page-tab-padding: calc(84rpx + env(safe-area-inset-bottom) + 16rpx);
+}
+
+.glass {
+  background: var(--color-bg-card);
+  border: 1rpx solid rgba(255, 255, 255, 0.75);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(20rpx);
+}
+
+.section-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 1rpx;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 28rpx;
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border-radius: 3rpx;
+}

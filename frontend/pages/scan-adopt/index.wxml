@@ -1,2 +1,136 @@
-<!--pages/scan-adopt/index.wxml-->
-<text>pages/scan-adopt/index.wxml</text>
+<view class="page">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-back" bindtap="goBack">
+      <pw-icon name="chevron-right" size="36" color="#2D4739" strokeWidth="2" class="nav-back-icon" />
+      <text class="nav-back-text">返回</text>
+    </view>
+    <text class="nav-title">扫码领养</text>
+    <view class="nav-placeholder"></view>
+  </view>
+
+  <!-- 引导页 -->
+  <block wx:if="{{step === 'intro'}}">
+    <view class="hero">
+      <view class="hero-icon-wrap">
+        <pw-icon name="qr-code" size="80" color="#FFFFFF" strokeWidth="1.8" />
+      </view>
+      <text class="hero-title">扫码领取植物</text>
+      <text class="hero-desc">扫描驿站二维码，浏览并领养心仪植物</text>
+    </view>
+
+    <view class="action-card glass">
+      <button class="scan-btn adopt" bindtap="startScan" loading="{{scanning}}" disabled="{{scanning}}">
+        <pw-icon name="qr-code" size="40" color="#FFFFFF" strokeWidth="2" />
+        <text>{{scanning ? '扫描中...' : '扫描驿站二维码'}}</text>
+      </button>
+    </view>
+
+    <view class="guide-card glass">
+      <text class="guide-title">领养流程</text>
+      <view class="guide-step">
+        <text class="step-num adopt">1</text>
+        <text class="step-text">扫描驿站门口的二维码</text>
+      </view>
+      <view class="guide-step">
+        <text class="step-num adopt">2</text>
+        <text class="step-text">浏览驿站内待领养植物</text>
+      </view>
+      <view class="guide-step">
+        <text class="step-num adopt">3</text>
+        <text class="step-text">确认领养，带它回家</text>
+      </view>
+    </view>
+
+    <view class="demo-card glass">
+      <text class="demo-title">开发测试 · 模拟扫描驿站</text>
+      <view class="demo-list">
+        <view class="demo-item" bindtap="simulateStationScan" data-id="1">城市根系驿站</view>
+        <view class="demo-item" bindtap="simulateStationScan" data-id="2">自丛驿站</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 植物列表 -->
+  <block wx:if="{{step === 'plants'}}">
+    <view class="station-header glass">
+      <view class="station-emoji">{{station.image}}</view>
+      <view class="station-info">
+        <text class="station-name">{{station.name}}</text>
+        <text class="station-address">{{station.address}}</text>
+        <text class="station-hours">{{station.hours}} · {{plants.length}} 株待领养</text>
+      </view>
+      <image wx:if="{{stationQrUrl}}" class="station-qr" src="{{stationQrUrl}}" mode="aspectFit" />
+    </view>
+
+    <view class="plants-section" wx:if="{{plants.length > 0}}">
+      <text class="section-label">待领养植物</text>
+      <view
+        class="plant-item glass {{selectedPlantId === item.id ? 'selected' : ''}}"
+        wx:for="{{plants}}"
+        wx:key="id"
+        bindtap="selectPlant"
+        data-id="{{item.id}}"
+      >
+        <view class="plant-emoji">{{item.image}}</view>
+        <view class="plant-detail">
+          <text class="plant-name">{{item.name}}</text>
+          <text class="plant-category">{{item.category}}</text>
+          <text class="plant-time">送养于 {{item.donateTime}}</text>
+        </view>
+        <view class="plant-check" wx:if="{{selectedPlantId === item.id}}">✓</view>
+      </view>
+    </view>
+
+    <view class="empty-card glass" wx:else>
+      <text class="empty-emoji">🌱</text>
+      <text class="empty-title">暂无待领养植物</text>
+      <text class="empty-desc">该驿站暂时没有可领养的植物，请稍后再来</text>
+    </view>
+
+    <button class="primary-btn adopt" bindtap="goToConfirm" wx:if="{{plants.length > 0}}" disabled="{{!selectedPlant}}">下一步</button>
+  </block>
+
+  <!-- 确认页 -->
+  <block wx:if="{{step === 'confirm'}}">
+    <view class="confirm-card glass">
+      <view class="confirm-plant">
+        <view class="confirm-emoji">{{selectedPlant.image}}</view>
+        <view class="confirm-info">
+          <text class="confirm-name">{{selectedPlant.name}}</text>
+          <text class="confirm-category">{{selectedPlant.category}}</text>
+          <text class="confirm-code">编号 {{selectedPlant.plantCode}}</text>
+        </view>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">领养驿站</text>
+        <text class="confirm-value">{{station.name}}</text>
+      </view>
+      <view class="confirm-row">
+        <text class="confirm-label">驿站地址</text>
+        <text class="confirm-value desc">{{station.address}}</text>
+      </view>
+      <view class="adopt-tip">
+        <pw-icon name="leaf" size="28" color="#3F5F4E" strokeWidth="2" />
+        <text>领养后请妥善养护，欢迎分享成长动态</text>
+      </view>
+    </view>
+
+    <button class="primary-btn adopt" bindtap="submitAdopt" loading="{{submitting}}" disabled="{{submitting}}">确认领养</button>
+    <button class="secondary-btn" bindtap="goBack">返回选择</button>
+  </block>
+
+  <!-- 成功页 -->
+  <block wx:if="{{step === 'success'}}">
+    <view class="success-card glass">
+      <view class="success-icon adopt">✓</view>
+      <text class="success-title">领养成功</text>
+      <text class="success-desc">恭喜！「{{result.plant.name}}」现在是你的了</text>
+      <view class="success-station">
+        <text>请前往 {{result.station.name}} 领取</text>
+        <text class="station-addr">{{result.station.address}}</text>
+      </view>
+    </view>
+    <button class="primary-btn adopt" bindtap="goHome">返回首页</button>
+    <button class="secondary-btn" bindtap="adoptAgain">继续领养</button>
+  </block>
+</view>

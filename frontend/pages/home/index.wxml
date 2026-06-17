@@ -1,8 +1,10 @@
 <view class="page">
-  <!-- 顶部区域 -->
   <view class="header" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-bg-shape"></view>
     <view class="logo-section">
-      <view class="logo-icon-wrap"><view class="logo-icon"></view></view>
+      <view class="logo-icon-wrap">
+        <pw-icon name="sprout" size="52" color="#FFFFFF" strokeWidth="2.2" />
+      </view>
       <view class="logo-text">
         <text class="logo-title">流浪植物驿站</text>
         <text class="logo-slogan">让每一株植物都能找到下一位主人</text>
@@ -10,35 +12,36 @@
     </view>
   </view>
 
-  <!-- 功能入口 -->
   <view class="function-section">
     <view class="function-card donate-card" bindtap="goToScanDonate">
-      <view class="function-icon-wrap donate-icon">
-        <view class="icon-white-scan"></view>
+      <view class="function-icon-wrap">
+        <pw-icon name="scan-line" size="48" color="#FFFFFF" strokeWidth="2" />
       </view>
       <view class="function-info">
         <text class="function-title">扫码送养植物</text>
         <text class="function-desc">捐赠植物，获得积分</text>
       </view>
-      <view class="function-arrow">→</view>
+      <pw-icon name="chevron-right" size="36" color="rgba(255,255,255,0.75)" strokeWidth="2" />
     </view>
     <view class="function-card adopt-card" bindtap="goToScanAdopt">
-      <view class="function-icon-wrap adopt-icon">
-        <view class="icon-white-qrcode"></view>
+      <view class="function-icon-wrap">
+        <pw-icon name="qr-code" size="48" color="#FFFFFF" strokeWidth="2" />
       </view>
       <view class="function-info">
         <text class="function-title">扫码领取植物</text>
         <text class="function-desc">领养植物，开启新缘分</text>
       </view>
-      <view class="function-arrow">→</view>
+      <pw-icon name="chevron-right" size="36" color="rgba(255,255,255,0.75)" strokeWidth="2" />
     </view>
   </view>
 
-  <!-- 中转站列表 -->
   <view class="section">
     <view class="section-header">
       <text class="section-title">附近中转站</text>
-      <text class="section-more" bindtap="viewAllStations">查看全部 ›</text>
+      <view class="section-more" bindtap="viewAllStations">
+        <text>查看全部</text>
+        <pw-icon name="chevron-right" size="28" color="#9C9690" strokeWidth="2" />
+      </view>
     </view>
     <view class="station-list">
       <view class="station-card glass" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">
@@ -50,10 +53,19 @@
               {{ item.isActive ? '营业中' : '休息中' }}
             </view>
           </view>
-          <text class="station-address">{{ item.address }}</text>
+          <view class="station-address-row">
+            <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
+            <text class="station-address">{{ item.address }}</text>
+          </view>
           <view class="station-meta">
-            <text class="station-hours">{{ item.hours }}</text>
-            <text class="station-distance">{{ item.distance }}</text>
+            <view class="meta-item">
+              <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
+              <text>{{ item.hours }}</text>
+            </view>
+            <view class="meta-item">
+              <pw-icon name="navigation" size="24" color="#9C9690" strokeWidth="1.8" />
+              <text>{{ item.distance }}</text>
+            </view>
           </view>
         </view>
         <view class="station-plants">
@@ -64,13 +76,15 @@
     </view>
   </view>
 
-  <!-- 最新植物 -->
   <view class="section">
     <view class="section-header">
       <text class="section-title">最新植物</text>
-      <text class="section-more" bindtap="viewAllPlants">查看全部 ›</text>
+      <view class="section-more" bindtap="viewAllPlants">
+        <text>查看全部</text>
+        <pw-icon name="chevron-right" size="28" color="#9C9690" strokeWidth="2" />
+      </view>
     </view>
-    <scroll-view class="plant-scroll" scroll-x>
+    <scroll-view class="plant-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="plant-card glass" wx:for="{{ newPlants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
         <view class="plant-image-wrap">
           <view class="plant-emoji">{{ item.image }}</view>

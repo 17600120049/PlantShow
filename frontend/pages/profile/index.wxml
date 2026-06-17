@@ -1,69 +1,78 @@
 <view class="page">
-  <!-- 头部背景 -->
-  <view class="header-bg">
+  <view class="header-bg" style="padding-top: {{statusBarHeight}}px;">
+    <view class="header-pattern"></view>
     <view class="user-section">
       <view class="avatar-wrap">
-        <view class="avatar"></view>
+        <pw-icon name="user" size="56" color="#FFFFFF" strokeWidth="2" />
       </view>
       <view class="user-info">
         <text class="nickname">{{ userInfo.nickname }}</text>
         <view class="points-wrap">
-          <view class="points-icon">★</view>
+          <pw-icon name="star" size="28" color="#D4A017" filled="{{true}}" />
           <text class="points-count">{{ userInfo.points }}</text>
           <text class="points-label">积分</text>
         </view>
       </view>
       <view class="settings-btn" bindtap="goToSettings">
-        <view class="icon-settings"></view>
+        <pw-icon name="settings" size="40" color="#FFFFFF" strokeWidth="1.8" />
       </view>
     </view>
   </view>
 
-  <!-- 统计数据 -->
-  <view class="stats-card">
+  <view class="stats-card glass">
     <view class="stat-item" bindtap="goToDonations">
       <text class="stat-count">{{ stats.donatedCount }}</text>
       <text class="stat-label">累计送养</text>
     </view>
+    <view class="stat-divider"></view>
     <view class="stat-item" bindtap="goToAdoptions">
       <text class="stat-count">{{ stats.adoptedCount }}</text>
       <text class="stat-label">累计领养</text>
     </view>
+    <view class="stat-divider"></view>
     <view class="stat-item" bindtap="goToReservations">
       <text class="stat-count">{{ stats.currentReservation }}</text>
       <text class="stat-label">当前预约</text>
     </view>
   </view>
 
-  <!-- 菜单列表 -->
   <view class="menu-section">
-    <view class="menu-card">
+    <view class="menu-card glass">
       <view class="menu-item" bindtap="goToDonations">
-        <view class="menu-icon-wrap donate"><view class="icon-plant"></view></view>
+        <view class="menu-icon-wrap donate">
+          <pw-icon name="leaf" size="36" color="#2D4739" strokeWidth="2" />
+        </view>
         <text class="menu-text">我的送养</text>
-        <view class="icon-arrow-right menu-arrow"></view>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
       <view class="menu-item" bindtap="goToAdoptions">
-        <view class="menu-icon-wrap adopt"><view class="icon-gift"></view></view>
+        <view class="menu-icon-wrap adopt">
+          <pw-icon name="gift" size="36" color="#6B8B7A" strokeWidth="2" />
+        </view>
         <text class="menu-text">我的领养</text>
-        <view class="icon-arrow-right menu-arrow"></view>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
       <view class="menu-item" bindtap="goToPoints">
-        <view class="menu-icon-wrap points"><view class="icon-star"></view></view>
+        <view class="menu-icon-wrap points">
+          <pw-icon name="star" size="36" color="#B8860B" strokeWidth="2" />
+        </view>
         <text class="menu-text">积分记录</text>
-        <view class="icon-arrow-right menu-arrow"></view>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
       <view class="menu-item" bindtap="goToSettings">
-        <view class="menu-icon-wrap settings"><view class="icon-settings"></view></view>
+        <view class="menu-icon-wrap settings">
+          <pw-icon name="settings" size="36" color="#9C9690" strokeWidth="2" />
+        </view>
         <text class="menu-text">设置</text>
-        <view class="icon-arrow-right menu-arrow"></view>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
     </view>
   </view>
 
-  <view class="divider"></view>
-
   <view class="about-section">
+    <view class="about-logo">
+      <pw-icon name="sprout" size="40" color="#2D4739" strokeWidth="2" />
+    </view>
     <text class="about-title">流浪植物驿站</text>
     <text class="about-version">版本 1.0.0</text>
   </view>

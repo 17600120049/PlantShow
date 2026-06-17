@@ -1,11 +1,12 @@
-@import './styles/icons.wxss';
+@import './styles/theme.wxss';
 
 page {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 28rpx;
-  color: #333333;
-  background-color: #FDFCFB;
+  color: var(--color-text);
+  background-color: var(--color-bg);
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 view, text {

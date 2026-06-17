@@ -1,24 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
-import { PlantModule } from './modules/plant/plant.module';
-import { SocialModule } from './modules/social/social.module';
-import { TradeModule } from './modules/trade/trade.module';
-import { MessageModule } from './modules/message/message.module';
-import { AdminModule } from './modules/admin/admin.module';
-import { PrismaModule } from './shared/prisma/prisma.module';
-import { RedisModule } from './shared/redis/redis.module';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
+import { StationsModule } from './stations/stations.module';
+import { PlantsModule } from './plants/plants.module';
+import { QrModule } from './qr/qr.module';
+import { UsersModule } from './users/users.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
-    RedisModule,
     AuthModule,
-    UserModule,
-    PlantModule,
-    SocialModule,
-    TradeModule,
-    MessageModule,
+    StationsModule,
+    PlantsModule,
+    QrModule,
+    UsersModule,
     AdminModule,
   ],
 })

@@ -1,2 +1,9 @@
-<!--pages/plant-detail/index.wxml-->
-<text>pages/plant-detail/index.wxml</text>
+<view class="page">
+  <view class="empty-wrap">
+    <view class="empty-icon-wrap">
+      <pw-icon name="leaf" size="96" color="#2D4739" strokeWidth="1.6" />
+    </view>
+    <text class="empty-title">植物详情</text>
+    <text class="empty-desc">页面开发中，敬请期待</text>
+  </view>
+</view>

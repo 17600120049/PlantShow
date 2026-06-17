@@ -1,74 +1,20 @@
+const { initStatusBarHeight, setTabBarSelected } = require('../../utils/system');
+const mockData = require('../../utils/mockData');
+
 Page({
   data: {
     statusBarHeight: 20,
     activeTab: 'plants',
-    favoritePlants: [
-      {
-        id: 1,
-        name: '鹿角蕨 OMG',
-        category: '蕨类',
-        image: '🌿',
-        station: '城市根系驿站',
-        status: '待领养'
-      },
-      {
-        id: 2,
-        name: '龟背竹',
-        category: '观叶',
-        image: '🍃',
-        station: '城市根系驿站',
-        status: '待领养'
-      },
-      {
-        id: 3,
-        name: '白锦龟背竹',
-        category: '观叶',
-        image: '🌿',
-        station: '自丛驿站',
-        status: '待领养'
-      }
-    ],
-    favoriteStations: [
-      {
-        id: 1,
-        name: '城市根系驿站',
-        image: '🏡',
-        address: '杭州市余杭区良渚街道好运街99号',
-        plants: 45,
-        distance: '1.2km'
-      },
-      {
-        id: 2,
-        name: '自丛驿站',
-        image: '🌿',
-        address: '杭州市西湖区转塘街道象山艺术公社21号',
-        plants: 28,
-        distance: '3.5km'
-      }
-    ]
+    favoritePlants: mockData.favoritePlants,
+    favoriteStations: mockData.favoriteStations
   },
 
   onLoad: function () {
-    try {
-      const systemInfo = wx.getSystemInfoSync();
-      const windowInfo = wx.getWindowInfo?.();
-      const statusBarHeight = windowInfo?.statusBarHeight || systemInfo.statusBarHeight || 44;
-      this.setData({
-        statusBarHeight: Math.max(statusBarHeight, 44)
-      });
-    } catch (e) {
-      this.setData({
-        statusBarHeight: 60
-      });
-    }
+    initStatusBarHeight(this);
   },
 
   onShow: function () {
-    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({
-        selected: 1
-      });
-    }
+    setTabBarSelected(this, 1);
   },
 
   setTab: function (e) {

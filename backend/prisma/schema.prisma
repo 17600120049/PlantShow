@@ -8,74 +8,99 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(cuid())
-  openid        String     @unique
-  nickname      String
-  avatar        String?
-  city          String?
-  bio           String?
-  plants        Plant[]    @relation("PlantOwner")
-  bredPlants    Plant[]    @relation("PlantBreeder")
-  posts         Post[]
-  comments      Comment[]
-  likes         Like[]
-  followings    Follow[]   @relation("FollowFollowing")
-  followers     Follow[]   @relation("FollowFollower")
-  messages      Message[]
-  sentTrades    Trade[]    @relation("TradeOwner")
-  receivedTrades Trade[]   @relation("TradeReceiver")
+  id             String         @id @default(cuid())
+  openid         String         @unique
+  nickname       String
+  avatar         String?
+  city           String?
+  bio            String?
+  points         Int            @default(0)
+  plants         Plant[]        @relation("PlantOwner")
+  bredPlants     Plant[]        @relation("PlantBreeder")
+  posts          Post[]
+  comments       Comment[]
+  likes          Like[]
+  followings     Follow[]       @relation("FollowFollowing")
+  followers      Follow[]       @relation("FollowFollower")
+  messages       Message[]
+  sentTrades     Trade[]        @relation("TradeOwner")
+  receivedTrades Trade[]        @relation("TradeReceiver")
   conversations1 Conversation[] @relation("ConversationUser1")
   conversations2 Conversation[] @relation("ConversationUser2")
   plantHistories PlantHistory[] @relation("PlantHistoryOwner")
-  reports       Report[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  reports        Report[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model Admin {
-  id            String     @id @default(cuid())
-  username      String     @unique
-  passwordHash  String
-  role          AdminRole  @default(ADMIN)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id           String    @id @default(cuid())
+  username     String    @unique
+  passwordHash String
+  role         AdminRole @default(ADMIN)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Station {
+  id         Int      @id @default(autoincrement())
+  stationCode String  @unique
+  name       String
+  address    String
+  hours      String
+  phone      String?
+  imageEmoji String   @default("🏡")
+  isActive   Boolean  @default(true) @ignore
+  plants     Plant[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Plant {
-  id             String        @id @default(cuid())
-  plantCode      String        @unique
+  id             String          @id @default(cuid())
+  plantCode      String          @unique
   name           String
   species        String
-  source         String
+  source         String          @default("donation")
   breederId      String
-  generation     Int           @default(1)
-  wanderCount    Int           @default(0)
-  status         PlantStatus   @default(ACTIVE)
+  generation     Int             @default(1)
+  wanderCount    Int             @default(0)
+  status         PlantStatus     @default(ACTIVE)
+  listStatus     PlantListStatus @default(NONE)
   currentOwnerId String
-  description    String?
+  stationId      Int?
+  description    String?         @db.Text
+  imageEmoji     String          @default("🌿")
+  photoUrl       String?
+  listedAt       DateTime?
+  adoptedAt      DateTime?
   histories      PlantHistory[]
   posts          Post[]
   trades         Trade[]
-  owner          User          @relation("PlantOwner", fields: [currentOwnerId], references: [id])
-  breeder        User          @relation("PlantBreeder", fields: [breederId], references: [id])
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  owner          User            @relation("PlantOwner", fields: [currentOwnerId], references: [id])
+  breeder        User            @relation("PlantBreeder", fields: [breederId], references: [id])
+  station        Station?        @relation(fields: [stationId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([stationId, listStatus])
+  @@index([plantCode])
 }
 
 model PlantHistory {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   plantId   String
   ownerId   String
   action    HistoryAction
-  timestamp DateTime @default(now())
+  timestamp DateTime      @default(now())
   note      String?
   photoUrl  String?
-  plant     Plant    @relation(fields: [plantId], references: [id])
-  owner     User     @relation("PlantHistoryOwner", fields: [ownerId], references: [id])
+  plant     Plant         @relation(fields: [plantId], references: [id])
+  owner     User          @relation("PlantHistoryOwner", fields: [ownerId], references: [id])
 }
 
 model Post {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   plantId   String?
   content   String
@@ -83,9 +108,9 @@ model Post {
   type      PostType
   comments  Comment[]
   likes     Like[]
-  user      User     @relation(fields: [userId], references: [id])
-  plant     Plant?   @relation(fields: [plantId], references: [id])
-  createdAt DateTime @default(now())
+  user      User      @relation(fields: [userId], references: [id])
+  plant     Plant?    @relation(fields: [plantId], references: [id])
+  createdAt DateTime  @default(now())
 }
 
 model Comment {
@@ -105,7 +130,7 @@ model Like {
   post      Post     @relation(fields: [postId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  
+
   @@unique([postId, userId])
 }
 
@@ -116,7 +141,7 @@ model Follow {
   follower    User     @relation("FollowFollower", fields: [followerId], references: [id])
   following   User     @relation("FollowFollowing", fields: [followingId], references: [id])
   createdAt   DateTime @default(now())
-  
+
   @@unique([followerId, followingId])
 }
 
@@ -136,45 +161,50 @@ model Trade {
 }
 
 model Conversation {
-  id           String    @id @default(cuid())
-  user1Id      String
-  user2Id      String
-  lastMessage  String?
-  unreadCount  Int       @default(0)
-  messages     Message[]
-  user1        User      @relation("ConversationUser1", fields: [user1Id], references: [id])
-  user2        User      @relation("ConversationUser2", fields: [user2Id], references: [id])
-  updatedAt    DateTime  @updatedAt
-  
+  id          String    @id @default(cuid())
+  user1Id     String
+  user2Id     String
+  lastMessage String?
+  unreadCount Int       @default(0)
+  messages    Message[]
+  user1       User      @relation("ConversationUser1", fields: [user1Id], references: [id])
+  user2       User      @relation("ConversationUser2", fields: [user2Id], references: [id])
+  updatedAt   DateTime  @updatedAt
+
   @@unique([user1Id, user2Id])
 }
 
 model Message {
-  id             String      @id @default(cuid())
+  id             String       @id @default(cuid())
   conversationId String
   senderId       String
   content        String
   type           MessageType
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  sender         User        @relation(fields: [senderId], references: [id])
-  createdAt      DateTime    @default(now())
+  sender         User         @relation(fields: [senderId], references: [id])
+  createdAt      DateTime     @default(now())
 }
 
 model Report {
-  id        String     @id @default(cuid())
-  userId    String
-  targetId  String
+  id         String           @id @default(cuid())
+  userId     String
+  targetId   String
   targetType ReportTargetType
-  reason    String
-  status    ReportStatus @default(PENDING)
-  user      User       @relation(fields: [userId], references: [id])
-  createdAt DateTime   @default(now())
+  reason     String
+  status     ReportStatus     @default(PENDING)
+  user       User             @relation(fields: [userId], references: [id])
+  createdAt  DateTime         @default(now())
 }
 
 enum PlantStatus {
   ACTIVE
   ADOPTED
   DEAD
+}
+
+enum PlantListStatus {
+  NONE
+  AVAILABLE
 }
 
 enum HistoryAction {

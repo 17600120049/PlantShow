@@ -1,18 +1,27 @@
-@import '../styles/icons.wxss';
+@import '../styles/theme.wxss';
 
 .tab-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 110rpx;
-  background: #FDFCFB;
-  border-top: 1rpx solid rgba(139, 134, 128, 0.1);
+  z-index: 1000;
+  background: rgba(250, 249, 247, 0.96);
+  border-top: 1rpx solid rgba(45, 71, 57, 0.06);
+  box-shadow: 0 -4rpx 24rpx rgba(28, 27, 25, 0.04);
+  --tab-bar-content-height: 84rpx;
+  height: calc(var(--tab-bar-content-height) + constant(safe-area-inset-bottom));
+  height: calc(var(--tab-bar-content-height) + env(safe-area-inset-bottom));
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
+}
+
+.tab-bar-inner {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
+  height: var(--tab-bar-content-height);
 }
 
 .tab-bar-item {
@@ -22,43 +31,25 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  transition: all 0.3s ease;
 }
 
-.tab-bar-item.active {
-  transform: translateY(-4rpx);
-}
-
-.tab-icon {
-  margin-bottom: 8rpx;
-}
-
-.tab-bar-item .svg-home,
-.tab-bar-item .icon-heart-lg,
-.tab-bar-item .icon-user-lg {
-  color: #8b8680;
-  transition: all 0.3s ease;
-}
-
-.tab-bar-item.active .svg-home,
-.tab-bar-item.active .icon-heart-lg,
-.tab-bar-item.active .icon-user-lg {
-  color: #2D4739;
-}
-
-.svg-home {
-  width: 48rpx;
-  height: 48rpx;
+.tab-icon-img {
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom: 4rpx;
+  display: block;
+  flex-shrink: 0;
 }
 
 .tab-text {
-  font-size: 24rpx;
+  font-size: 20rpx;
   font-weight: 500;
   line-height: 1;
-  color: #8b8680;
-  transition: color 0.3s ease;
+  color: #9C9690;
+  letter-spacing: 1rpx;
 }
 
 .tab-bar-item.active .tab-text {
   color: #2D4739;
+  font-weight: 600;
 }
