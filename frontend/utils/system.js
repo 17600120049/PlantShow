@@ -99,9 +99,7 @@ function showComingSoon(title) {
 }
 
 module.exports = {
-  getStatusBarHeight,
   initStatusBarHeight,
-  initDetailNav,
   setupDetailNav,
   setTabBarSelected,
   showComingSoon

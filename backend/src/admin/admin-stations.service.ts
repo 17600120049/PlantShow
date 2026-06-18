@@ -77,11 +77,20 @@ export class AdminStationsService {
   }
 
   async remove(id: number) {
-    const count = await this.prisma.plant.count({ where: { stationId: id } });
-    if (count > 0) {
-      throw new BadRequestException('中转站下仍有植物，无法删除');
-    }
-    await this.prisma.station.delete({ where: { id } });
+    await this.ensureStation(id);
+
+    await this.prisma.$transaction(async (tx) => {
+      await tx.plant.updateMany({
+        where: { stationId: id },
+        data: {
+          stationId: null,
+          listStatus: PlantListStatus.NONE,
+          listedAt: null,
+        },
+      });
+      await tx.station.delete({ where: { id } });
+    });
+
     return { success: true };
   }
 

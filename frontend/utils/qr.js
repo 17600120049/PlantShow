@@ -42,17 +42,6 @@ function parseQrResult(raw) {
   return { type: 'unknown', raw: text };
 }
 
-function buildPlantQr(plantCode) {
-  return PREFIX + 'plant/' + plantCode;
-}
-
-function buildStationQr(stationId) {
-  return PREFIX + 'station/' + stationId;
-}
-
 module.exports = {
-  PREFIX,
-  parseQrResult,
-  buildPlantQr,
-  buildStationQr
+  parseQrResult
 };

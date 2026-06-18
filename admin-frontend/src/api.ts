@@ -96,6 +96,17 @@ export const api = {
   deleteStation: (id: number) =>
     request(`/api/admin/stations/${id}`, { method: 'DELETE' }),
 
+  getStationApplications: (status?: string) => {
+    const qs = status ? `?status=${encodeURIComponent(status)}` : '';
+    return request<import('./types').StationApplication[]>(`/api/admin/station-applications${qs}`);
+  },
+
+  reviewStationApplication: (id: string, data: { status: string; reviewNote?: string }) =>
+    request(`/api/admin/station-applications/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    }),
+
   getPlants: (params?: { keyword?: string; listStatus?: string; stationId?: number }) => {
     const query = new URLSearchParams();
     if (params?.keyword) query.set('keyword', params.keyword);

@@ -41,6 +41,22 @@ export interface Station {
   isActive: boolean;
 }
 
+export interface StationApplication {
+  id: string;
+  applicantName: string;
+  phone: string;
+  stationName: string;
+  address: string;
+  hours: string | null;
+  intro: string | null;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  reviewNote: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  userId: string | null;
+  userNickname: string | null;
+}
+
 export interface Plant {
   id: string;
   plantCode: string;

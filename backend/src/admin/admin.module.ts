@@ -14,6 +14,8 @@ import { AdminStationsController } from './admin-stations.controller';
 import { AdminPlantsService } from './admin-plants.service';
 import { AdminPlantsController } from './admin-plants.controller';
 import { AdminUploadController } from './admin-upload.controller';
+import { AdminStationApplicationsController } from './admin-station-applications.controller';
+import { AdminStationApplicationsService } from './admin-station-applications.service';
 
 @Module({
   imports: [
@@ -39,6 +41,7 @@ import { AdminUploadController } from './admin-upload.controller';
     AdminStationsController,
     AdminPlantsController,
     AdminUploadController,
+    AdminStationApplicationsController,
   ],
   providers: [
     AdminAuthService,
@@ -47,6 +50,7 @@ import { AdminUploadController } from './admin-upload.controller';
     AdminUsersService,
     AdminStationsService,
     AdminPlantsService,
+    AdminStationApplicationsService,
   ],
 })
 export class AdminModule {}

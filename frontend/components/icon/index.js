@@ -25,7 +25,7 @@ Component({
   },
 
   data: {
-    src: '/static/icons/home/default.svg'
+    src: '/static/icons/tab/home.png'
   },
 
   observers: {

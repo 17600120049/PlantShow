@@ -9,6 +9,7 @@ import { QrModule } from './qr/qr.module';
 import { UsersModule } from './users/users.module';
 import { AdminModule } from './admin/admin.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { StationApplicationsModule } from './station-applications/station-applications.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     QrModule,
     UsersModule,
     FavoritesModule,
+    StationApplicationsModule,
     AdminModule,
   ],
 })

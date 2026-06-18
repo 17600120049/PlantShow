@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
 import StationsPage from './pages/StationsPage';
+import StationApplicationsPage from './pages/StationApplicationsPage';
 import PlantsPage from './pages/PlantsPage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -30,6 +31,7 @@ export default function App() {
           <Route index element={<DashboardPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="stations" element={<StationsPage />} />
+          <Route path="station-applications" element={<StationApplicationsPage />} />
           <Route path="plants" element={<PlantsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

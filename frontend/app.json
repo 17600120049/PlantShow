@@ -5,7 +5,8 @@
     "pages/profile/index",
     "pages/plant-detail/index",
     "pages/station-detail/index",
-    "pages/publish/index",
+    "pages/stations-list/index",
+    "pages/join-us/index",
     "pages/scan-donate/index",
     "pages/scan-adopt/index"
   ],

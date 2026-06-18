@@ -152,10 +152,16 @@ export default function StationsPage() {
                   onClick={() => {
                     Modal.confirm({
                       title: '确认删除该中转站？',
+                      content: '删除后，该站关联的植物将自动解除绑定并下架。',
                       onOk: async () => {
-                        await api.deleteStation(record.id);
-                        message.success('已删除');
-                        load();
+                        try {
+                          await api.deleteStation(record.id);
+                          message.success('已删除');
+                          load();
+                        } catch (err) {
+                          message.error(err instanceof Error ? err.message : '删除失败');
+                          throw err;
+                        }
                       },
                     });
                   }}

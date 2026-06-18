@@ -1,0 +1,83 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">加入我们</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <block wx:if="{{!submitted}}">
+    <view class="hero">
+      <text class="philosophy-title">我们的理念</text>
+      <view class="philosophy-item">
+        <view class="philosophy-dot"></view>
+        <text class="philosophy-text">我们相信，每一株植物都值得被温柔对待。当主人无法继续照料时，植物不应被遗弃，而应通过中转站找到新的归宿。</text>
+      </view>
+      <view class="philosophy-item">
+        <view class="philosophy-dot"></view>
+        <text class="philosophy-text">中转站是城市里的「植物驿站」——接收送养植物、展示待领养信息，连接送养者与领养者，让流浪植物重新流动起来。</text>
+      </view>
+      <view class="philosophy-item">
+        <view class="philosophy-dot"></view>
+        <text class="philosophy-text">我们欢迎花店、社区空间、咖啡馆等有爱心的场所加入，一起搭建覆盖城市的植物中转网络，传递绿色与温暖。</text>
+      </view>
+    </view>
+
+    <view class="form-card glass">
+      <text class="form-title">提交申请</text>
+      <text class="form-subtitle">填写信息后，我们将在 3 个工作日内审核并与您联系</text>
+
+      <view class="form-item">
+        <text class="label">联系人 <text class="required">*</text></text>
+        <input class="input" placeholder="您的姓名" value="{{applicantName}}" bindinput="onApplicantNameInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">联系电话 <text class="required">*</text></text>
+        <input class="input" type="number" placeholder="方便我们与您联系" value="{{phone}}" bindinput="onPhoneInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">拟设中转站名称 <text class="required">*</text></text>
+        <input class="input" placeholder="例如：城市根系中转站" value="{{stationName}}" bindinput="onStationNameInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">详细地址 <text class="required">*</text></text>
+        <input class="input" placeholder="请填写完整地址，便于用户导航到达" value="{{address}}" bindinput="onAddressInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">营业时间</text>
+        <input class="input" placeholder="例如：09:00-20:00" value="{{hours}}" bindinput="onHoursInput" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">申请说明</text>
+        <textarea class="textarea" placeholder="简单介绍您的场地、运营计划或加入意愿..." value="{{intro}}" bindinput="onIntroInput" maxlength="500" />
+      </view>
+    </view>
+
+    <button class="primary-btn" bindtap="submitApplication" loading="{{submitting}}" disabled="{{submitting}}">提交申请</button>
+  </block>
+
+  <block wx:else>
+    <view class="success-card glass">
+      <view class="success-icon">✓</view>
+      <text class="success-title">申请已提交</text>
+      <text class="success-desc">感谢您的信任！我们已收到您的申请，审核结果将通过电话联系您。</text>
+    </view>
+    <button class="primary-btn" bindtap="goHome">返回首页</button>
+    <button class="secondary-btn" bindtap="goBack">返回列表</button>
+  </block>
+</view>

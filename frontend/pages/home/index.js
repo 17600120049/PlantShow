@@ -101,9 +101,8 @@ Page({
   },
 
   viewAllStations: function () {
-    wx.showToast({
-      title: '更多中转站即将上线',
-      icon: 'none'
+    wx.navigateTo({
+      url: '/pages/stations-list/index'
     });
   },
 

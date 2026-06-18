@@ -1,0 +1,85 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">全部中转站</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="load-error" wx:if="{{loadError}}">{{loadError}}</view>
+
+  <view class="empty-state" wx:if="{{!loading && !loadError && stations.length === 0}}">
+    <pw-icon name="map-pin" size="72" color="#9C9690" strokeWidth="1.6" />
+    <text class="empty-text">暂无中转站</text>
+    <text class="empty-hint">欢迎申请成为合作伙伴</text>
+  </view>
+
+  <view class="station-list" wx:else>
+    <view
+      class="station-card glass-liquid"
+      wx:for="{{stations}}"
+      wx:key="id"
+      bindtap="goToStationDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="station-logo-wrap">
+        <image wx:if="{{item.logoUrl}}" class="station-logo" src="{{item.logoUrl}}" mode="aspectFill" />
+        <view wx:else class="station-image">{{item.image}}</view>
+      </view>
+      <view class="station-info">
+        <view class="station-header">
+          <text class="station-name">{{item.name}}</text>
+          <view class="station-status {{item.isActive ? 'status-open' : 'status-closed'}}">
+            {{item.isActive ? '营业中' : '休息中'}}
+          </view>
+        </view>
+        <view class="station-address-row">
+          <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
+          <text class="station-address">{{item.address}}</text>
+        </view>
+        <view class="station-meta">
+          <view class="meta-item">
+            <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
+            <text>{{item.hours}}</text>
+          </view>
+          <view
+            class="meta-item meta-item-nav"
+            wx:if="{{item.address}}"
+            catchtap="openStationNavigation"
+            data-id="{{item.id}}"
+          >
+            <pw-icon name="navigation" size="24" color="#3F5F4E" strokeWidth="1.8" />
+            <text>导航</text>
+          </view>
+        </view>
+      </view>
+      <view class="station-plants">
+        <text class="plants-count">{{item.plants}}</text>
+        <text class="plants-label">株植物</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="join-fixed-bar" wx:if="{{!loadError}}">
+    <view class="join-fixed-inner">
+      <view class="join-fixed-text">
+        <text class="join-fixed-title">想开设中转站？</text>
+        <text class="join-fixed-desc">欢迎加入流浪植物网络</text>
+      </view>
+      <view class="join-fixed-btn" bindtap="goToJoinUs">
+        <text>加入我们</text>
+        <pw-icon name="chevron-right" size="28" color="#FFFFFF" strokeWidth="2" />
+      </view>
+    </view>
+  </view>
+</view>

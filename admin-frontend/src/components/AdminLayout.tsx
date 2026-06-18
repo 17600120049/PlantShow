@@ -4,6 +4,7 @@ import {
   UserOutlined,
   ShopOutlined,
   EnvironmentOutlined,
+  FormOutlined,
 } from '@ant-design/icons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ const menuItems = [
   { key: '/', icon: <DashboardOutlined />, label: '数据概览' },
   { key: '/users', icon: <UserOutlined />, label: '用户管理' },
   { key: '/stations', icon: <ShopOutlined />, label: '中转站管理' },
+  { key: '/station-applications', icon: <FormOutlined />, label: '加盟申请' },
   { key: '/plants', icon: <EnvironmentOutlined />, label: '植物管理' },
 ];
 
