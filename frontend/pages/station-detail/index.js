@@ -1,6 +1,7 @@
-const { initDetailNav } = require('../../utils/system');
+const { setupDetailNav } = require('../../utils/system');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
+const navigation = require('../../utils/navigation');
 
 Page({
   data: {
@@ -20,7 +21,7 @@ Page({
   },
 
   onLoad: function (options) {
-    initDetailNav(this);
+    setupDetailNav(this);
     if (options && options.id) {
       this.stationId = options.id;
       this.loadStation(options.id);
@@ -106,6 +107,10 @@ Page({
 
   goBack: function () {
     wx.navigateBack({ delta: 1 });
+  },
+
+  openStationNavigation: function () {
+    navigation.openStationLocation(this.data.station);
   },
 
   onPullDownRefresh: function () {

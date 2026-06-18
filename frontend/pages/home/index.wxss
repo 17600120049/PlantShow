@@ -310,6 +310,17 @@
   color: var(--color-text-tertiary);
 }
 
+.meta-item-nav {
+  color: var(--color-primary);
+  padding: 4rpx 12rpx;
+  margin: -4rpx -12rpx;
+  border-radius: 999rpx;
+}
+
+.meta-item-nav:active {
+  background: rgba(45, 71, 57, 0.08);
+}
+
 .station-plants {
   text-align: center;
   margin-left: 16rpx;

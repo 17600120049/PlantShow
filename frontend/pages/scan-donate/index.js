@@ -1,4 +1,4 @@
-const { initStatusBarHeight } = require('../../utils/system');
+const { setupDetailNav } = require('../../utils/system');
 const { parseQrResult } = require('../../utils/qr');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
@@ -6,6 +6,11 @@ const media = require('../../utils/media');
 Page({
   data: {
     statusBarHeight: 44,
+    navBarBottom: 88,
+    navContentTop: 44,
+    navContentHeight: 32,
+    navPaddingX: 16,
+    navCapsuleWidth: 88,
     step: 'intro',
     scanning: false,
     submitting: false,
@@ -20,7 +25,7 @@ Page({
   },
 
   onLoad: function () {
-    initStatusBarHeight(this);
+    setupDetailNav(this);
   },
 
   goBack: function () {
@@ -63,11 +68,6 @@ Page({
       .finally(function () {
         that.setData({ scanning: false });
       });
-  },
-
-  simulateStationScan: function (e) {
-    const stationId = e.currentTarget.dataset.id;
-    this.handleScanResult('plantwander://station/' + stationId);
   },
 
   handleScanResult: function (raw) {

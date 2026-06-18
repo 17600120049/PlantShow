@@ -182,8 +182,8 @@ export default function StationsPage() {
           <Form.Item name="name" label="名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="address" label="地址" rules={[{ required: true }]}>
-            <Input />
+          <Form.Item name="address" label="地址" rules={[{ required: true }]} extra="保存时会通过高德地图验证地址是否可搜索">
+            <Input placeholder="建议填写完整地址，如：北京市朝阳区双桥中路50号院" />
           </Form.Item>
           <Form.Item name="hours" label="营业时间" rules={[{ required: true }]} extra="营业状态将根据此时间自动计算">
             <Input placeholder="09:00-20:00" />

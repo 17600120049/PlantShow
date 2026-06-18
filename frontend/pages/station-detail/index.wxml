@@ -9,7 +9,9 @@
           <view class="detail-nav-back-arrow"></view>
         </view>
       </view>
-      <text class="detail-nav-title">中转站详情</text>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">中转站详情</text>
+      </view>
       <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
     </view>
   </view>
@@ -30,6 +32,14 @@
           </view>
         </view>
         <text class="station-address">{{station.address}}</text>
+        <view
+          class="station-nav-btn"
+          wx:if="{{station.address}}"
+          catchtap="openStationNavigation"
+        >
+          <pw-icon name="navigation" size="24" color="#3F5F4E" strokeWidth="1.8" />
+          <text>导航前往</text>
+        </view>
         <text class="station-code">编号 {{station.stationCode}}</text>
         <text class="station-hours">{{station.hours}}</text>
         <text class="station-phone" wx:if="{{station.phone}}">电话 {{station.phone}}</text>

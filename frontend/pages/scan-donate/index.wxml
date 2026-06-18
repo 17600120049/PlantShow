@@ -1,11 +1,19 @@
 <view class="page">
-  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px;">
-    <view class="nav-back" bindtap="goBack">
-      <pw-icon name="chevron-right" size="36" color="#2D4739" strokeWidth="2" class="nav-back-icon" />
-      <text class="nav-back-text">返回</text>
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">扫码送养</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
     </view>
-    <text class="nav-title">扫码送养</text>
-    <view class="nav-placeholder"></view>
   </view>
 
   <!-- 引导页 -->
@@ -38,15 +46,6 @@
       <view class="guide-step">
         <text class="step-num">3</text>
         <text class="step-text">完成送养，植物自动归属该中转站</text>
-      </view>
-    </view>
-
-    <view class="demo-card glass">
-      <text class="demo-title">开发测试 · 模拟扫描中转站</text>
-      <view class="demo-list">
-        <view class="demo-item" bindtap="simulateStationScan" data-id="1">城市根系中转站</view>
-        <view class="demo-item" bindtap="simulateStationScan" data-id="2">自丛中转站</view>
-        <view class="demo-item" bindtap="simulateStationScan" data-id="3">绿野中转站</view>
       </view>
     </view>
   </block>

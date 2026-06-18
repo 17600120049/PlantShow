@@ -9,7 +9,9 @@
           <view class="detail-nav-back-arrow"></view>
         </view>
       </view>
-      <text class="detail-nav-title">植物详情</text>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">植物详情</text>
+      </view>
       <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
     </view>
   </view>

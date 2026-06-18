@@ -1,4 +1,4 @@
-const { initDetailNav } = require('../../utils/system');
+const { setupDetailNav } = require('../../utils/system');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
 
@@ -19,7 +19,7 @@ Page({
   },
 
   onLoad: function (options) {
-    initDetailNav(this);
+    setupDetailNav(this);
     if (options && options.id) {
       this.plantId = options.id;
       this.loadPlant(options.id);

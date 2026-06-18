@@ -19,6 +19,11 @@ export class StationsController {
     return this.stationsService.findOne(id);
   }
 
+  @Get(':id/navigation')
+  getNavigation(@Param('id', ParseIntPipe) id: number) {
+    return this.stationsService.resolveNavigationTarget(id);
+  }
+
   @Get(':id/plants')
   findPlants(@Param('id', ParseIntPipe) id: number) {
     return this.plantsService.findAvailableByStation(id);

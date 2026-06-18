@@ -39,6 +39,23 @@
   margin-top: 6rpx;
 }
 
+.station-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  margin-top: 16rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 999rpx;
+  background: rgba(45, 71, 57, 0.08);
+  color: var(--color-primary);
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.station-nav-btn:active {
+  background: rgba(45, 71, 57, 0.14);
+}
+
 .station-aside {
   display: flex;
   flex-direction: column;

@@ -1,6 +1,7 @@
 const { initStatusBarHeight, setTabBarSelected } = require('../../utils/system');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
+const navigation = require('../../utils/navigation');
 
 Page({
   data: {
@@ -70,6 +71,14 @@ Page({
     wx.navigateTo({
       url: `/pages/station-detail/index?id=${id}`
     });
+  },
+
+  openStationNavigation: function (e) {
+    const id = Number(e.currentTarget.dataset.id);
+    const station = this.data.stations.find(function (item) {
+      return Number(item.id) === id;
+    });
+    navigation.openStationLocation(station);
   },
 
   goToScanDonate: function () {

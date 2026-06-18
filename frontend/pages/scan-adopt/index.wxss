@@ -2,6 +2,7 @@
 
 .hero {
   background: linear-gradient(145deg, #7A9A88 0%, #5A7A68 100%);
+  box-shadow: 0 8rpx 32rpx rgba(90, 122, 104, 0.18);
 }
 
 .scan-btn.adopt {
@@ -13,38 +14,12 @@
   background: #6B8B7A;
 }
 
-.demo-card {
-  margin-top: 32rpx;
-  padding: 28rpx;
-  border-radius: var(--radius-lg);
-}
-
-.demo-title {
-  display: block;
-  font-size: 24rpx;
-  color: var(--color-text-tertiary);
-  margin-bottom: 16rpx;
-}
-
-.demo-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-}
-
-.demo-item {
-  padding: 16rpx 28rpx;
-  background: rgba(107, 139, 122, 0.12);
-  color: var(--color-primary);
-  font-size: 26rpx;
-  border-radius: 999rpx;
-}
-
 .station-header {
   display: flex;
   gap: 24rpx;
   padding: 28rpx;
   border-radius: var(--radius-lg);
+  margin-top: 16rpx;
   margin-bottom: 32rpx;
 }
 

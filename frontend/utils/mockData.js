@@ -7,7 +7,7 @@ const stations = [
     hours: '09:00-20:00',
     phone: '0571 8723 5456',
     plants: 45,
-    distance: '1.2km'
+    distance: '导航'
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const stations = [
     hours: '10:00-19:00',
     phone: '0571 8675 3210',
     plants: 28,
-    distance: '3.5km'
+    distance: '导航'
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const stations = [
     hours: '10:00-22:00',
     phone: '0571 8899 1234',
     plants: 56,
-    distance: '5.8km'
+    distance: '导航'
   }
 ];
 

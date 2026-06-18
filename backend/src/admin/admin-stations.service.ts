@@ -4,13 +4,17 @@
   NotFoundException,
 } from '@nestjs/common';
 import { PlantListStatus } from '@prisma/client';
+import { GeocodingService } from '../common/geocoding.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { toStationDto } from '../common/mappers';
 import { CreateStationDto, UpdateStationDto } from './dto/station.dto';
 
 @Injectable()
 export class AdminStationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly geocoding: GeocodingService,
+  ) {}
 
   async findAll() {
     const stations = await this.prisma.station.findMany({
@@ -27,6 +31,8 @@ export class AdminStationsService {
   }
 
   async create(dto: CreateStationDto) {
+    await this.ensureAddressSearchable(dto.address);
+
     const station = await this.prisma.station.create({
       data: {
         stationCode: dto.stationCode,
@@ -44,11 +50,17 @@ export class AdminStationsService {
         },
       },
     });
+
     return toStationDto(station);
   }
 
   async update(id: number, dto: UpdateStationDto) {
-    await this.ensureStation(id);
+    const existing = await this.ensureStation(id);
+
+    if (dto.address && dto.address !== existing.address) {
+      await this.ensureAddressSearchable(dto.address);
+    }
+
     const station = await this.prisma.station.update({
       where: { id },
       data: dto,
@@ -60,6 +72,7 @@ export class AdminStationsService {
         },
       },
     });
+
     return toStationDto(station);
   }
 
@@ -78,5 +91,14 @@ export class AdminStationsService {
       throw new NotFoundException('中转站不存在');
     }
     return station;
+  }
+
+  private async ensureAddressSearchable(address: string) {
+    const geocoded = await this.geocoding.geocodeAddress(address);
+    if (!geocoded) {
+      throw new BadRequestException(
+        '无法根据该地址搜索到位置，请填写更完整的地址或检查地图 API Key 配置',
+      );
+    }
   }
 }

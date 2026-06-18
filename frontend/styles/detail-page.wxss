@@ -1,6 +1,8 @@
 .detail-nav-wrap {
   position: relative;
-  width: 100%;
+  width: calc(100% + 64rpx);
+  margin-left: -32rpx;
+  margin-right: -32rpx;
   flex-shrink: 0;
 }
 
@@ -17,6 +19,7 @@
 .detail-nav-side {
   display: flex;
   align-items: center;
+  height: 100%;
   flex-shrink: 0;
 }
 
@@ -44,14 +47,25 @@
   box-sizing: border-box;
 }
 
-.detail-nav-title {
+.detail-nav-title-wrap {
   flex: 1;
-  text-align: center;
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-nav-title {
+  max-width: 100%;
   font-size: 34rpx;
   font-weight: 600;
   color: var(--color-text);
   letter-spacing: 1rpx;
   line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .detail-favorite-btn {

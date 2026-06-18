@@ -30,12 +30,12 @@ function initStatusBarHeight(page, extraTop) {
 }
 
 function initDetailNav(page) {
-  const statusBarHeight = getStatusBarHeight();
+  const windowInfo = wx.getWindowInfo?.() || wx.getSystemInfoSync?.() || {};
+  const statusBarHeight = windowInfo.statusBarHeight || getStatusBarHeight();
+  const screenWidth = windowInfo.screenWidth || 375;
   const menuButton = getMenuButtonRect();
-  const systemInfo = wx.getSystemInfoSync?.() || {};
-  const screenWidth = systemInfo.screenWidth || 375;
 
-  if (!menuButton || !menuButton.top) {
+  if (!menuButton || !menuButton.height) {
     page.setData({
       statusBarHeight: statusBarHeight,
       navContentTop: statusBarHeight + 6,
@@ -48,16 +48,41 @@ function initDetailNav(page) {
   }
 
   const navPaddingX = screenWidth - menuButton.right;
-  const navBarBottom = menuButton.bottom + navPaddingX;
+  const navGap = menuButton.top - statusBarHeight;
 
   page.setData({
     statusBarHeight: statusBarHeight,
     navContentTop: menuButton.top,
     navContentHeight: menuButton.height,
-    navBarBottom: navBarBottom,
+    navBarBottom: menuButton.bottom + navGap,
     navPaddingX: navPaddingX,
     navCapsuleWidth: menuButton.width
   });
+}
+
+function setupDetailNav(page) {
+  initDetailNav(page);
+
+  if (page.__detailNavReadyBound) {
+    return;
+  }
+  page.__detailNavReadyBound = true;
+
+  const originalReady = page.onReady;
+  page.onReady = function () {
+    initDetailNav(this);
+    if (typeof originalReady === 'function') {
+      originalReady.call(this);
+    }
+  };
+
+  const originalShow = page.onShow;
+  page.onShow = function () {
+    initDetailNav(this);
+    if (typeof originalShow === 'function') {
+      originalShow.call(this);
+    }
+  };
 }
 
 function setTabBarSelected(page, index) {
@@ -77,6 +102,7 @@ module.exports = {
   getStatusBarHeight,
   initStatusBarHeight,
   initDetailNav,
+  setupDetailNav,
   setTabBarSelected,
   showComingSoon
 };
