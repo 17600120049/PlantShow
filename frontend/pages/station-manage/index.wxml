@@ -1,0 +1,152 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">中转站管理</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 中转站列表 -->
+  <view class="list-view" wx:if="{{!loading && view === 'list'}}">
+    <text class="list-hint" wx:if="{{managedStations.length}}">选择要管理的中转站</text>
+    <view
+      class="station-card glass"
+      wx:for="{{managedStations}}"
+      wx:key="id"
+      bindtap="openStation"
+      data-id="{{item.id}}"
+    >
+      <view class="station-card-logo" wx:if="{{item.logoUrl}}">
+        <image src="{{item.logoUrl}}" mode="aspectFill" />
+      </view>
+      <view class="station-card-emoji" wx:else>{{item.image}}</view>
+      <view class="station-card-info">
+        <text class="station-card-name">{{item.name}}</text>
+        <text class="station-card-address">{{item.address}}</text>
+        <view class="station-card-meta">
+          <text class="station-card-hours">{{item.hours}}</text>
+          <text class="station-card-status {{item.isActive ? 'open' : 'closed'}}">
+            {{item.isActive ? '营业中' : '休息中'}}
+          </text>
+        </view>
+      </view>
+      <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
+    </view>
+    <text class="load-error" wx:if="{{loadError}}">{{loadError}}</text>
+  </view>
+
+  <!-- 管理详情 -->
+  <view class="detail-view" wx:if="{{!loading && view === 'detail' && station}}">
+    <view class="tab-bar">
+      <view class="tab-item {{activeTab === 'info' ? 'active' : ''}}" bindtap="switchTab" data-tab="info">基本信息</view>
+      <view class="tab-item {{activeTab === 'plants' ? 'active' : ''}}" bindtap="switchTab" data-tab="plants">植物管理</view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="panel glass" wx:if="{{activeTab === 'info'}}">
+      <view class="form-item">
+        <text class="label">中转站编号</text>
+        <text class="readonly-value">{{station.stationCode}}</text>
+      </view>
+
+      <view class="form-item">
+        <text class="label">名称 <text class="required">*</text></text>
+        <input class="input" value="{{form.name}}" data-field="name" bindinput="onFormInput" placeholder="中转站名称" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">地址 <text class="required">*</text></text>
+        <input class="input" value="{{form.address}}" data-field="address" bindinput="onFormInput" placeholder="详细地址" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">营业时间模式</text>
+        <radio-group class="radio-row" bindchange="onHoursModeChange">
+          <label class="radio-label">
+            <radio value="FIXED" checked="{{form.hoursMode === 'FIXED'}}" color="#2D4739" />固定时间
+          </label>
+          <label class="radio-label">
+            <radio value="FLEXIBLE" checked="{{form.hoursMode === 'FLEXIBLE'}}" color="#2D4739" />无固定时间
+          </label>
+        </radio-group>
+      </view>
+
+      <view class="form-item" wx:if="{{form.hoursMode === 'FIXED'}}">
+        <text class="label">营业时间段 <text class="required">*</text></text>
+        <input class="input" value="{{form.hours}}" data-field="hours" bindinput="onFormInput" placeholder="如 09:00-20:00" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">联系方式</text>
+        <radio-group class="radio-row" bindchange="onContactTypeChange">
+          <label class="radio-label">
+            <radio value="PHONE" checked="{{form.contactType === 'PHONE'}}" color="#2D4739" />电话
+          </label>
+          <label class="radio-label">
+            <radio value="WECHAT" checked="{{form.contactType === 'WECHAT'}}" color="#2D4739" />微信
+          </label>
+        </radio-group>
+      </view>
+
+      <view class="form-item">
+        <text class="label">{{form.contactType === 'WECHAT' ? '微信号' : '联系电话'}}</text>
+        <input class="input" value="{{form.phone}}" data-field="phone" bindinput="onFormInput" placeholder="选填" />
+      </view>
+
+      <view class="form-item">
+        <text class="label">Logo</text>
+        <view class="logo-row">
+          <view class="logo-preview" wx:if="{{form.logoUrl}}">
+            <image src="{{form.logoUrl}}" mode="aspectFill" />
+          </view>
+          <view class="logo-add" bindtap="chooseLogo">
+            <text>{{form.logoUrl ? '更换' : '上传 Logo'}}</text>
+          </view>
+        </view>
+      </view>
+
+      <button class="primary-btn" bindtap="saveStation" loading="{{savingStation}}" disabled="{{savingStation}}">保存修改</button>
+    </view>
+
+    <!-- 植物管理 -->
+    <view class="panel" wx:if="{{activeTab === 'plants'}}">
+      <view class="plants-empty" wx:if="{{!plants.length}}">
+        <text>暂无植物</text>
+      </view>
+      <view
+        class="plant-card glass"
+        wx:for="{{plants}}"
+        wx:key="id"
+        bindtap="editPlant"
+        data-id="{{item.id}}"
+      >
+        <image wx:if="{{item.photoUrl}}" class="plant-photo" src="{{item.photoUrl}}" mode="aspectFill" />
+        <view wx:else class="plant-emoji">{{item.image}}</view>
+        <view class="plant-info">
+          <text class="plant-name">{{item.name}}</text>
+          <text class="plant-species">{{item.category || item.species}}</text>
+          <text class="plant-status {{item.listStatus === 'AVAILABLE' ? 'available' : ''}}">{{item.status}}</text>
+        </view>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
+      </view>
+    </view>
+  </view>
+
+  <view class="error-panel" wx:if="{{!loading && loadError && view === 'detail' && !station}}">
+    <text class="load-error">{{loadError}}</text>
+  </view>
+</view>

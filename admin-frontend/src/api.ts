@@ -73,7 +73,12 @@ export const api = {
       `/api/admin/users${keyword ? `?keyword=${encodeURIComponent(keyword)}` : ''}`,
     ),
 
-  updateUser: (id: string, data: { nickname?: string; city?: string; bio?: string }) =>
+  updateUser: (id: string, data: {
+    nickname?: string;
+    city?: string;
+    bio?: string;
+    managedStationId?: number | null;
+  }) =>
     request(`/api/admin/users/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
 
   adjustPoints: (id: string, delta: number, reason?: string) =>
@@ -124,8 +129,6 @@ export const api = {
 
   getStationQrUrl: (stationId: number, size = 320) =>
     `/api/qr/station/${stationId}?size=${size}`,
-
-  getStationQrPayload: (stationId: number) => `plantwander://station/${stationId}`,
 
   uploadImage: async (file: File) => {
     const form = new FormData();

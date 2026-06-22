@@ -4,6 +4,15 @@ export type PlantPhotoRecord = {
   photos?: unknown;
 };
 
+function isLocalPhotoPath(url: string): boolean {
+  return (
+    /^wxfile:/.test(url) ||
+    /^http:\/\/tmp/.test(url) ||
+    /^tmp\//.test(url) ||
+    /^\/tmp\//.test(url)
+  );
+}
+
 /** Extract upload path from full or relative URL, e.g. /api/uploads/abc.jpg */
 export function normalizePhotoPath(url: unknown): string {
   if (typeof url !== 'string') {
@@ -11,6 +20,9 @@ export function normalizePhotoPath(url: unknown): string {
   }
   const trimmed = url.trim();
   if (!trimmed) {
+    return '';
+  }
+  if (isLocalPhotoPath(trimmed)) {
     return '';
   }
 

@@ -27,7 +27,10 @@ App({
 
     const auth = require('./utils/auth');
     const plantStore = require('./utils/plantStore');
-    auth.ensureLogin(this).catch(function (err) {
+    const stationAutoSync = require('./utils/stationAutoSync');
+    auth.ensureLogin(this).then(function () {
+      stationAutoSync.runOnAppActive();
+    }).catch(function (err) {
       console.warn('[auth] 自动登录失败', err);
     });
     plantStore.probeApi().then(function (online) {
@@ -36,6 +39,11 @@ App({
       }
     });
     setTimeout(loadAppFonts, 0);
+  },
+
+  onShow: function () {
+    const stationAutoSync = require('./utils/stationAutoSync');
+    stationAutoSync.runOnAppActive();
   },
 
   globalData: {

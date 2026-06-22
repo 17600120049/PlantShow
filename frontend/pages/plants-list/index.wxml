@@ -1,0 +1,93 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">全部植物</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="filter-panel glass" wx:if="{{!loadError}}">
+    <view class="search-bar">
+      <pw-icon name="leaf" size="32" color="#9C9690" strokeWidth="1.8" />
+      <input
+        class="search-input"
+        value="{{searchKeyword}}"
+        placeholder="搜索名称、编号、品种描述或中转站"
+        placeholder-class="search-placeholder"
+        confirm-type="search"
+        bindinput="onSearchInput"
+      />
+      <view class="search-clear" wx:if="{{searchKeyword}}" bindtap="clearSearch">
+        <text>×</text>
+      </view>
+    </view>
+
+    <view class="filter-group" wx:if="{{stations.length}}">
+      <text class="filter-label">中转站</text>
+      <picker
+        mode="selector"
+        range="{{stationPickerLabels}}"
+        value="{{stationPickerIndex}}"
+        bindchange="onStationFilterChange"
+      >
+        <view class="filter-picker">
+          <text class="filter-picker-text">{{stationPickerLabels[stationPickerIndex]}}</text>
+          <pw-icon name="chevron-right" size="28" color="#9C9690" strokeWidth="2" />
+        </view>
+      </picker>
+    </view>
+
+    <view class="filter-meta" wx:if="{{!loading}}">
+      <text class="result-count">共 {{plants.length}} 株</text>
+      <text class="reset-link" wx:if="{{hasActiveFilters}}" bindtap="resetFilters">清除筛选</text>
+    </view>
+  </view>
+
+  <view class="load-error" wx:if="{{loadError}}">{{loadError}}</view>
+
+  <view class="empty-state" wx:if="{{!loading && !loadError && allPlants.length === 0}}">
+    <pw-icon name="leaf" size="72" color="#9C9690" strokeWidth="1.6" />
+    <text class="empty-text">暂无待领养植物</text>
+    <text class="empty-hint">欢迎扫码送养，让植物找到新主人</text>
+  </view>
+
+  <view class="empty-state" wx:elif="{{!loading && !loadError && allPlants.length && plants.length === 0}}">
+    <pw-icon name="leaf" size="72" color="#9C9690" strokeWidth="1.6" />
+    <text class="empty-text">未找到匹配的植物</text>
+    <text class="empty-hint">试试调整搜索词或筛选条件</text>
+    <view class="empty-action" wx:if="{{hasActiveFilters}}" bindtap="resetFilters">清除筛选</view>
+  </view>
+
+  <view class="plant-list" wx:elif="{{plants.length}}">
+    <view
+      class="plant-card glass-liquid"
+      wx:for="{{plants}}"
+      wx:key="id"
+      bindtap="goToPlantDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="plant-image-wrap">
+        <image wx:if="{{item.photoUrl}}" class="plant-photo" src="{{item.photoUrl}}" mode="aspectFill" />
+        <view wx:else class="plant-emoji">{{item.image}}</view>
+      </view>
+      <view class="plant-info">
+        <text class="plant-name">{{item.name}}</text>
+        <text class="plant-category">{{item.category}}</text>
+        <view class="plant-footer">
+          <text class="plant-station">{{item.station || '暂无中转站'}}</text>
+          <view class="plant-status-tag">{{item.status}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

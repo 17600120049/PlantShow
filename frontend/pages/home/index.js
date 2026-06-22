@@ -3,6 +3,8 @@ const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
 const navigation = require('../../utils/navigation');
 
+const HOME_STATIONS_LIMIT = 3;
+
 Page({
   data: {
     statusBarHeight: 20,
@@ -29,8 +31,9 @@ Page({
         const errors = [];
 
         if (stationsResult.status === 'fulfilled') {
-          that.setData({ stations: stationsResult.value, loadError: '' });
-          media.hydrateStations(stationsResult.value).then(function (stations) {
+          const previewStations = stationsResult.value.slice(0, HOME_STATIONS_LIMIT);
+          that.setData({ stations: previewStations, loadError: '' });
+          media.hydrateStations(previewStations).then(function (stations) {
             that.setData({ stations: stations });
           });
         } else {
@@ -107,8 +110,8 @@ Page({
   },
 
   viewAllPlants: function () {
-    wx.switchTab({
-      url: '/pages/favorites/index'
+    wx.navigateTo({
+      url: '/pages/plants-list/index'
     });
   }
 });

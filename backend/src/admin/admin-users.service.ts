@@ -31,21 +31,18 @@ export class AdminUsersService {
             plantHistories: true,
           },
         },
+        stationManagers: {
+          include: {
+            station: {
+              select: { id: true, name: true },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
       },
     });
 
-    return users.map((user) => ({
-      id: user.id,
-      openid: user.openid,
-      nickname: user.nickname,
-      avatar: user.avatar,
-      city: user.city,
-      bio: user.bio,
-      points: user.points,
-      plantCount: user._count.plants,
-      historyCount: user._count.plantHistories,
-      createdAt: user.createdAt,
-    }));
+    return users.map((user) => this.toAdminUserDto(user));
   }
 
   async findOne(id: string) {
@@ -58,6 +55,13 @@ export class AdminUsersService {
           orderBy: { timestamp: 'desc' },
           include: { plant: { select: { name: true, plantCode: true } } },
         },
+        stationManagers: {
+          include: {
+            station: {
+              select: { id: true, name: true },
+            },
+          },
+        },
       },
     });
     if (!user) {
@@ -68,10 +72,72 @@ export class AdminUsersService {
 
   async update(id: string, dto: UpdateUserDto) {
     await this.ensureUser(id);
-    return this.prisma.user.update({
-      where: { id },
-      data: dto,
+
+    const { managedStationId, ...profile } = dto;
+    const data: {
+      nickname?: string;
+      city?: string;
+      bio?: string;
+    } = {};
+
+    if (profile.nickname !== undefined) {
+      data.nickname = profile.nickname;
+    }
+    if (profile.city !== undefined) {
+      data.city = profile.city;
+    }
+    if (profile.bio !== undefined) {
+      data.bio = profile.bio;
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      if (Object.keys(data).length) {
+        await tx.user.update({
+          where: { id },
+          data,
+        });
+      }
+
+      if (managedStationId !== undefined) {
+        await tx.stationManager.deleteMany({ where: { userId: id } });
+        if (managedStationId !== null) {
+          const station = await tx.station.findUnique({
+            where: { id: managedStationId },
+          });
+          if (!station) {
+            throw new BadRequestException('中转站不存在');
+          }
+          await tx.stationManager.create({
+            data: {
+              userId: id,
+              stationId: managedStationId,
+            },
+          });
+        }
+      }
     });
+
+    const updated = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            plants: true,
+            plantHistories: true,
+          },
+        },
+        stationManagers: {
+          include: {
+            station: {
+              select: { id: true, name: true },
+            },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
+      },
+    });
+
+    return this.toAdminUserDto(updated!);
   }
 
   async adjustPoints(id: string, dto: AdjustPointsDto) {
@@ -101,6 +167,37 @@ export class AdminUsersService {
 
     await this.prisma.user.delete({ where: { id } });
     return { success: true };
+  }
+
+  private toAdminUserDto(user: {
+    id: string;
+    openid: string;
+    nickname: string;
+    avatar: string | null;
+    city: string | null;
+    bio: string | null;
+    points: number;
+    createdAt: Date;
+    _count: { plants: number; plantHistories: number };
+    stationManagers: Array<{
+      station: { id: number; name: string };
+    }>;
+  }) {
+    const managedStation = user.stationManagers[0]?.station || null;
+    return {
+      id: user.id,
+      openid: user.openid,
+      nickname: user.nickname,
+      avatar: user.avatar,
+      city: user.city,
+      bio: user.bio,
+      points: user.points,
+      plantCount: user._count.plants,
+      historyCount: user._count.plantHistories,
+      managedStationId: managedStation?.id ?? null,
+      managedStationName: managedStation?.name ?? null,
+      createdAt: user.createdAt,
+    };
   }
 
   private async ensureUser(id: string) {

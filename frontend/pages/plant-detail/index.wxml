@@ -57,6 +57,10 @@
         <text class="info-label">所在中转站</text>
         <text class="info-value link" bindtap="goToStation">{{plant.station}}</text>
       </view>
+      <view class="info-row" wx:if="{{plant.donorName}}">
+        <text class="info-label">送养人</text>
+        <text class="info-value">{{plant.donorName}}</text>
+      </view>
       <view class="info-row" wx:if="{{plant.donateTime}}">
         <text class="info-label">送养时间</text>
         <text class="info-value">{{plant.donateTime}}</text>

@@ -1,22 +1,26 @@
-﻿import { Button, Form, Input, Modal, Space, Table, Tag, Typography, message } from 'antd';
+﻿import { Button, Form, Input, Modal, Select, Space, Table, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import ImageUpload from '../components/ImageUpload';
-import type { Station } from '../types';
+import type { ContactType, Station } from '../types';
+
+function contactTypeLabel(type?: ContactType) {
+  return type === 'WECHAT' ? '微信' : '电话';
+}
 
 function StationLogo({ url, name }: { url?: string | null; name: string }) {
-  if (url) {
-    return (
-      <img
-        src={url}
-        alt={name}
-        width={36}
-        height={36}
-        style={{ objectFit: 'cover', borderRadius: 6, marginRight: 8, verticalAlign: 'middle' }}
-      />
-    );
+  if (!url) {
+    return <span style={{ color: '#bfbfbf' }}>—</span>;
   }
-  return null;
+  return (
+    <img
+      src={url}
+      alt={name}
+      width={36}
+      height={36}
+      style={{ objectFit: 'cover', borderRadius: 6, display: 'block' }}
+    />
+  );
 }
 
 export default function StationsPage() {
@@ -26,6 +30,8 @@ export default function StationsPage() {
   const [creating, setCreating] = useState(false);
   const [qrStation, setQrStation] = useState<Station | null>(null);
   const [form] = Form.useForm();
+  const contactType = Form.useWatch('contactType', form) as ContactType | undefined;
+  const hoursMode = Form.useWatch('hoursMode', form) as Station['hoursMode'] | undefined;
 
   const load = async () => {
     setLoading(true);
@@ -45,7 +51,7 @@ export default function StationsPage() {
   const openCreate = () => {
     setCreating(true);
     form.resetFields();
-    form.setFieldsValue({ logoUrl: '' });
+    form.setFieldsValue({ logoUrl: '', contactType: 'PHONE', hoursMode: 'FIXED' });
   };
 
   const openEdit = (station: Station) => {
@@ -54,7 +60,9 @@ export default function StationsPage() {
       stationCode: station.stationCode,
       name: station.name,
       address: station.address,
-      hours: station.hours,
+      hoursMode: station.hoursMode || 'FIXED',
+      hours: station.hoursMode === 'FLEXIBLE' ? '' : station.hours,
+      contactType: station.contactType || 'PHONE',
       phone: station.phone,
       logoUrl: station.logoUrl || '',
     });
@@ -65,6 +73,8 @@ export default function StationsPage() {
     const payload = {
       ...values,
       logoUrl: values.logoUrl || null,
+      phone: values.phone?.trim() || null,
+      hours: values.hoursMode === 'FLEXIBLE' ? undefined : values.hours?.trim(),
     };
     try {
       if (creating) {
@@ -93,22 +103,39 @@ export default function StationsPage() {
         rowKey="id"
         loading={loading}
         dataSource={stations}
-        scroll={{ x: 1100 }}
+        scroll={{ x: 1200 }}
         pagination={{ pageSize: 10 }}
         columns={[
           { title: '编号', dataIndex: 'stationCode', width: 100 },
           {
-            title: '名称',
-            render: (_, r) => (
-              <span>
-                <StationLogo url={r.logoUrl} name={r.name} />
-                {r.name}
-              </span>
+            title: 'Logo',
+            width: 72,
+            align: 'center',
+            render: (_, r) => <StationLogo url={r.logoUrl} name={r.name} />,
+          },
+          { title: '名称', dataIndex: 'name', width: 140, ellipsis: true },
+          { title: '地址', dataIndex: 'address', width: 260, ellipsis: true },
+          {
+            title: '营业时间',
+            dataIndex: 'hours',
+            width: 140,
+            render: (hours: string, record) => (
+              record.hoursMode === 'FLEXIBLE'
+                ? <Tag>无固定</Tag>
+                : hours
             ),
           },
-          { title: '地址', dataIndex: 'address', ellipsis: true },
-          { title: '营业时间', dataIndex: 'hours', width: 120 },
-          { title: '电话', dataIndex: 'phone', width: 130 },
+          {
+            title: '联系方式',
+            width: 160,
+            ellipsis: true,
+            render: (_, r) => {
+              if (!r.phone) {
+                return '—';
+              }
+              return `${contactTypeLabel(r.contactType)} ${r.phone}`;
+            },
+          },
           { title: '待领养', dataIndex: 'plants', width: 80 },
           {
             title: '营业状态',
@@ -191,11 +218,41 @@ export default function StationsPage() {
           <Form.Item name="address" label="地址" rules={[{ required: true }]} extra="保存时会通过高德地图验证地址是否可搜索">
             <Input placeholder="建议填写完整地址，如：北京市朝阳区双桥中路50号院" />
           </Form.Item>
-          <Form.Item name="hours" label="营业时间" rules={[{ required: true }]} extra="营业状态将根据此时间自动计算">
-            <Input placeholder="09:00-20:00" />
+          <Form.Item name="hoursMode" label="营业时间类型" rules={[{ required: true }]}>
+            <Select>
+              <Select.Option value="FIXED">固定营业时间</Select.Option>
+              <Select.Option value="FLEXIBLE">无固定营业时间</Select.Option>
+            </Select>
           </Form.Item>
-          <Form.Item name="phone" label="电话">
-            <Input />
+          {hoursMode === 'FIXED' && (
+            <Form.Item
+              name="hours"
+              label="营业时间段"
+              rules={[{ required: true, message: '请填写营业时间段' }]}
+              extra="营业状态将根据此时间自动计算"
+            >
+              <Input placeholder="09:00-20:00" />
+            </Form.Item>
+          )}
+          {hoursMode === 'FLEXIBLE' && (
+            <Typography.Paragraph type="secondary" style={{ marginTop: -8 }}>
+              无固定营业时间的中转站，需由管理员扫码手动切换营业/休息状态。
+            </Typography.Paragraph>
+          )}
+          <Form.Item label="联系方式">
+            <Space.Compact style={{ width: '100%' }}>
+              <Form.Item name="contactType" noStyle initialValue="PHONE">
+                <Select style={{ width: 96 }}>
+                  <Select.Option value="PHONE">电话</Select.Option>
+                  <Select.Option value="WECHAT">微信</Select.Option>
+                </Select>
+              </Form.Item>
+              <Form.Item name="phone" noStyle>
+                <Input
+                  placeholder={contactType === 'WECHAT' ? '请输入微信号' : '请输入电话号码'}
+                />
+              </Form.Item>
+            </Space.Compact>
           </Form.Item>
           <Form.Item name="logoUrl" label="Logo">
             <ImageUpload label="上传中转站 Logo" />
@@ -207,32 +264,21 @@ export default function StationsPage() {
         title={qrStation ? `${qrStation.name} · 中转站二维码` : '中转站二维码'}
         open={!!qrStation}
         onCancel={() => setQrStation(null)}
-        footer={[
-          <Button key="close" onClick={() => setQrStation(null)}>关闭</Button>,
+        footer={
           qrStation ? (
             <Button
-              key="download"
               type="primary"
               href={api.getStationQrUrl(qrStation.id, 512)}
               download={`station-${qrStation.stationCode}-qr.png`}
             >
               下载二维码
             </Button>
-          ) : null,
-        ]}
+          ) : null
+        }
         width={400}
       >
         {qrStation && (
           <div style={{ textAlign: 'center', padding: '8px 0' }}>
-            {qrStation.logoUrl && (
-              <img
-                src={qrStation.logoUrl}
-                alt={qrStation.name}
-                width={72}
-                height={72}
-                style={{ objectFit: 'cover', borderRadius: 8, marginBottom: 12 }}
-              />
-            )}
             <img
               src={api.getStationQrUrl(qrStation.id, 280)}
               alt={`${qrStation.name} 二维码`}
@@ -245,12 +291,12 @@ export default function StationsPage() {
                 background: '#fff',
               }}
             />
-            <Typography.Paragraph type="secondary" style={{ marginTop: 16, marginBottom: 8 }}>
-              用户扫描此码可进行送养或领养，请打印张贴于中转站门口
+            <Typography.Paragraph
+              type="secondary"
+              style={{ marginTop: 16, marginBottom: 0, padding: '0 8px', whiteSpace: 'normal' }}
+            >
+              用户扫描此码可进行送养或领养；无固定营业时间的中转站，管理员扫码可切换营业状态
             </Typography.Paragraph>
-            <Typography.Text code copyable>
-              {api.getStationQrPayload(qrStation.id)}
-            </Typography.Text>
           </div>
         )}
       </Modal>

@@ -1,0 +1,227 @@
+@import "../../styles/detail-page.wxss";
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FAF9F7 0%, #F3F0EB 50%, #FAF9F7 100%);
+  padding: 0 32rpx calc(32rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.load-error {
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  background: rgba(196, 120, 90, 0.1);
+  color: #9A4A2E;
+  border-radius: var(--radius-md);
+  font-size: 26rpx;
+}
+
+.filter-panel {
+  margin-top: 8rpx;
+  padding: 24rpx;
+  border-radius: var(--radius-xl);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 0 20rpx;
+  height: 76rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1rpx solid rgba(45, 71, 57, 0.08);
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  height: 76rpx;
+  font-size: 26rpx;
+  color: var(--color-text);
+}
+
+.search-placeholder {
+  color: var(--color-text-tertiary);
+  font-size: 26rpx;
+}
+
+.search-clear {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: rgba(156, 150, 144, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-tertiary);
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.filter-group {
+  margin-top: 24rpx;
+}
+
+.filter-label {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 12rpx;
+}
+
+.filter-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  padding: 18rpx 24rpx;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1rpx solid rgba(45, 71, 57, 0.08);
+}
+
+.filter-picker-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 26rpx;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid rgba(45, 71, 57, 0.06);
+}
+
+.result-count {
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+}
+
+.reset-link {
+  font-size: 24rpx;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.plant-list {
+  padding-top: 16rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.empty-state {
+  margin-top: 120rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: var(--color-text-tertiary);
+}
+
+.empty-action {
+  margin-top: 24rpx;
+  padding: 14rpx 32rpx;
+  border-radius: 999rpx;
+  background: rgba(45, 71, 57, 0.08);
+  color: var(--color-primary);
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.plant-card {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-radius: var(--radius-lg);
+}
+
+.plant-image-wrap {
+  width: 140rpx;
+  height: 140rpx;
+  background: linear-gradient(145deg, #E8F0EA 0%, #D4E4D6 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.plant-photo {
+  width: 100%;
+  height: 100%;
+}
+
+.plant-emoji {
+  font-size: 64rpx;
+}
+
+.plant-info {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20rpx;
+}
+
+.plant-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plant-category {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  margin-bottom: 12rpx;
+}
+
+.plant-footer {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.plant-station {
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.plant-status-tag {
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 6rpx 14rpx;
+  background: rgba(45, 71, 57, 0.08);
+  color: var(--color-primary);
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}

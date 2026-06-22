@@ -80,16 +80,19 @@ Page({
         return;
       }
       if (!station.isActive) {
+        const content = station.isFlexibleHours
+          ? '「' + station.name + '」当前为休息中，请稍后再来。'
+          : '「' + station.name + '」当前不在营业时间内（' + station.hours + '），请稍后再来。';
         wx.showModal({
           title: '中转站休息中',
-          content: '「' + station.name + '」当前不在营业时间内（' + station.hours + '），请稍后再来。',
+          content: content,
           showCancel: false
         });
         return;
       }
 
       const qrRemote = plantStore.getQrImageUrl('station', station.id);
-      media.downloadToLocal(qrRemote).then(function (qrLocal) {
+      return media.downloadToLocal(qrRemote).then(function (qrLocal) {
         that.setData({
           step: 'plants',
           station: station,

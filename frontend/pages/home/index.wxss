@@ -189,7 +189,7 @@
 
 .station-card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 28rpx;
   border-radius: var(--radius-xl);
   margin-bottom: 20rpx;
@@ -285,7 +285,7 @@
   display: flex;
   align-items: center;
   gap: 8rpx;
-  margin-bottom: 12rpx;
+  margin-bottom: 10rpx;
 }
 
 .station-address {
@@ -295,11 +295,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
+  min-width: 0;
+}
+
+.station-nav-icon-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx;
+}
+
+.station-nav-icon-btn:active {
+  opacity: 0.65;
 }
 
 .station-meta {
   display: flex;
-  gap: 24rpx;
+  align-items: center;
 }
 
 .meta-item {
@@ -310,21 +323,10 @@
   color: var(--color-text-tertiary);
 }
 
-.meta-item-nav {
-  color: var(--color-primary);
-  padding: 4rpx 12rpx;
-  margin: -4rpx -12rpx;
-  border-radius: 999rpx;
-}
-
-.meta-item-nav:active {
-  background: rgba(45, 71, 57, 0.08);
-}
-
 .station-plants {
   text-align: center;
   margin-left: 16rpx;
-  padding: 12rpx 0 12rpx 20rpx;
+  padding-top: 4rpx;
   flex-shrink: 0;
   position: relative;
   z-index: 1;

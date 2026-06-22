@@ -113,6 +113,22 @@ Page({
     navigation.openStationLocation(this.data.station);
   },
 
+  copyContact: function () {
+    const station = this.data.station;
+    if (!station || !station.phone) {
+      return;
+    }
+    wx.setClipboardData({
+      data: station.phone,
+      success: function () {
+        wx.showToast({ title: '已复制', icon: 'success' });
+      },
+      fail: function () {
+        wx.showToast({ title: '复制失败', icon: 'none' });
+      }
+    });
+  },
+
   onPullDownRefresh: function () {
     const station = this.data.station;
     if (station) {

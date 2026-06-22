@@ -1,0 +1,53 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">积分记录</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="load-error" wx:if="{{loadError}}">{{loadError}}</view>
+
+  <view class="content">
+    <view class="points-summary">
+      <text class="points-summary-label">当前积分</text>
+      <view class="points-summary-value">
+        <pw-icon name="star" size="36" color="#D4A017" filled="{{true}}" />
+        <text>{{ totalPoints }}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{ !loading && !loadError && records.length === 0 }}" class="empty-state">
+      <view class="empty-icon-wrap">
+        <pw-icon name="star" size="80" color="#B8860B" strokeWidth="1.6" />
+      </view>
+      <text class="empty-text">暂无积分记录</text>
+      <text class="empty-hint">送养植物可获得 10 积分/株</text>
+      <view class="empty-btn" bindtap="goToScanDonate">去送养赚积分</view>
+    </view>
+
+    <view wx:else class="points-list">
+      <view class="points-item glass" wx:for="{{ records }}" wx:key="id">
+        <view class="points-item-icon">
+          <pw-icon name="leaf" size="36" color="#B8860B" strokeWidth="2" />
+        </view>
+        <view class="points-item-info">
+          <text class="points-item-title">{{ item.title }}</text>
+          <text class="points-item-desc">{{ item.description }}</text>
+          <text class="points-item-time">{{ item.timeDetail || item.time }}</text>
+        </view>
+        <text class="points-item-delta">+{{ item.delta }}</text>
+      </view>
+    </view>
+  </view>
+</view>

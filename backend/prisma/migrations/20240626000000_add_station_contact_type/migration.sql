@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Station` ADD COLUMN `contactType` ENUM('PHONE', 'WECHAT') NOT NULL DEFAULT 'PHONE';

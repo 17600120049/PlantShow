@@ -31,18 +31,21 @@
             {{station.isActive ? '营业中' : '休息中'}}
           </view>
         </view>
-        <text class="station-address">{{station.address}}</text>
-        <view
-          class="station-nav-btn"
-          wx:if="{{station.address}}"
-          catchtap="openStationNavigation"
-        >
-          <pw-icon name="navigation" size="24" color="#3F5F4E" strokeWidth="1.8" />
-          <text>导航前往</text>
+        <view class="station-address-row" wx:if="{{station.address}}">
+          <text class="station-address">{{station.address}}</text>
+          <view class="station-nav-icon-btn" catchtap="openStationNavigation">
+            <pw-icon name="navigation" size="28" color="#3F5F4E" strokeWidth="1.8" />
+          </view>
         </view>
-        <text class="station-code">编号 {{station.stationCode}}</text>
-        <text class="station-hours">{{station.hours}}</text>
-        <text class="station-phone" wx:if="{{station.phone}}">电话 {{station.phone}}</text>
+        <view class="station-meta-row" wx:if="{{station.hours}}">
+          <text class="station-meta-item">{{station.hours}}</text>
+        </view>
+        <view class="station-contact-row" wx:if="{{station.phone}}">
+          <text class="station-contact-text">{{station.contactType === 'WECHAT' ? '微信' : '电话'}} {{station.phone}}</text>
+          <view class="station-contact-copy" catchtap="copyContact">
+            <text>复制</text>
+          </view>
+        </view>
       </view>
       <view class="station-aside">
         <view class="station-favorite-btn {{favorited ? 'active' : ''}}" bindtap="toggleFavorite">

@@ -1,11 +1,23 @@
-import { Plant, PlantListStatus, PlantStatus, Station } from '@prisma/client';
-import { isStationOpenByHours } from './station-hours';
+import { Plant, PlantListStatus, PlantStatus, Station, StationHoursMode } from '@prisma/client';
+import {
+  DEFAULT_AUTO_CLOSE_HOURS,
+  DEFAULT_AUTO_OPEN_RADIUS_M,
+} from './station-auto-status';
+import {
+  formatStationHoursDisplay,
+  isFlexibleHoursMode,
+  resolveStationIsActive,
+} from './station-hours';
 import { parsePlantPhotos, getPlantCoverPhoto } from './plant-photos';
 
 export const DONATE_POINTS = 10;
 export const QR_PREFIX = 'plantwander://';
 
-export type PlantWithStation = Plant & { station?: Station | null };
+export type PlantWithStation = Plant & {
+  station?: Station | null;
+  breeder?: { nickname: string } | null;
+  histories?: Array<{ owner: { nickname: string } }>;
+};
 
 export function formatDate(date?: Date | null) {
   if (!date) return '';
@@ -13,6 +25,13 @@ export function formatDate(date?: Date | null) {
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const d = String(date.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
+}
+
+export function formatDateTime(date?: Date | null) {
+  if (!date) return '';
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  return `${formatDate(date)} ${hh}:${mm}`;
 }
 
 export function toPlantStatusLabel(plant: Pick<Plant, 'status' | 'listStatus'>) {
@@ -42,6 +61,8 @@ export function toPlantDto(plant: PlantWithStation) {
     stationId: plant.stationId,
     donateTime: formatDate(plant.listedAt),
     adoptTime: formatDate(plant.adoptedAt),
+    donorName:
+      plant.histories?.[0]?.owner?.nickname || plant.breeder?.nickname || '',
     description: plant.description || '',
     listStatus: plant.listStatus,
     plantStatus: plant.status,
@@ -53,6 +74,7 @@ export function toStationDto(
   distance = '—',
 ) {
   const plantCount = station._count?.plants ?? 0;
+  const hoursMode = station.hoursMode || StationHoursMode.FIXED;
   return {
     id: station.id,
     stationCode: station.stationCode,
@@ -61,11 +83,34 @@ export function toStationDto(
     imageEmoji: station.imageEmoji,
     logoUrl: station.logoUrl,
     address: station.address,
-    hours: station.hours,
+    hours: formatStationHoursDisplay(station.hours, hoursMode),
+    hoursMode,
+    contactType: station.contactType,
     phone: station.phone,
     plants: plantCount,
     distance,
-    isActive: isStationOpenByHours(station.hours),
+    isActive: resolveStationIsActive({
+      hours: station.hours,
+      hoursMode,
+      isActive: station.isActive,
+    }),
+    manualOpen: station.isActive,
+    isFlexibleHours: isFlexibleHoursMode(hoursMode),
+  };
+}
+
+export function toStationAutoStatusFields(station: Station) {
+  return {
+    wifiSsid: station.wifiSsid || '',
+    autoOpenRadiusM: station.autoOpenRadiusM ?? DEFAULT_AUTO_OPEN_RADIUS_M,
+    autoCloseHours: station.autoCloseHours ?? DEFAULT_AUTO_CLOSE_HOURS,
+    autoStatusEnabled: station.autoStatusEnabled ?? true,
+    lastOpenConfirmedAt: formatDateTime(station.lastOpenConfirmedAt),
+    hasAutoLocation:
+      typeof station.latitude === 'number' &&
+      typeof station.longitude === 'number' &&
+      Number.isFinite(station.latitude) &&
+      Number.isFinite(station.longitude),
   };
 }
 

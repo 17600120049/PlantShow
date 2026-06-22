@@ -9,6 +9,9 @@
 const DEV_LAN_IP = '10.254.32.188';
 const API_PORT = 3000;
 
+/** 微信登录未配置时，是否允许使用开发登录（真机调试可开启，上线前请改为 false） */
+const ALLOW_DEV_LOGIN = true;
+
 function isDevtools() {
   try {
     const sys = wx.getSystemInfoSync();
@@ -26,6 +29,7 @@ function getApiBaseUrl() {
 module.exports = {
   DEV_LAN_IP: DEV_LAN_IP,
   API_PORT: API_PORT,
+  ALLOW_DEV_LOGIN: ALLOW_DEV_LOGIN,
   getApiBaseUrl: getApiBaseUrl,
   isDevtools: isDevtools
 };

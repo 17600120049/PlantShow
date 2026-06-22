@@ -1,0 +1,247 @@
+@import "./detail-page.wxss";
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FAF9F7 0%, #F3F0EB 100%);
+  padding: 0 32rpx calc(32rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.load-error {
+  margin-top: 24rpx;
+  padding: 20rpx 24rpx;
+  background: rgba(196, 120, 90, 0.1);
+  color: #9A4A2E;
+  border-radius: var(--radius-md);
+  font-size: 26rpx;
+}
+
+.content {
+  padding-top: 16rpx;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+}
+
+.empty-icon-wrap {
+  width: 160rpx;
+  height: 160rpx;
+  background: rgba(45, 71, 57, 0.06);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.empty-hint {
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  margin-top: 12rpx;
+  text-align: center;
+}
+
+.empty-btn {
+  margin-top: 40rpx;
+  padding: 20rpx 48rpx;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.plant-card {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-radius: var(--radius-lg);
+}
+
+.plant-image-wrap {
+  width: 140rpx;
+  height: 140rpx;
+  background: linear-gradient(145deg, #E8F0EA 0%, #D4E4D6 100%);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.plant-photo {
+  width: 100%;
+  height: 100%;
+}
+
+.plant-emoji {
+  font-size: 64rpx;
+}
+
+.plant-info {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20rpx;
+}
+
+.plant-name {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plant-category {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  margin-bottom: 12rpx;
+}
+
+.plant-footer {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.plant-meta {
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.plant-status-tag {
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 6rpx 14rpx;
+  background: rgba(45, 71, 57, 0.08);
+  color: var(--color-primary);
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+
+.plant-status-tag.adopted {
+  background: rgba(156, 150, 144, 0.15);
+  color: var(--color-text-tertiary);
+}
+
+.points-badge {
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 6rpx 14rpx;
+  background: rgba(212, 160, 23, 0.12);
+  color: #B8860B;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+}
+
+.points-summary {
+  margin-top: 16rpx;
+  margin-bottom: 8rpx;
+  padding: 28rpx 32rpx;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #3F5F4E 0%, #2D4739 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.points-summary-label {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.points-summary-value {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.points-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.points-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border-radius: var(--radius-lg);
+}
+
+.points-item-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: rgba(212, 160, 23, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.points-item-info {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20rpx;
+}
+
+.points-item-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 6rpx;
+}
+
+.points-item-desc {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.points-item-time {
+  display: block;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+  margin-top: 8rpx;
+}
+
+.points-item-delta {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #B8860B;
+  flex-shrink: 0;
+}

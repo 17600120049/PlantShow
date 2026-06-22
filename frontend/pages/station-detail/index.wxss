@@ -24,36 +24,87 @@
   color: var(--color-text-tertiary);
 }
 
-.station-phone {
-  display: block;
+.station-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 10rpx;
+}
+
+.station-contact-text {
   font-size: 24rpx;
   color: var(--color-text-secondary);
-  margin-top: 8rpx;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.station-code {
-  display: block;
-  font-size: 22rpx;
-  color: var(--color-text-tertiary);
-  font-family: monospace;
-  margin-top: 6rpx;
-}
-
-.station-nav-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8rpx;
-  margin-top: 16rpx;
-  padding: 12rpx 24rpx;
+.station-contact-copy {
+  padding: 4rpx 16rpx;
   border-radius: 999rpx;
   background: rgba(45, 71, 57, 0.08);
   color: var(--color-primary);
-  font-size: 24rpx;
+  font-size: 22rpx;
   font-weight: 500;
+  flex-shrink: 0;
 }
 
-.station-nav-btn:active {
+.station-contact-copy:active {
   background: rgba(45, 71, 57, 0.14);
+}
+
+.station-address-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  margin-top: 10rpx;
+}
+
+.station-header .station-info .station-address {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+
+.station-nav-icon-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rpx;
+}
+
+.station-nav-icon-btn:active {
+  opacity: 0.65;
+}
+
+.station-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 10rpx;
+}
+
+.station-meta-item {
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+}
+
+.station-meta-dot {
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+  opacity: 0.6;
+}
+
+.station-header .station-info .station-name {
+  flex: 1;
+  min-width: 0;
 }
 
 .station-aside {

@@ -37,55 +37,6 @@
     <text class="load-error-hint">请确认后端已启动，并在开发者工具中勾选「不校验合法域名」</text>
   </view>
 
-  <view class="section section-stations">
-    <view class="section-header">
-      <text class="section-title">附近中转站</text>
-      <view class="section-more" bindtap="viewAllStations">
-        <text>查看全部</text>
-        <pw-icon name="chevron-right" size="28" color="#9C9690" strokeWidth="2" />
-      </view>
-    </view>
-    <view class="station-list">
-      <view class="station-card glass-liquid" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">
-        <view class="station-logo-wrap">
-          <image wx:if="{{item.logoUrl}}" class="station-logo" src="{{item.logoUrl}}" mode="aspectFill" />
-          <view wx:else class="station-image">{{ item.image }}</view>
-        </view>
-        <view class="station-info">
-          <view class="station-header">
-            <text class="station-name">{{ item.name }}</text>
-            <view class="station-status {{ item.isActive ? 'status-open' : 'status-closed' }}">
-              {{ item.isActive ? '营业中' : '休息中' }}
-            </view>
-          </view>
-          <view class="station-address-row">
-            <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
-            <text class="station-address">{{ item.address }}</text>
-          </view>
-          <view class="station-meta">
-            <view class="meta-item">
-              <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
-              <text>{{ item.hours }}</text>
-            </view>
-            <view
-              class="meta-item meta-item-nav"
-              wx:if="{{ item.address }}"
-              catchtap="openStationNavigation"
-              data-id="{{ item.id }}"
-            >
-              <pw-icon name="navigation" size="24" color="#3F5F4E" strokeWidth="1.8" />
-              <text>导航</text>
-            </view>
-          </view>
-        </view>
-        <view class="station-plants">
-          <text class="plants-count">{{ item.plants }}</text>
-          <text class="plants-label">株植物</text>
-        </view>
-      </view>
-    </view>
-  </view>
-
   <view class="section section-plants">
     <view class="section-header">
       <text class="section-title">最新植物</text>
@@ -113,5 +64,53 @@
         </view>
       </view>
     </scroll-view>
+  </view>
+
+  <view class="section section-stations">
+    <view class="section-header">
+      <text class="section-title">附近中转站</text>
+      <view class="section-more" bindtap="viewAllStations">
+        <text>查看全部</text>
+        <pw-icon name="chevron-right" size="28" color="#9C9690" strokeWidth="2" />
+      </view>
+    </view>
+    <view class="station-list">
+      <view class="station-card glass-liquid" wx:for="{{ stations }}" wx:key="id" bindtap="goToStationDetail" data-id="{{ item.id }}">
+        <view class="station-logo-wrap">
+          <image wx:if="{{item.logoUrl}}" class="station-logo" src="{{item.logoUrl}}" mode="aspectFill" />
+          <view wx:else class="station-image">{{ item.image }}</view>
+        </view>
+        <view class="station-info">
+          <view class="station-header">
+            <text class="station-name">{{ item.name }}</text>
+            <view class="station-status {{ item.isActive ? 'status-open' : 'status-closed' }}">
+              {{ item.isActive ? '营业中' : '休息中' }}
+            </view>
+          </view>
+          <view class="station-address-row">
+            <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
+            <text class="station-address">{{ item.address }}</text>
+            <view
+              class="station-nav-icon-btn"
+              wx:if="{{ item.address }}"
+              catchtap="openStationNavigation"
+              data-id="{{ item.id }}"
+            >
+              <pw-icon name="navigation" size="28" color="#3F5F4E" strokeWidth="1.8" />
+            </view>
+          </view>
+          <view class="station-meta">
+            <view class="meta-item">
+              <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
+              <text>{{ item.hours }}</text>
+            </view>
+          </view>
+        </view>
+        <view class="station-plants">
+          <text class="plants-count">{{ item.plants }}</text>
+          <text class="plants-label">株植物</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

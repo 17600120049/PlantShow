@@ -56,13 +56,14 @@ async function writePng(filePath, svgContent) {
     .toFile(filePath);
 }
 
-async function writeIcon(name, variant, color, strokeWidth, filled, opacity) {
+async function writeIcon(name, variant, colorKey, strokeWidth, filled, opacity) {
   const shapes = SHAPES[name];
   if (!shapes) return;
   const dir = path.join(OUT, name);
   fs.mkdirSync(dir, { recursive: true });
   const base = variant || 'default';
-  const svg = buildSvg(shapes, color, strokeWidth, filled, opacity);
+  const strokeColor = COLORS[colorKey] || colorKey;
+  const svg = buildSvg(shapes, strokeColor, strokeWidth, filled, opacity);
   fs.writeFileSync(path.join(dir, `${base}.svg`), svg);
   await writePng(path.join(dir, `${base}.png`), svg);
 }
@@ -79,6 +80,7 @@ async function main() {
     ['map-pin', 'gray', 'gray', 1.8, false, 1],
     ['clock', 'gray', 'gray', 1.8, false, 1],
     ['navigation', 'gray', 'gray', 1.8, false, 1],
+    ['navigation', 'primary', 'primary', 1.8, false, 1],
     ['leaf', 'primary', 'primary', 1.6, false, 1],
     ['leaf', 'primary-bold', 'primary', 2, false, 1],
     ['leaf', 'white', 'white', 2, false, 1],

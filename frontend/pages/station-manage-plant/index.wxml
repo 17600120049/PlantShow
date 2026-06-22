@@ -1,0 +1,79 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">编辑植物</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="error-panel" wx:if="{{!loading && loadError}}">
+    <text class="load-error">{{loadError}}</text>
+  </view>
+
+  <view class="form-panel glass" wx:if="{{!loading && plant && canEdit}}">
+    <view class="form-item">
+      <text class="label">植物编号</text>
+      <text class="readonly-value">{{plant.plantCode}}</text>
+    </view>
+
+    <view class="form-item">
+      <text class="label">名称 <text class="required">*</text></text>
+      <input class="input" value="{{name}}" bindinput="onNameInput" placeholder="植物名称" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">品种 <text class="required">*</text></text>
+      <input class="input" value="{{species}}" bindinput="onSpeciesInput" placeholder="如 绿萝、多肉" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">描述</text>
+      <textarea class="textarea" value="{{description}}" bindinput="onDescriptionInput" placeholder="养护经验、注意事项等" maxlength="300" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">展示状态</text>
+      <radio-group class="radio-row" bindchange="onListStatusChange">
+        <label class="radio-label">
+          <radio value="AVAILABLE" checked="{{listStatus === 'AVAILABLE'}}" color="#2D4739" />待领养
+        </label>
+        <label class="radio-label">
+          <radio value="NONE" checked="{{listStatus === 'NONE'}}" color="#2D4739" />已下架
+        </label>
+      </radio-group>
+    </view>
+
+    <view class="form-item">
+      <text class="label">照片</text>
+      <view class="photo-row">
+        <view class="photo-item" wx:for="{{photos}}" wx:key="*this">
+          <image src="{{item}}" mode="aspectFill" />
+          <view class="photo-delete" bindtap="deletePhoto" data-index="{{index}}">×</view>
+        </view>
+        <view class="photo-add" bindtap="choosePhoto" wx:if="{{photos.length < 3}}">
+          <text class="add-icon">+</text>
+        </view>
+      </view>
+    </view>
+
+    <button class="primary-btn" bindtap="savePlant" loading="{{saving}}" disabled="{{saving}}">保存修改</button>
+  </view>
+
+  <view class="form-panel glass" wx:if="{{!loading && plant && !canEdit}}">
+    <text class="readonly-hint">该植物已被领养，不可编辑</text>
+  </view>
+</view>

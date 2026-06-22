@@ -1,23 +1,24 @@
 ﻿import { Button, Form, Input, Modal, Select, Space, Table, Tag, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { getDisplayablePhotos, isDisplayableMediaUrl, resolveMediaUrl } from '../media';
 import MultiImageUpload from '../components/MultiImageUpload';
 import type { Plant, Station } from '../types';
 
 function PlantThumb({ plant }: { plant: Plant }) {
-  const cover = plant.photos?.[0];
-  if (cover) {
-    return (
-      <img
-        src={cover}
-        alt={plant.name}
-        width={36}
-        height={36}
-        style={{ objectFit: 'cover', borderRadius: 6, marginRight: 8, verticalAlign: 'middle' }}
-      />
-    );
+  const cover = getDisplayablePhotos(plant.photos)[0] || resolveMediaUrl(plant.photoUrl);
+  if (!cover || !isDisplayableMediaUrl(cover)) {
+    return null;
   }
-  return null;
+  return (
+    <img
+      src={cover}
+      alt={plant.name}
+      width={36}
+      height={36}
+      style={{ objectFit: 'cover', borderRadius: 6, marginRight: 8, verticalAlign: 'middle' }}
+    />
+  );
 }
 
 export default function PlantsPage() {
@@ -54,7 +55,7 @@ export default function PlantsPage() {
       name: plant.name,
       species: plant.category,
       description: plant.description,
-      photos: plant.photos || [],
+      photos: getDisplayablePhotos(plant.photos),
       listStatus: plant.listStatus,
       status: plant.plantStatus,
       stationId: plant.stationId,
@@ -110,7 +111,7 @@ export default function PlantsPage() {
           {
             title: '照片',
             width: 120,
-            render: (_, r) => (r.photos?.length || 0) + ' 张',
+            render: (_, r) => getDisplayablePhotos(r.photos).length + ' 张',
           },
           { title: '状态', dataIndex: 'status', render: (v: string) => <Tag>{v}</Tag> },
           { title: '中转站', dataIndex: 'station' },

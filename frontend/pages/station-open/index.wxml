@@ -1,0 +1,137 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">营业状态</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="loading-state" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 无固定营业时间的中转站列表 -->
+  <view class="list-view" wx:if="{{!loading && view === 'list'}}">
+    <text class="list-hint" wx:if="{{flexibleStations.length}}">选择要切换营业状态的中转站</text>
+    <view
+      class="station-card glass"
+      wx:for="{{flexibleStations}}"
+      wx:key="id"
+      bindtap="openStation"
+      data-id="{{item.id}}"
+    >
+      <view class="station-card-logo" wx:if="{{item.logoUrl}}">
+        <image src="{{item.logoUrl}}" mode="aspectFill" />
+      </view>
+      <view class="station-card-emoji" wx:else>{{item.image}}</view>
+      <view class="station-card-info">
+        <text class="station-card-name">{{item.name}}</text>
+        <text class="station-card-address">{{item.address}}</text>
+        <view class="station-card-meta">
+          <text class="station-card-hours">{{item.hours}}</text>
+          <text class="station-card-status {{item.isActive ? 'open' : 'closed'}}">
+            {{item.isActive ? '营业中' : '休息中'}}
+          </text>
+        </view>
+      </view>
+      <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
+    </view>
+
+    <view class="intro-card glass" wx:if="{{!flexibleStations.length && !loadError}}">
+      <pw-icon name="building-2" size="72" color="#2D4739" strokeWidth="1.6" />
+      <text class="intro-title">扫描中转站二维码</text>
+      <text class="intro-desc">管理员到店后扫描自己中转站的二维码，即可切换营业或休息状态</text>
+      <view class="scan-btn" bindtap="startScan">
+        <pw-icon name="scan-line" size="36" color="#FFFFFF" strokeWidth="2" />
+        <text>扫描中转站码</text>
+      </view>
+    </view>
+
+    <view class="scan-link-wrap" wx:if="{{flexibleStations.length}}">
+      <view class="scan-link" bindtap="startScan">或扫描中转站二维码</view>
+    </view>
+
+    <text class="sync-message list-sync" wx:if="{{syncMessage}}">{{syncMessage}}</text>
+    <text class="load-error" wx:if="{{loadError}}">{{loadError}}</text>
+  </view>
+
+  <!-- 营业状态切换 -->
+  <view class="detail-view" wx:if="{{!loading && view === 'detail' && station && !loadError}}">
+    <view class="manage-panel glass">
+      <view class="station-header">
+        <text class="station-name">{{station.name}}</text>
+        <view class="station-status {{station.isActive ? 'open' : 'closed'}}">
+          {{station.isActive ? '营业中' : '休息中'}}
+        </view>
+      </view>
+      <text class="station-hours">{{station.hours}}</text>
+
+      <view class="action-row">
+        <view
+          class="action-btn open {{station.isActive ? 'active' : ''}}"
+          bindtap="setOpenStatus"
+          data-active="{{true}}"
+        >
+          <text>开始营业</text>
+        </view>
+        <view
+          class="action-btn closed {{!station.isActive ? 'active' : ''}}"
+          bindtap="setOpenStatus"
+          data-active="{{false}}"
+        >
+          <text>设为休息</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="auto-panel glass">
+      <text class="section-title">自动营业状态</text>
+      <view class="form-item switch-row">
+        <text class="label inline">开启自动同步</text>
+        <switch checked="{{autoForm.autoStatusEnabled}}" bindchange="onAutoStatusEnabledChange" color="#2D4739" />
+      </view>
+      <view class="form-item">
+        <text class="label">店内 WiFi 名称</text>
+        <input class="input" value="{{autoForm.wifiSsid}}" data-field="wifiSsid" bindinput="onAutoFormInput" placeholder="选填，与店内 WiFi 名称一致" />
+      </view>
+      <view class="form-item">
+        <text class="label">定位识别半径（米）</text>
+        <input class="input" type="number" value="{{autoForm.autoOpenRadiusM}}" data-field="autoOpenRadiusM" bindinput="onAutoFormInput" placeholder="默认 150" />
+      </view>
+      <view class="form-item">
+        <text class="label">超时自动休息（小时）</text>
+        <input class="input" type="number" value="{{autoForm.autoCloseHours}}" data-field="autoCloseHours" bindinput="onAutoFormInput" placeholder="默认 6" />
+      </view>
+      <text class="field-hint">打开小程序或进入本页时将根据 WiFi 或定位自动切换；长时间未确认营业将自动设为休息</text>
+      <text class="field-hint" wx:if="{{station.hasAutoLocation}}">已根据中转站地址缓存定位坐标</text>
+      <text class="field-hint warn" wx:else>请在中转站管理中确认地址准确，以便启用定位识别</text>
+
+      <view class="sync-status" wx:if="{{autoForm.autoStatusEnabled}}">
+        <text class="sync-message" wx:if="{{syncMessage}}">{{syncMessage}}</text>
+        <text class="auto-info-meta" wx:if="{{station.lastOpenConfirmedAt}}">上次营业确认：{{station.lastOpenConfirmedAt}}</text>
+        <view class="refresh-sync" bindtap="refreshAutoSync">{{syncing ? '检测中...' : '立即检测'}}</view>
+      </view>
+
+      <button class="primary-btn" bindtap="saveAutoSettings" loading="{{savingAuto}}" disabled="{{savingAuto}}">保存自动设置</button>
+    </view>
+
+    <view class="rescan-link-wrap">
+      <view class="rescan-link" bindtap="startScan">重新扫码</view>
+    </view>
+  </view>
+
+  <view class="error-panel glass" wx:if="{{!loading && loadError && (view === 'detail' || !flexibleStations.length)}}">
+    <text class="load-error">{{loadError}}</text>
+    <view class="rescan-link" wx:if="{{view === 'detail'}}" bindtap="startScan">扫描中转站码</view>
+  </view>
+</view>

@@ -1,10 +1,11 @@
-import { Button, Form, Input, InputNumber, Modal, Space, Table, message } from 'antd';
+import { Button, Form, Input, InputNumber, Modal, Select, Space, Table, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
-import type { AdminUser } from '../types';
+import type { AdminUser, Station } from '../types';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [stations, setStations] = useState<Station[]>([]);
   const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [editUser, setEditUser] = useState<AdminUser | null>(null);
@@ -25,18 +26,29 @@ export default function UsersPage() {
 
   useEffect(() => {
     load();
+    api.getStations().then(setStations).catch(() => {});
   }, []);
 
   const openEdit = (user: AdminUser) => {
     setEditUser(user);
-    form.setFieldsValue({ nickname: user.nickname, city: user.city, bio: user.bio });
+    form.setFieldsValue({
+      nickname: user.nickname,
+      city: user.city,
+      bio: user.bio,
+      managedStationId: user.managedStationId ?? undefined,
+    });
   };
 
   const saveEdit = async () => {
     if (!editUser) return;
     const values = await form.validateFields();
     try {
-      await api.updateUser(editUser.id, values);
+      await api.updateUser(editUser.id, {
+        nickname: values.nickname,
+        city: values.city,
+        bio: values.bio,
+        managedStationId: values.managedStationId ?? null,
+      });
       message.success('已保存');
       setEditUser(null);
       load(keyword);
@@ -79,6 +91,7 @@ export default function UsersPage() {
         rowKey="id"
         loading={loading}
         dataSource={users}
+        scroll={{ x: 1100 }}
         pagination={{ pageSize: 10 }}
         columns={[
           { title: '昵称', dataIndex: 'nickname' },
@@ -86,6 +99,13 @@ export default function UsersPage() {
           { title: '城市', dataIndex: 'city' },
           { title: '积分', dataIndex: 'points' },
           { title: '植物数', dataIndex: 'plantCount' },
+          {
+            title: '管理中转站',
+            dataIndex: 'managedStationName',
+            width: 160,
+            ellipsis: true,
+            render: (name: string | null) => name || '—',
+          },
           {
             title: '注册时间',
             dataIndex: 'createdAt',
@@ -121,7 +141,7 @@ export default function UsersPage() {
         ]}
       />
 
-      <Modal title="编辑用户" open={!!editUser} onOk={saveEdit} onCancel={() => setEditUser(null)}>
+      <Modal title="编辑用户" open={!!editUser} onOk={saveEdit} onCancel={() => setEditUser(null)} width={520}>
         <Form form={form} layout="vertical">
           <Form.Item name="nickname" label="昵称" rules={[{ required: true }]}>
             <Input />
@@ -131,6 +151,20 @@ export default function UsersPage() {
           </Form.Item>
           <Form.Item name="bio" label="简介">
             <Input.TextArea rows={3} />
+          </Form.Item>
+          <Form.Item
+            name="managedStationId"
+            label="中转站管理员"
+            extra="设为管理员后，用户可在小程序扫描该中转站二维码切换营业状态（仅无固定营业时间）"
+          >
+            <Select
+              allowClear
+              placeholder="不担任管理员"
+              options={stations.map((station) => ({
+                value: station.id,
+                label: `${station.name} (${station.stationCode})`,
+              }))}
+            />
           </Form.Item>
         </Form>
       </Modal>

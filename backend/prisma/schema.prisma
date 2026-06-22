@@ -32,6 +32,7 @@ model User {
   plantFavorites PlantFavorite[]
   stationFavorites StationFavorite[]
   stationApplications StationApplication[]
+  stationManagers StationManager[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }
@@ -46,19 +47,42 @@ model Admin {
 }
 
 model Station {
-  id         Int      @id @default(autoincrement())
-  stationCode String  @unique
-  name       String
-  address    String
-  hours      String
-  phone      String?
-  imageEmoji String   @default("🏡")
-  logoUrl    String?
-  isActive   Boolean  @default(true) @ignore
-  plants     Plant[]
-  favorites  StationFavorite[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          Int              @id @default(autoincrement())
+  stationCode String           @unique
+  name        String
+  address     String
+  hours       String
+  hoursMode   StationHoursMode @default(FIXED)
+  contactType ContactType      @default(PHONE)
+  phone       String?
+  imageEmoji  String           @default("🏡")
+  logoUrl     String?
+  isActive    Boolean          @default(true)
+  wifiSsid              String?
+  latitude              Float?
+  longitude             Float?
+  autoOpenRadiusM       Int              @default(150)
+  autoCloseHours        Int              @default(6)
+  lastOpenConfirmedAt   DateTime?
+  autoStatusEnabled     Boolean          @default(true)
+  plants      Plant[]
+  favorites   StationFavorite[]
+  managers    StationManager[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model StationManager {
+  id        String   @id @default(cuid())
+  userId    String
+  stationId Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  station   Station  @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, stationId])
+  @@index([userId])
+  @@index([stationId])
 }
 
 model Plant {
@@ -304,6 +328,16 @@ model StationApplication {
 
   @@index([status])
   @@index([userId])
+}
+
+enum ContactType {
+  PHONE
+  WECHAT
+}
+
+enum StationHoursMode {
+  FIXED
+  FLEXIBLE
 }
 
 enum StationApplicationStatus {

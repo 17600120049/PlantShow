@@ -10,10 +10,21 @@ import {
   User,
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { isStationOpenByHours } from '../common/station-hours';
+import { resolveStationIsActive } from '../common/station-hours';
 import { DONATE_POINTS, toPlantDto } from '../common/mappers';
 import { photosToPrismaJson, normalizePhotosInput, getPlantCoverPhoto } from '../common/plant-photos';
 import { DonatePlantDto } from './dto/donate-plant.dto';
+
+const plantReadInclude = {
+  station: true,
+  breeder: { select: { nickname: true } },
+  histories: {
+    where: { action: HistoryAction.GIFT },
+    orderBy: { timestamp: 'desc' as const },
+    take: 1,
+    include: { owner: { select: { nickname: true } } },
+  },
+};
 
 @Injectable()
 export class PlantsService {
@@ -27,7 +38,7 @@ export class PlantsService {
   async findListed() {
     const plants = await this.prisma.plant.findMany({
       where: { listStatus: PlantListStatus.AVAILABLE },
-      include: { station: true },
+      include: plantReadInclude,
       orderBy: { listedAt: 'desc' },
     });
     return plants.map(toPlantDto);
@@ -44,7 +55,7 @@ export class PlantsService {
         stationId,
         listStatus: PlantListStatus.AVAILABLE,
       },
-      include: { station: true },
+      include: plantReadInclude,
       orderBy: { listedAt: 'desc' },
     });
 
@@ -54,7 +65,7 @@ export class PlantsService {
   async findByCode(plantCode: string) {
     const plant = await this.prisma.plant.findUnique({
       where: { plantCode: plantCode.toUpperCase() },
-      include: { station: true },
+      include: plantReadInclude,
     });
 
     if (!plant) {
@@ -67,7 +78,7 @@ export class PlantsService {
   async findOne(id: string) {
     const plant = await this.prisma.plant.findUnique({
       where: { id },
-      include: { station: true },
+      include: plantReadInclude,
     });
 
     if (!plant) {
@@ -85,7 +96,7 @@ export class PlantsService {
     if (!station) {
       throw new NotFoundException('中转站不存在');
     }
-    if (!isStationOpenByHours(station.hours)) {
+    if (!resolveStationIsActive(station)) {
       throw new BadRequestException('该中转站当前不在营业时间内，请选择其他中转站');
     }
 
@@ -100,9 +111,15 @@ export class PlantsService {
     }
 
     const now = new Date();
-    const donatePhotos = normalizePhotosInput(
-      dto.photos?.length ? dto.photos : dto.photoUrl ? [dto.photoUrl] : [],
-    );
+    const rawPhotoInputs = dto.photos?.length
+      ? dto.photos
+      : dto.photoUrl
+        ? [dto.photoUrl]
+        : [];
+    const donatePhotos = normalizePhotosInput(rawPhotoInputs);
+    if (rawPhotoInputs.length && !donatePhotos.length) {
+      throw new BadRequestException('植物照片无效，请重新上传');
+    }
     const coverPhoto = donatePhotos[0] || null;
 
     const result = await this.prisma.$transaction(async (tx) => {

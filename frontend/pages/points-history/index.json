@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "pw-icon": "/components/icon/index"
+  },
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true
+}

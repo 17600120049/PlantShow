@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="detail-nav-wrap" style="height: {{navBarBottom}}px;">
+    <view
+      class="detail-nav-bar"
+      style="top: {{navContentTop}}px; height: {{navContentHeight}}px; padding-left: {{navPaddingX}}px; padding-right: {{navPaddingX}}px;"
+    >
+      <view class="detail-nav-side" style="width: {{navCapsuleWidth}}px;">
+        <view class="detail-nav-back-btn" style="width: {{navContentHeight}}px; height: {{navContentHeight}}px;" bindtap="goBack">
+          <view class="detail-nav-back-arrow"></view>
+        </view>
+      </view>
+      <view class="detail-nav-title-wrap">
+        <text class="detail-nav-title">我的领养</text>
+      </view>
+      <view class="detail-nav-side detail-nav-side-placeholder" style="width: {{navCapsuleWidth}}px;"></view>
+    </view>
+  </view>
+
+  <view class="load-error" wx:if="{{loadError}}">{{loadError}}</view>
+
+  <view class="content">
+    <view wx:if="{{ !loading && !loadError && records.length === 0 }}" class="empty-state">
+      <view class="empty-icon-wrap">
+        <pw-icon name="gift" size="80" color="#6B8B7A" strokeWidth="1.6" />
+      </view>
+      <text class="empty-text">暂无领养记录</text>
+      <text class="empty-hint">扫码领养心仪植物，开启新缘分</text>
+      <view class="empty-btn" bindtap="goToScanAdopt">去领养</view>
+    </view>
+
+    <view wx:else class="record-list">
+      <view
+        class="plant-card glass"
+        wx:for="{{ records }}"
+        wx:key="id"
+        bindtap="goToPlantDetail"
+        data-id="{{ item.plant.id }}"
+      >
+        <view class="plant-image-wrap">
+          <image wx:if="{{item.plant.photoUrl}}" class="plant-photo" src="{{item.plant.photoUrl}}" mode="aspectFill" />
+          <view wx:else class="plant-emoji">{{ item.plant.image }}</view>
+        </view>
+        <view class="plant-info">
+          <text class="plant-name">{{ item.plant.name }}</text>
+          <text class="plant-category">{{ item.plant.category }}</text>
+          <view class="plant-footer">
+            <text class="plant-meta">{{ item.note || '扫码领养' }}</text>
+            <view class="plant-status-tag adopted">已领养</view>
+          </view>
+          <text class="plant-meta" style="margin-top: 8rpx;">{{ item.timeDetail || item.time }}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

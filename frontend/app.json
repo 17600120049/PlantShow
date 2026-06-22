@@ -6,9 +6,16 @@
     "pages/plant-detail/index",
     "pages/station-detail/index",
     "pages/stations-list/index",
+    "pages/plants-list/index",
     "pages/join-us/index",
     "pages/scan-donate/index",
-    "pages/scan-adopt/index"
+    "pages/scan-adopt/index",
+    "pages/station-manage/index",
+    "pages/station-open/index",
+    "pages/station-manage-plant/index",
+    "pages/my-donations/index",
+    "pages/my-adoptions/index",
+    "pages/points-history/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -41,6 +48,16 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于判断您是否在中转站附近，以自动更新营业状态"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "startLocationUpdate",
+    "onLocationChange"
+  ],
   "usingComponents": {
     "pw-icon": "/components/icon/index"
   }

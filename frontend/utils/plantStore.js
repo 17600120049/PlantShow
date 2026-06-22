@@ -1,6 +1,20 @@
 const request = require('./request');
 const auth = require('./auth');
 
+function apiPatch(url, data) {
+  if (typeof request.patch === 'function') {
+    return request.patch(url, data);
+  }
+  return request.send({ url: url, method: 'PATCH', data: data });
+}
+
+function apiDelete(url, data) {
+  if (typeof request.del === 'function') {
+    return request.del(url, data);
+  }
+  return request.send({ url: url, method: 'DELETE', data: data });
+}
+
 function isMediaUrl(value) {
   return !!value && (value.indexOf('/api/') === 0 || value.indexOf('http') === 0);
 }
@@ -20,9 +34,16 @@ function normalizePlant(plant) {
   if (!plant) {
     return plant;
   }
-  const photos = (plant.photos || []).map(request.resolveMediaUrl).filter(Boolean);
+  const photos = (plant.photos || [])
+    .map(request.resolveMediaUrl)
+    .filter(function (url) {
+      return url && isMediaUrl(url);
+    });
   const photoUrl = request.resolveMediaUrl(plant.photoUrl || photos[0] || '');
-  return Object.assign({}, plant, { photos: photos, photoUrl: photoUrl });
+  return Object.assign({}, plant, {
+    photos: photos,
+    photoUrl: isMediaUrl(photoUrl) ? photoUrl : photos[0] || ''
+  });
 }
 
 function normalizeError(err) {
@@ -120,17 +141,25 @@ function probeApi() {
 }
 
 function donatePlant(payload) {
-  return auth
-    .ensureLogin()
-    .then(function () {
-      return request.post('/plants/donate', {
-        plantCode: payload.plantCode,
-        name: payload.name,
-        category: payload.category,
-        stationId: payload.stationId,
-        description: payload.description,
-        image: payload.image,
-        photoUrl: payload.photoPath || payload.photoUrl
+  const photoPath = payload.photoPath || payload.photoUrl || '';
+  const photoPromise = isMediaUrl(photoPath)
+    ? Promise.resolve(photoPath)
+    : photoPath
+      ? request.uploadFile(photoPath)
+      : Promise.resolve('');
+
+  return photoPromise
+    .then(function (photoUrl) {
+      return auth.ensureLogin().then(function () {
+        return request.post('/plants/donate', {
+          plantCode: payload.plantCode,
+          name: payload.name,
+          category: payload.category,
+          stationId: payload.stationId,
+          description: payload.description,
+          image: payload.image,
+          photoUrl: photoUrl || undefined
+        });
       });
     })
     .then(function (result) {
@@ -159,6 +188,53 @@ function getUserStats() {
     .ensureLogin()
     .then(function () {
       return request.get('/users/me/stats');
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function getMyDonations() {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/donations');
+    })
+    .then(function (records) {
+      return (records || []).map(function (record) {
+        return Object.assign({}, record, {
+          plant: normalizePlant(record.plant)
+        });
+      });
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function getMyAdoptions() {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/adoptions');
+    })
+    .then(function (records) {
+      return (records || []).map(function (record) {
+        return Object.assign({}, record, {
+          plant: normalizePlant(record.plant)
+        });
+      });
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function getPointsHistory() {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/points');
     })
     .catch(function (err) {
       return Promise.reject(normalizeError(err));
@@ -232,7 +308,7 @@ function removeFavorite(payload) {
       if (payload.stationId != null) {
         query.stationId = payload.stationId;
       }
-      return request.del('/users/me/favorites', query);
+      return apiDelete('/users/me/favorites', query);
     })
     .catch(function (err) {
       return Promise.reject(normalizeError(err));
@@ -283,6 +359,128 @@ function submitStationApplication(data) {
     });
 }
 
+function getManagedStations() {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/users/me/managed-stations');
+    })
+    .then(function (stations) {
+      return (stations || []).map(normalizeStation);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function getStationManagerAccess(stationId) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/stations/' + stationId + '/manager-access');
+    })
+    .then(function (station) {
+      return normalizeStation(station);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function setStationOpenStatus(stationId, isActive) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return apiPatch('/stations/' + stationId + '/open-status', { isActive: isActive });
+    })
+    .then(function (station) {
+      return normalizeStation(station);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function updateManagedStation(stationId, data) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return apiPatch('/stations/' + stationId + '/managed', data);
+    })
+    .then(function (station) {
+      return normalizeStation(station);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function getManagedPlants(stationId) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.get('/stations/' + stationId + '/managed-plants');
+    })
+    .then(function (plants) {
+      return (plants || []).map(normalizePlant);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function updateManagedPlant(stationId, plantId, data) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return apiPatch('/stations/' + stationId + '/plants/' + plantId, data);
+    })
+    .then(function (plant) {
+      return normalizePlant(plant);
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function syncStationOpenStatus(stationId, signals) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.post('/stations/' + stationId + '/open-status/sync', signals || {});
+    })
+    .then(function (result) {
+      return Object.assign({}, normalizeStation(result), {
+        sync: result.sync || null
+      });
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
+function syncManagedOpenStatus(signals) {
+  return auth
+    .ensureLogin()
+    .then(function () {
+      return request.post('/users/me/managed-stations/open-status/sync', signals || {});
+    })
+    .then(function (result) {
+      return {
+        stations: (result.stations || []).map(function (item) {
+          return Object.assign({}, normalizeStation(item), {
+            sync: item.sync || null,
+            isManager: item.isManager,
+            canToggleStatus: item.canToggleStatus
+          });
+        })
+      };
+    })
+    .catch(function (err) {
+      return Promise.reject(normalizeError(err));
+    });
+}
+
 module.exports = {
   probeApi,
   getStations,
@@ -294,6 +492,9 @@ module.exports = {
   donatePlant,
   adoptPlant,
   getUserStats,
+  getMyDonations,
+  getMyAdoptions,
+  getPointsHistory,
   getFavorites,
   checkPlantFavorite,
   checkStationFavorite,
@@ -303,5 +504,13 @@ module.exports = {
   toggleStationFavorite,
   scanCode,
   submitStationApplication,
+  getManagedStations,
+  getStationManagerAccess,
+  setStationOpenStatus,
+  updateManagedStation,
+  getManagedPlants,
+  updateManagedPlant,
+  syncStationOpenStatus,
+  syncManagedOpenStatus,
   getQrImageUrl: request.getQrImageUrl
 };

@@ -66,8 +66,16 @@ function post(url, data) {
   return request({ url: url, method: 'POST', data: data });
 }
 
+function patch(url, data) {
+  return request({ url: url, method: 'PATCH', data: data });
+}
+
 function del(url, data) {
   return request({ url: url, method: 'DELETE', data: data });
+}
+
+function send(options) {
+  return request(options);
 }
 
 function getQrImageUrl(type, id, size) {
@@ -89,11 +97,44 @@ function resolveMediaUrl(url) {
   return origin + (url.indexOf('/') === 0 ? url : '/' + url);
 }
 
+function uploadFile(filePath) {
+  return new Promise(function (resolve, reject) {
+    wx.uploadFile({
+      url: getBaseUrl() + '/upload',
+      filePath: filePath,
+      name: 'file',
+      header: {
+        Authorization: getToken() ? 'Bearer ' + getToken() : ''
+      },
+      success: function (res) {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try {
+            const data = JSON.parse(res.data);
+            resolve(data.url || '');
+            return;
+          } catch (e) {
+            reject({ message: '上传响应解析失败' });
+            return;
+          }
+        }
+        reject({ message: '上传失败 (' + res.statusCode + ')' });
+      },
+      fail: function (err) {
+        reject(err || { message: '上传失败' });
+      }
+    });
+  });
+}
+
 module.exports = {
+  send: send,
+  request: send,
   getBaseUrl: getBaseUrl,
   get: get,
   post: post,
+  patch: patch,
   del: del,
   getQrImageUrl: getQrImageUrl,
-  resolveMediaUrl: resolveMediaUrl
+  resolveMediaUrl: resolveMediaUrl,
+  uploadFile: uploadFile
 };

@@ -24,8 +24,12 @@ export interface AdminUser {
   points: number;
   plantCount: number;
   historyCount: number;
+  managedStationId: number | null;
+  managedStationName: string | null;
   createdAt: string;
 }
+
+export type ContactType = 'PHONE' | 'WECHAT';
 
 export interface Station {
   id: number;
@@ -33,12 +37,15 @@ export interface Station {
   name: string;
   address: string;
   hours: string;
+  hoursMode: 'FIXED' | 'FLEXIBLE';
+  contactType: ContactType;
   phone: string | null;
   imageEmoji?: string;
   logoUrl: string | null;
   image?: string | null;
   plants: number;
   isActive: boolean;
+  isFlexibleHours?: boolean;
 }
 
 export interface StationApplication {

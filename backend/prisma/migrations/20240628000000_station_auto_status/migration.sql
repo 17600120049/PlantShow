@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE `Station` ADD COLUMN `wifiSsid` VARCHAR(191) NULL,
+    ADD COLUMN `latitude` DOUBLE NULL,
+    ADD COLUMN `longitude` DOUBLE NULL,
+    ADD COLUMN `autoOpenRadiusM` INTEGER NOT NULL DEFAULT 150,
+    ADD COLUMN `autoCloseHours` INTEGER NOT NULL DEFAULT 6,
+    ADD COLUMN `lastOpenConfirmedAt` DATETIME(3) NULL,
+    ADD COLUMN `autoStatusEnabled` BOOLEAN NOT NULL DEFAULT true;

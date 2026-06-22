@@ -3,6 +3,7 @@ import { Upload, message } from 'antd';
 import type { UploadFile, UploadProps } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { isDisplayableMediaUrl, resolveMediaUrl } from '../media';
 
 type MultiImageUploadProps = {
   value?: string[];
@@ -19,12 +20,15 @@ export default function MultiImageUpload({
 
   useEffect(() => {
     setFileList(
-      (value || []).map((url, index) => ({
-        uid: `${index}-${url}`,
-        name: `photo-${index + 1}`,
-        status: 'done' as const,
-        url,
-      })),
+      (value || [])
+        .map(resolveMediaUrl)
+        .filter(isDisplayableMediaUrl)
+        .map((url, index) => ({
+          uid: `${index}-${url}`,
+          name: `photo-${index + 1}`,
+          status: 'done' as const,
+          url,
+        })),
     );
   }, [value]);
 

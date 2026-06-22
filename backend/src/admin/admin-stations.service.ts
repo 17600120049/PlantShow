@@ -3,8 +3,9 @@
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PlantListStatus } from '@prisma/client';
+import { PlantListStatus, StationHoursMode } from '@prisma/client';
 import { GeocodingService } from '../common/geocoding.service';
+import { normalizeStationHoursInput } from '../common/station-hours';
 import { PrismaService } from '../prisma/prisma.service';
 import { toStationDto } from '../common/mappers';
 import { CreateStationDto, UpdateStationDto } from './dto/station.dto';
@@ -31,16 +32,27 @@ export class AdminStationsService {
   }
 
   async create(dto: CreateStationDto) {
-    await this.ensureAddressSearchable(dto.address);
+    const geocoded = await this.ensureAddressSearchable(dto.address);
+
+    const hoursMode = dto.hoursMode || StationHoursMode.FIXED;
+    const normalizedHours = normalizeStationHoursInput(hoursMode, dto.hours);
+    if (hoursMode === StationHoursMode.FIXED && !normalizedHours.hours) {
+      throw new BadRequestException('固定营业时间需填写时间段，如 09:00-20:00');
+    }
 
     const station = await this.prisma.station.create({
       data: {
         stationCode: dto.stationCode,
         name: dto.name,
         address: dto.address,
-        hours: dto.hours,
+        hours: normalizedHours.hours,
+        hoursMode: normalizedHours.hoursMode,
+        contactType: dto.contactType,
         phone: dto.phone,
         logoUrl: dto.logoUrl,
+        latitude: geocoded?.latitude,
+        longitude: geocoded?.longitude,
+        isActive: true,
       },
       include: {
         _count: {
@@ -61,9 +73,39 @@ export class AdminStationsService {
       await this.ensureAddressSearchable(dto.address);
     }
 
+    const nextHoursMode = dto.hoursMode || existing.hoursMode;
+    const normalizedHours = normalizeStationHoursInput(
+      nextHoursMode,
+      dto.hours ?? existing.hours,
+    );
+    if (nextHoursMode === StationHoursMode.FIXED && !normalizedHours.hours) {
+      throw new BadRequestException('固定营业时间需填写时间段，如 09:00-20:00');
+    }
+
+    let latitude = existing.latitude;
+    let longitude = existing.longitude;
+    if (dto.address && dto.address !== existing.address) {
+      const geocoded = await this.geocoding.geocodeAddress(dto.address);
+      if (geocoded) {
+        latitude = geocoded.latitude;
+        longitude = geocoded.longitude;
+      }
+    }
+
     const station = await this.prisma.station.update({
       where: { id },
-      data: dto,
+      data: {
+        stationCode: dto.stationCode,
+        name: dto.name,
+        address: dto.address,
+        hours: normalizedHours.hours,
+        hoursMode: normalizedHours.hoursMode,
+        contactType: dto.contactType,
+        phone: dto.phone,
+        logoUrl: dto.logoUrl,
+        latitude,
+        longitude,
+      },
       include: {
         _count: {
           select: {
@@ -109,5 +151,6 @@ export class AdminStationsService {
         '无法根据该地址搜索到位置，请填写更完整的地址或检查地图 API Key 配置',
       );
     }
+    return geocoded;
   }
 }

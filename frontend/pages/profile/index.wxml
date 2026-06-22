@@ -2,19 +2,29 @@
   <view class="header-bg" style="padding-top: {{statusBarHeight}}px;">
     <view class="header-pattern"></view>
     <view class="user-section">
-      <view class="avatar-wrap">
-        <pw-icon name="user" size="56" color="#FFFFFF" strokeWidth="2" />
-      </view>
-      <view class="user-info">
-        <text class="nickname">{{ userInfo.nickname }}</text>
-        <view class="points-wrap">
-          <pw-icon name="star" size="28" color="#D4A017" filled="{{true}}" />
-          <text class="points-count">{{ userInfo.points }}</text>
-          <text class="points-label">积分</text>
+      <view class="user-main">
+        <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <view class="avatar-wrap">
+            <image wx:if="{{ userInfo.avatarUrl }}" class="avatar-img" src="{{ userInfo.avatarUrl }}" mode="aspectFill" />
+            <pw-icon wx:else name="user" size="56" color="#FFFFFF" strokeWidth="2" />
+          </view>
+        </button>
+        <view class="user-info">
+          <input
+            class="nickname-input"
+            style="text-align: left;"
+            type="nickname"
+            value="{{ userInfo.nickname }}"
+            placeholder="点击填写昵称"
+            placeholder-class="nickname-placeholder"
+            bindblur="onNicknameBlur"
+          />
+          <view class="points-wrap">
+            <pw-icon name="star" size="28" color="#D4A017" filled="{{true}}" />
+            <text class="points-count">{{ userInfo.points }}</text>
+            <text class="points-label">积分</text>
+          </view>
         </view>
-      </view>
-      <view class="settings-btn" bindtap="goToSettings">
-        <pw-icon name="settings" size="40" color="#FFFFFF" strokeWidth="1.8" />
       </view>
     </view>
   </view>
@@ -59,6 +69,20 @@
         <text class="menu-text">积分记录</text>
         <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
+      <view class="menu-item" wx:if="{{managedStations.length}}" bindtap="goToStationManage">
+        <view class="menu-icon-wrap manage">
+          <pw-icon name="building-2" size="36" color="#3F5F4E" strokeWidth="2" />
+        </view>
+        <text class="menu-text">中转站管理</text>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
+      </view>
+      <view class="menu-item" wx:if="{{flexibleManagedStations.length}}" bindtap="goToStationOpen">
+        <view class="menu-icon-wrap open">
+          <pw-icon name="clock" size="36" color="#9C9690" strokeWidth="2" />
+        </view>
+        <text class="menu-text">营业状态</text>
+        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
+      </view>
       <view class="menu-item" bindtap="goToSettings">
         <view class="menu-icon-wrap settings">
           <pw-icon name="settings" size="36" color="#9C9690" strokeWidth="2" />
@@ -67,13 +91,5 @@
         <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
     </view>
-  </view>
-
-  <view class="about-section">
-    <view class="about-logo">
-      <pw-icon name="sprout" size="40" color="#2D4739" strokeWidth="2" />
-    </view>
-    <text class="about-title">流浪植物中转站</text>
-    <text class="about-version">版本 1.0.0</text>
   </view>
 </view>

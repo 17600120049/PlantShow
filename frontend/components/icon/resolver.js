@@ -4,6 +4,7 @@
 
 const COLOR_VARIANT = {
   '#2D4739': 'primary',
+  '#3F5F4E': 'primary',
   '#FFFFFF': 'white',
   '#9C9690': 'gray',
   '#CCCCCC': 'lightgray',

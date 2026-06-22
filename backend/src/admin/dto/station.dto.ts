@@ -1,8 +1,16 @@
 import {
+  IsIn,
+  IsInt,
   IsOptional,
   IsString,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
+
+const CONTACT_TYPES = ['PHONE', 'WECHAT'] as const;
+const HOURS_MODES = ['FIXED', 'FLEXIBLE'] as const;
+export type ContactTypeDto = (typeof CONTACT_TYPES)[number];
+export type HoursModeDto = (typeof HOURS_MODES)[number];
 
 export class CreateStationDto {
   @IsString()
@@ -17,9 +25,18 @@ export class CreateStationDto {
   @MinLength(1)
   address: string;
 
+  @IsOptional()
+  @IsIn(HOURS_MODES)
+  hoursMode?: HoursModeDto;
+
+  @ValidateIf((dto) => dto.hoursMode !== 'FLEXIBLE')
   @IsString()
   @MinLength(1)
   hours: string;
+
+  @IsOptional()
+  @IsIn(CONTACT_TYPES)
+  contactType?: ContactTypeDto;
 
   @IsOptional()
   @IsString()
@@ -44,8 +61,17 @@ export class UpdateStationDto {
   address?: string;
 
   @IsOptional()
+  @IsIn(HOURS_MODES)
+  hoursMode?: HoursModeDto;
+
+  @ValidateIf((dto) => dto.hoursMode !== 'FLEXIBLE')
+  @IsOptional()
   @IsString()
   hours?: string;
+
+  @IsOptional()
+  @IsIn(CONTACT_TYPES)
+  contactType?: ContactTypeDto;
 
   @IsOptional()
   @IsString()
