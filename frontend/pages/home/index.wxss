@@ -141,7 +141,7 @@
 }
 
 .section-stations {
-  margin-top: 20rpx;
+  margin-top: 24rpx;
 }
 
 .section-stations::before,
@@ -372,15 +372,15 @@
 .plant-scroll-inner {
   display: inline-flex;
   align-items: stretch;
-  padding: 8rpx 24rpx 32rpx;
+  padding: 8rpx 24rpx 8rpx;
   gap: 16rpx;
 }
 
 .plant-card-wrap {
   flex-shrink: 0;
-  padding: 0 0 20rpx;
-  filter: drop-shadow(0 8rpx 24rpx rgba(45, 71, 57, 0.05))
-    drop-shadow(0 3rpx 10rpx rgba(28, 27, 25, 0.028));
+  padding: 0 0 16rpx;
+  filter: drop-shadow(0 6rpx 18rpx rgba(45, 71, 57, 0.045))
+    drop-shadow(0 2rpx 8rpx rgba(28, 27, 25, 0.025));
 }
 
 .plant-card {
