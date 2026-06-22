@@ -189,7 +189,7 @@
 
 .station-card {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 28rpx;
   border-radius: var(--radius-xl);
   margin-bottom: 20rpx;
@@ -242,6 +242,10 @@
 .station-info {
   flex: 1;
   min-width: 0;
+  padding-right: 12rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
   position: relative;
   z-index: 1;
 }
@@ -249,14 +253,17 @@
 .station-header {
   display: flex;
   align-items: center;
-  margin-bottom: 12rpx;
+  gap: 8rpx;
+  min-width: 0;
 }
 
 .station-name {
   font-size: 30rpx;
   font-weight: 600;
   color: var(--color-primary);
-  flex: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  line-height: 1.35;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -267,7 +274,6 @@
   font-weight: 500;
   padding: 6rpx 16rpx;
   border-radius: 20rpx;
-  margin-left: 12rpx;
   flex-shrink: 0;
 }
 
@@ -281,21 +287,29 @@
   color: var(--color-text-tertiary);
 }
 
+.station-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  min-width: 0;
+}
+
 .station-address-row {
   display: flex;
   align-items: center;
   gap: 8rpx;
-  margin-bottom: 10rpx;
+  min-width: 0;
 }
 
 .station-address {
   font-size: 24rpx;
   color: var(--color-text-secondary);
+  flex-shrink: 1;
+  min-width: 0;
+  line-height: 1.45;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;
-  min-width: 0;
 }
 
 .station-nav-icon-btn {
@@ -304,6 +318,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rpx;
+  margin-left: 2rpx;
 }
 
 .station-nav-icon-btn:active {
@@ -320,14 +335,15 @@
   align-items: center;
   gap: 6rpx;
   font-size: 22rpx;
+  line-height: 1.45;
   color: var(--color-text-tertiary);
 }
 
 .station-plants {
   text-align: center;
-  margin-left: 16rpx;
-  padding-top: 4rpx;
+  margin-left: 28rpx;
   flex-shrink: 0;
+  min-width: 64rpx;
   position: relative;
   z-index: 1;
 }

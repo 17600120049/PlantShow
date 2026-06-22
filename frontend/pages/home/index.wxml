@@ -87,22 +87,24 @@
               {{ item.isActive ? '营业中' : '休息中' }}
             </view>
           </view>
-          <view class="station-address-row">
-            <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
-            <text class="station-address">{{ item.address }}</text>
-            <view
-              class="station-nav-icon-btn"
-              wx:if="{{ item.address }}"
-              catchtap="openStationNavigation"
-              data-id="{{ item.id }}"
-            >
-              <pw-icon name="navigation" size="28" color="#3F5F4E" strokeWidth="1.8" />
+          <view class="station-details">
+            <view class="station-address-row">
+              <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
+              <text class="station-address">{{ item.address }}</text>
+              <view
+                class="station-nav-icon-btn"
+                wx:if="{{ item.address }}"
+                catchtap="openStationNavigation"
+                data-id="{{ item.id }}"
+              >
+                <pw-icon name="navigation" size="28" color="#3F5F4E" strokeWidth="1.8" />
+              </view>
             </view>
-          </view>
-          <view class="station-meta">
-            <view class="meta-item">
-              <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
-              <text>{{ item.hours }}</text>
+            <view class="station-meta">
+              <view class="meta-item">
+                <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
+                <text>{{ item.hours }}</text>
+              </view>
             </view>
           </view>
         </view>
