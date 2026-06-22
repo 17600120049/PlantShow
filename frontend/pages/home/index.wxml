@@ -47,7 +47,8 @@
     </view>
     <scroll-view class="plant-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view class="plant-scroll-inner">
-        <view class="plant-card glass-liquid" wx:for="{{ newPlants }}" wx:key="id" bindtap="goToPlantDetail" data-id="{{ item.id }}">
+        <view class="plant-card-wrap" wx:for="{{ newPlants }}" wx:key="id">
+          <view class="plant-card glass-liquid" bindtap="goToPlantDetail" data-id="{{ item.id }}">
           <view class="plant-image-wrap">
             <image wx:if="{{item.photoUrl}}" class="plant-photo-cover" src="{{item.photoUrl}}" mode="aspectFill" />
             <view wx:else class="plant-emoji">{{ item.image }}</view>
@@ -60,6 +61,7 @@
               <text class="plant-station">{{ item.station }}</text>
               <view class="plant-status-tag">{{ item.status }}</view>
             </view>
+          </view>
           </view>
         </view>
       </view>

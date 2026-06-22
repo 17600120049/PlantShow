@@ -137,7 +137,11 @@
 .section {
   margin-top: 48rpx;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.section-stations {
+  margin-top: 20rpx;
 }
 
 .section-stations::before,
@@ -182,7 +186,7 @@
 }
 
 .station-list {
-  padding: 0 24rpx;
+  padding: 8rpx 24rpx 16rpx;
   position: relative;
   z-index: 1;
 }
@@ -194,10 +198,6 @@
   border-radius: var(--radius-xl);
   margin-bottom: 20rpx;
   transition: transform 0.2s ease;
-}
-
-.station-card.glass-liquid {
-  box-shadow: none;
 }
 
 .station-card:active {
@@ -366,37 +366,38 @@
   width: 100%;
   position: relative;
   z-index: 1;
+  overflow: visible;
 }
 
 .plant-scroll-inner {
   display: inline-flex;
-  padding: 0 24rpx;
+  align-items: stretch;
+  padding: 8rpx 24rpx 32rpx;
   gap: 16rpx;
 }
 
-.plant-card.glass-liquid {
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
-.plant-card.glass-liquid::before,
-.plant-card.glass-liquid::after {
-  content: none;
-  display: none;
+.plant-card-wrap {
+  flex-shrink: 0;
+  padding: 0 0 20rpx;
+  filter: drop-shadow(0 8rpx 24rpx rgba(45, 71, 57, 0.05))
+    drop-shadow(0 3rpx 10rpx rgba(28, 27, 25, 0.028));
 }
 
 .plant-card {
-  flex-shrink: 0;
   width: 280rpx;
   border-radius: var(--radius-xl);
   overflow: hidden;
   transition: transform 0.2s ease;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.78) 0%,
-    rgba(255, 255, 255, 0.55) 100%
-  );
+}
+
+.plant-card.glass-liquid .plant-image-wrap {
+  border-top-left-radius: calc(var(--radius-xl) - 1rpx);
+  border-top-right-radius: calc(var(--radius-xl) - 1rpx);
+}
+
+.plant-card.glass-liquid .plant-info {
+  border-bottom-left-radius: calc(var(--radius-xl) - 1rpx);
+  border-bottom-right-radius: calc(var(--radius-xl) - 1rpx);
 }
 
 .plant-card:active {
@@ -416,11 +417,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 60rpx;
+  height: 72rpx;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.35) 100%
+    rgba(255, 255, 255, 0.22) 40%,
+    rgba(255, 255, 255, 0.52) 100%
   );
   pointer-events: none;
   z-index: 2;
