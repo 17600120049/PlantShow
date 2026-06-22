@@ -20,30 +20,30 @@
 
   <block wx:if="{{station}}">
     <view class="station-header glass">
-      <view class="station-emoji" wx:if="{{station.logoUrl}}">
-        <image class="station-logo" src="{{station.logoUrl}}" mode="aspectFill" />
+      <view class="station-logo-wrap">
+        <image wx:if="{{station.logoUrl}}" class="station-logo" src="{{station.logoUrl}}" mode="aspectFill" />
+        <view wx:else class="station-image">{{station.image}}</view>
       </view>
-      <view class="station-emoji" wx:else>{{station.image}}</view>
       <view class="station-info">
-        <view class="station-title-row">
+        <view class="station-header-row">
           <text class="station-name">{{station.name}}</text>
-          <view class="station-status {{station.isActive ? 'open' : 'closed'}}">
+          <view class="station-status {{station.isActive ? 'status-open' : 'status-closed'}}">
             {{station.isActive ? '营业中' : '休息中'}}
           </view>
         </view>
-        <view class="station-address-row" wx:if="{{station.address}}">
-          <text class="station-address">{{station.address}}</text>
-          <view class="station-nav-icon-btn" catchtap="openStationNavigation">
-            <pw-icon name="navigation" size="28" color="#3F5F4E" strokeWidth="1.8" />
+        <view class="station-details">
+          <view class="station-address-row" wx:if="{{station.address}}">
+            <pw-icon name="map-pin" size="24" color="#9C9690" strokeWidth="1.8" />
+            <text class="station-address">{{station.address}}</text>
+            <view class="station-nav-icon-btn" catchtap="openStationNavigation">
+              <pw-icon name="navigation" size="28" color="#3F5F4E" strokeWidth="1.8" />
+            </view>
           </view>
-        </view>
-        <view class="station-meta-row" wx:if="{{station.hours}}">
-          <text class="station-meta-item">{{station.hours}}</text>
-        </view>
-        <view class="station-contact-row" wx:if="{{station.phone}}">
-          <text class="station-contact-text">{{station.contactType === 'WECHAT' ? '微信' : '电话'}} {{station.phone}}</text>
-          <view class="station-contact-copy" catchtap="copyContact">
-            <text>复制</text>
+          <view class="station-meta" wx:if="{{station.hours}}">
+            <view class="meta-item">
+              <pw-icon name="clock" size="24" color="#9C9690" strokeWidth="1.8" />
+              <text>{{station.hours}}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -55,7 +55,16 @@
             mode="aspectFit"
           />
         </view>
-        <image wx:if="{{stationQrUrl}}" class="station-qr" src="{{stationQrUrl}}" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="contact-section glass" wx:if="{{station.phone}}">
+      <text class="contact-label">联系我们</text>
+      <view class="contact-row">
+        <text class="contact-text">{{station.contactType === 'WECHAT' ? '微信' : '电话'}}：{{station.phone}}</text>
+        <view class="contact-copy" catchtap="copyContact">
+          <text>复制</text>
+        </view>
       </view>
     </view>
 

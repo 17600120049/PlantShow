@@ -15,6 +15,11 @@ model User {
   city           String?
   bio            String?
   points         Int            @default(0)
+  inviteUnlocked Boolean        @default(false)
+  referralCode   String         @unique
+  referredById   String?
+  referredBy     User?          @relation("Referral", fields: [referredById], references: [id])
+  referrals      User[]         @relation("Referral")
   plants         Plant[]        @relation("PlantOwner")
   bredPlants     Plant[]        @relation("PlantBreeder")
   posts          Post[]

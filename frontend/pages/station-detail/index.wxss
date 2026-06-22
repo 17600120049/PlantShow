@@ -1,74 +1,111 @@
 @import "../scan-donate/index.wxss";
 @import "../../styles/detail-page.wxss";
 
-.station-title-row {
+.station-header {
   display: flex;
   align-items: center;
-  gap: 16rpx;
-  flex-wrap: wrap;
+  padding: 28rpx;
+  border-radius: var(--radius-xl);
+  margin-bottom: 20rpx;
 }
 
-.station-status {
-  font-size: 22rpx;
-  padding: 4rpx 16rpx;
-  border-radius: 999rpx;
+.station-logo-wrap {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  margin-right: 24rpx;
+  border-radius: var(--radius-md);
 }
 
-.station-status.open {
-  background: rgba(45, 71, 57, 0.1);
-  color: var(--color-primary);
-}
-
-.station-status.closed {
-  background: rgba(156, 150, 144, 0.15);
-  color: var(--color-text-tertiary);
-}
-
-.station-contact-row {
+.station-image {
+  width: 112rpx;
+  height: 112rpx;
+  background: linear-gradient(145deg, rgba(232, 240, 234, 0.95) 0%, rgba(212, 228, 214, 0.85) 100%);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
-  gap: 16rpx;
-  margin-top: 10rpx;
+  justify-content: center;
+  font-size: 52rpx;
 }
 
-.station-contact-text {
-  font-size: 24rpx;
-  color: var(--color-text-secondary);
+.station-logo {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+.station-info {
   flex: 1;
   min-width: 0;
+  padding-right: 12rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.station-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  min-width: 0;
+}
+
+.station-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  flex-shrink: 1;
+  min-width: 0;
+  line-height: 1.35;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.station-contact-copy {
-  padding: 4rpx 16rpx;
-  border-radius: 999rpx;
-  background: rgba(45, 71, 57, 0.08);
-  color: var(--color-primary);
-  font-size: 22rpx;
+.station-status {
+  font-size: 20rpx;
   font-weight: 500;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
   flex-shrink: 0;
 }
 
-.station-contact-copy:active {
-  background: rgba(45, 71, 57, 0.14);
+.status-open {
+  background: rgba(45, 71, 57, 0.12);
+  color: var(--color-primary);
+}
+
+.status-closed {
+  background: rgba(156, 150, 144, 0.14);
+  color: var(--color-text-tertiary);
+}
+
+.station-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  min-width: 0;
 }
 
 .station-address-row {
   display: flex;
-  align-items: flex-start;
-  gap: 12rpx;
-  margin-top: 10rpx;
+  align-items: center;
+  gap: 8rpx;
+  min-width: 0;
 }
 
-.station-header .station-info .station-address {
-  display: block;
+.station-address {
   font-size: 24rpx;
   color: var(--color-text-secondary);
-  line-height: 1.5;
-  flex: 1;
+  flex-shrink: 1;
   min-width: 0;
+  line-height: 1.45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .station-nav-icon-btn {
@@ -77,34 +114,25 @@
   align-items: center;
   justify-content: center;
   padding: 4rpx;
+  margin-left: 2rpx;
 }
 
 .station-nav-icon-btn:active {
   opacity: 0.65;
 }
 
-.station-meta-row {
+.station-meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8rpx;
-  margin-top: 10rpx;
 }
 
-.station-meta-item {
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
   font-size: 22rpx;
+  line-height: 1.45;
   color: var(--color-text-tertiary);
-}
-
-.station-meta-dot {
-  font-size: 22rpx;
-  color: var(--color-text-tertiary);
-  opacity: 0.6;
-}
-
-.station-header .station-info .station-name {
-  flex: 1;
-  min-width: 0;
 }
 
 .station-aside {
@@ -141,6 +169,50 @@
 .station-favorite-btn.active .station-favorite-icon {
   width: 44rpx;
   height: 44rpx;
+}
+
+.contact-section {
+  padding: 24rpx 28rpx;
+  border-radius: var(--radius-xl);
+  margin-bottom: 20rpx;
+}
+
+.contact-label {
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 16rpx;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact-text {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contact-copy {
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+  background: rgba(45, 71, 57, 0.08);
+  color: var(--color-primary);
+  font-size: 24rpx;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.contact-copy:active {
+  background: rgba(45, 71, 57, 0.14);
 }
 
 .section-label {

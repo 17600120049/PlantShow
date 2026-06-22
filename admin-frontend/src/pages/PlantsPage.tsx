@@ -1,4 +1,4 @@
-﻿import { Button, Form, Input, Modal, Select, Space, Table, Tag, message } from 'antd';
+import { Button, Form, Input, Modal, Select, Space, Table, Tag, Typography, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { getDisplayablePhotos, isDisplayableMediaUrl, resolveMediaUrl } from '../media';
@@ -27,6 +27,7 @@ export default function PlantsPage() {
   const [loading, setLoading] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [editing, setEditing] = useState<Plant | null>(null);
+  const [qrPlant, setQrPlant] = useState<Plant | null>(null);
   const [form] = Form.useForm();
 
   const load = async (search?: string) => {
@@ -118,6 +119,26 @@ export default function PlantsPage() {
           { title: '主人', dataIndex: 'ownerName' },
           { title: '送养时间', dataIndex: 'donateTime' },
           {
+            title: '二维码',
+            width: 90,
+            render: (_, record) => (
+              <img
+                src={api.getPlantQrUrl(record.plantCode, 80)}
+                alt={`${record.name} 二维码`}
+                width={64}
+                height={64}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: 6,
+                  border: '1px solid #f0f0f0',
+                  padding: 4,
+                  background: '#fff',
+                }}
+                onClick={() => setQrPlant(record)}
+              />
+            ),
+          },
+          {
             title: '操作',
             fixed: 'right',
             width: 160,
@@ -184,6 +205,47 @@ export default function PlantsPage() {
             <Input.TextArea rows={3} />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title={qrPlant ? `${qrPlant.name} · 植物二维码` : '植物二维码'}
+        open={!!qrPlant}
+        onCancel={() => setQrPlant(null)}
+        footer={
+          qrPlant ? (
+            <Button
+              type="primary"
+              href={api.getPlantQrUrl(qrPlant.plantCode, 512)}
+              download={`plant-${qrPlant.plantCode}-qr.png`}
+            >
+              下载二维码
+            </Button>
+          ) : null
+        }
+        width={400}
+      >
+        {qrPlant && (
+          <div style={{ textAlign: 'center', padding: '8px 0' }}>
+            <img
+              src={api.getPlantQrUrl(qrPlant.plantCode, 280)}
+              alt={`${qrPlant.name} 二维码`}
+              width={280}
+              height={280}
+              style={{
+                borderRadius: 8,
+                border: '1px solid #f0f0f0',
+                padding: 12,
+                background: '#fff',
+              }}
+            />
+            <Typography.Paragraph
+              type="secondary"
+              style={{ marginTop: 16, marginBottom: 0, padding: '0 8px', whiteSpace: 'normal' }}
+            >
+              用户扫描此码可查看植物详情并进行领养
+            </Typography.Paragraph>
+          </div>
+        )}
       </Modal>
     </div>
   );

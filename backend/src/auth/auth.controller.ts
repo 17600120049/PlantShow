@@ -9,11 +9,11 @@ export class AuthController {
 
   @Post('wx-login')
   wxLogin(@Body() dto: WxLoginDto) {
-    return this.authService.wxLogin(dto.code);
+    return this.authService.wxLogin(dto.code, dto.referralCode);
   }
 
   @Post('dev-login')
   devLogin(@Body() dto: DevLoginDto) {
-    return this.authService.devLogin(dto.openid, dto.nickname);
+    return this.authService.devLogin(dto.openid, dto.nickname, dto.referralCode);
   }
 }

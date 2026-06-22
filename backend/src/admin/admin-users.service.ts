@@ -156,13 +156,35 @@ export class AdminUsersService {
   async remove(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { _count: { select: { plants: true, posts: true } } },
+      include: {
+        _count: {
+          select: {
+            plants: true,
+            bredPlants: true,
+            posts: true,
+            comments: true,
+            likes: true,
+            followings: true,
+            followers: true,
+            messages: true,
+            sentTrades: true,
+            receivedTrades: true,
+            plantHistories: true,
+            reports: true,
+            stationManagers: true,
+            conversations1: true,
+            conversations2: true,
+          },
+        },
+      },
     });
     if (!user) {
       throw new NotFoundException('用户不存在');
     }
-    if (user._count.plants > 0 || user._count.posts > 0) {
-      throw new BadRequestException('该用户有关联植物或动态，无法删除');
+
+    const totalAssociations = Object.values(user._count).reduce((sum, count) => sum + count, 0);
+    if (totalAssociations > 0) {
+      throw new BadRequestException('该用户有关联数据，无法删除');
     }
 
     await this.prisma.user.delete({ where: { id } });

@@ -57,7 +57,6 @@ export class UsersService {
       donatedCount,
       adoptedCount,
       points: user.points,
-      currentReservation: 0,
     };
   }
 

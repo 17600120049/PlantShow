@@ -8,4 +8,8 @@ export class DevLoginDto {
   @IsOptional()
   @IsString()
   nickname?: string;
+
+  @IsOptional()
+  @IsString()
+  referralCode?: string;
 }

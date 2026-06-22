@@ -125,9 +125,7 @@
       <button class="primary-btn" bindtap="saveAutoSettings" loading="{{savingAuto}}" disabled="{{savingAuto}}">保存自动设置</button>
     </view>
 
-    <view class="rescan-link-wrap">
-      <view class="rescan-link" bindtap="startScan">重新扫码</view>
-    </view>
+
   </view>
 
   <view class="error-panel glass" wx:if="{{!loading && loadError && (view === 'detail' || !flexibleStations.length)}}">

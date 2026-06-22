@@ -130,6 +130,9 @@ export const api = {
   getStationQrUrl: (stationId: number, size = 320) =>
     `/api/qr/station/${stationId}?size=${size}`,
 
+  getPlantQrUrl: (plantCode: string, size = 320) =>
+    `/api/qr/plant/${plantCode}?size=${size}`,
+
   uploadImage: async (file: File) => {
     const form = new FormData();
     form.append('file', file);

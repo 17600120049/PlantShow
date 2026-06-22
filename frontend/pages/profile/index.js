@@ -23,8 +23,7 @@ Page({
     },
     stats: {
       donatedCount: 0,
-      adoptedCount: 0,
-      currentReservation: 0
+      adoptedCount: 0
     },
     savingProfile: false,
     managedStations: [],
@@ -149,9 +148,7 @@ Page({
     });
   },
 
-  goToReservations: function () {
-    showComingSoon('预约记录开发中');
-  },
+
 
   goToPoints: function () {
     wx.navigateTo({

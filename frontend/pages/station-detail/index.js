@@ -13,7 +13,7 @@ Page({
     navCapsuleWidth: 88,
     station: null,
     plants: [],
-    stationQrUrl: '',
+
     loading: true,
     loadError: '',
     favorited: false,
@@ -40,11 +40,9 @@ Page({
         const station = results[0];
         const plants = results[1];
         const favorited = results[2];
-        const qrRemote = plantStore.getQrImageUrl('station', station.id);
         that.setData({
           station: station,
           plants: plants,
-          stationQrUrl: '',
           loading: false,
           loadError: '',
           favorited: favorited
@@ -54,9 +52,6 @@ Page({
         });
         media.hydratePlants(plants).then(function (hydratedPlants) {
           that.setData({ plants: hydratedPlants });
-        });
-        media.downloadToLocal(qrRemote).then(function (qrLocal) {
-          that.setData({ stationQrUrl: qrLocal || qrRemote });
         });
       })
       .catch(function (err) {

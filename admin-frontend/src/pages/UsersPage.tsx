@@ -126,9 +126,13 @@ export default function UsersPage() {
                     Modal.confirm({
                       title: '确认删除该用户？',
                       onOk: async () => {
-                        await api.deleteUser(record.id);
-                        message.success('已删除');
-                        load(keyword);
+                        try {
+                          await api.deleteUser(record.id);
+                          message.success('已删除');
+                          load(keyword);
+                        } catch (err) {
+                          message.error(err instanceof Error ? err.message : '删除失败');
+                        }
                       },
                     });
                   }}
