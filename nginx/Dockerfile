@@ -3,7 +3,8 @@ FROM docker.m.daocloud.io/library/node:18-alpine AS admin-build
 WORKDIR /app
 
 COPY admin-frontend/package*.json ./
-RUN npm install
+RUN npm config set registry https://registry.npmmirror.com \
+ && npm install
 
 COPY admin-frontend/ .
 RUN npm run build

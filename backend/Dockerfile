@@ -4,7 +4,8 @@ FROM docker.m.daocloud.io/library/node:18-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm config set registry https://registry.npmmirror.com \
+ && npm install
 
 COPY . .
 RUN npx prisma generate
@@ -18,7 +19,8 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm config set registry https://registry.npmmirror.com \
+ && npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
