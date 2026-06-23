@@ -1,4 +1,4 @@
-FROM node:18-alpine AS admin-build
+FROM docker.m.daocloud.io/library/node:18-alpine AS admin-build
 
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN npm install
 COPY admin-frontend/ .
 RUN npm run build
 
-FROM nginx:alpine
+FROM docker.m.daocloud.io/library/nginx:alpine
 
 RUN apk add --no-cache openssl
 

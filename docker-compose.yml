@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.0
+    image: docker.m.daocloud.io/library/mysql:8.0
     container_name: plant-show-mysql
     restart: unless-stopped
     environment:
@@ -70,7 +70,7 @@ services:
       - plant-show-network
 
   certbot:
-    image: certbot/certbot:latest
+    image: docker.m.daocloud.io/certbot/certbot:latest
     container_name: plant-show-certbot
     profiles:
       - certbot

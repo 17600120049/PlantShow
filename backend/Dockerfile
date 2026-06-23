@@ -1,4 +1,5 @@
-FROM node:18-alpine AS builder
+# 国内服务器直连 DaoCloud，避免 registry-mirrors 误配为 google_containers
+FROM docker.m.daocloud.io/library/node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -10,7 +11,7 @@ RUN npx prisma generate
 RUN npm run build
 RUN npm run build:seed
 
-FROM node:18-alpine
+FROM docker.m.daocloud.io/library/node:18-alpine
 
 WORKDIR /app
 
