@@ -20,7 +20,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#FAF9F7",
-    "navigationBarTitleText": "流浪植物中转站",
+    "navigationBarTitleText": "PlantShow",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#FAF9F7",
     "navigationStyle": "custom"

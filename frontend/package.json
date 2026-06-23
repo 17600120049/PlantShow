@@ -1,5 +1,5 @@
 {
-  "name": "plant-wander-miniprogram",
+  "name": "plant-show-miniprogram",
   "private": true,
   "scripts": {
     "icons": "node scripts/generate-icons.js"

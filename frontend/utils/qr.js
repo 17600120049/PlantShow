@@ -1,4 +1,4 @@
-const PREFIX = 'plantwander://';
+const PREFIX = 'plantshow://';
 
 function parseQrResult(raw) {
   if (!raw || typeof raw !== 'string') {

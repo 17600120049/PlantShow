@@ -25,7 +25,7 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   await app.listen(port, '0.0.0.0');
-  console.log(`🚀 Plant Wander API running on http://localhost:${port}/api`);
+  console.log(`🚀 PlantShow API running on http://localhost:${port}/api`);
   console.log(`📱 真机调试请使用局域网 IP，例如 http://<你的电脑IP>:${port}/api`);
 }
 

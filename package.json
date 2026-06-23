@@ -1,21 +1,23 @@
 {
-  "name": "plant-wander",
+  "name": "plant-show",
   "version": "1.0.0",
   "private": true,
-  "description": "流浪植物驿站 — 微信小程序 + NestJS 后端 + 管理后台",
+  "description": "PlantShow — 微信小程序 + NestJS 后端 + 管理后台",
   "workspaces": [
     "backend",
     "admin-frontend"
   ],
   "scripts": {
-    "backend:dev": "npm run start:dev -w plant-wander-backend",
-    "backend:build": "npm run build -w plant-wander-backend",
-    "backend:seed": "npm run prisma:seed -w plant-wander-backend",
-    "admin:dev": "npm run dev -w plant-wander-admin",
-    "admin:build": "npm run build -w plant-wander-admin",
+    "backend:dev": "npm run start:dev -w plant-show-backend",
+    "backend:build": "npm run build -w plant-show-backend",
+    "backend:seed": "npm run prisma:seed -w plant-show-backend",
+    "admin:dev": "npm run dev -w plant-show-admin",
+    "admin:build": "npm run build -w plant-show-admin",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down",
     "docker:deploy": "docker compose up -d --build",
+    "docker:prod": "bash scripts/deploy-prod.sh",
+    "docker:ssl": "bash scripts/init-ssl.sh",
     "docker:logs": "docker compose logs -f"
   }
 }

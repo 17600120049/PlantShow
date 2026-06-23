@@ -3,7 +3,7 @@
     <view class="header-bg-shape"></view>
     <view class="logo-section">
       <view class="logo-text">
-        <text class="logo-title">流浪植物中转站</text>
+        <text class="logo-title">PlantShow</text>
         <text class="logo-slogan">让每一株植物都能找到下一位主人</text>
       </view>
     </view>

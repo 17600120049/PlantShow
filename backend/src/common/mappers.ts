@@ -11,7 +11,7 @@ import {
 import { parsePlantPhotos, getPlantCoverPhoto } from './plant-photos';
 
 export const DONATE_POINTS = 10;
-export const QR_PREFIX = 'plantwander://';
+export const QR_PREFIX = 'plantshow://';
 
 export type PlantWithStation = Plant & {
   station?: Station | null;

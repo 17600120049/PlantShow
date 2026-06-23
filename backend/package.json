@@ -1,7 +1,7 @@
 {
-  "name": "plant-wander-backend",
+  "name": "plant-show-backend",
   "version": "1.0.0",
-  "description": "流浪植物后端服务",
+  "description": "PlantShow 后端服务",
   "main": "dist/main.js",
   "scripts": {
     "build": "nest build",

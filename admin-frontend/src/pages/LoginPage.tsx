@@ -19,7 +19,7 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <Card className="login-card" title="流浪植物管理后台">
+      <Card className="login-card" title="PlantShow 管理后台">
         <Typography.Paragraph type="secondary">
           管理用户、积分、中转站与植物数据
         </Typography.Paragraph>

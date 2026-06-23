@@ -1,4 +1,4 @@
-﻿# 流浪植物中转站 (Plant Wander)
+﻿# PlantShow
 
 微信小程序 + NestJS 后端 + React 管理后台，支持扫码送养、扫码领养、中转站管理与二维码生成。
 
@@ -47,9 +47,9 @@ npm run docker:deploy
 
 | 服务 | 容器名 | 端口 | 说明 |
 |------|--------|------|------|
-| MySQL | plant-wander-mysql | 3306 | 数据库，库名 `plant_wander` |
-| Backend | plant-wander-backend | 3000 | NestJS API，启动时自动迁移 + 种子数据 |
-| Nginx | plant-wander-nginx | 80 | 反代 `/api`，托管 `/admin` |
+| MySQL | plant-show-mysql | 3306 | 数据库，库名 `plant_show` |
+| Backend | plant-show-backend | 3000 | NestJS API，启动时自动迁移 + 种子数据 |
+| Nginx | plant-show-nginx | 80 | 反代 `/api`，托管 `/admin` |
 
 ### 访问地址
 
@@ -103,7 +103,7 @@ cp backend/.env.example backend/.env
 默认连接本地 MySQL：
 
 ```
-DATABASE_URL="mysql://root:plant123@localhost:3306/plant_wander"
+DATABASE_URL="mysql://root:plant123@localhost:3306/plant_show"
 ```
 
 初始化数据库：
@@ -185,8 +185,8 @@ npm run admin:dev
 小程序扫码解析支持以下协议：
 
 ```
-plantwander://plant/PW-000001    # 植物编号
-plantwander://station/1          # 中转站 ID
+plantshow://plant/PW-000001    # 植物编号
+plantshow://station/1          # 中转站 ID
 ```
 
 也可通过 API 获取 PNG 图片：

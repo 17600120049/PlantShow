@@ -75,7 +75,7 @@
     <view class="join-fixed-inner">
       <view class="join-fixed-text">
         <text class="join-fixed-title">想开设中转站？</text>
-        <text class="join-fixed-desc">欢迎加入流浪植物网络</text>
+        <text class="join-fixed-desc">欢迎加入 PlantShow 网络</text>
       </view>
       <view class="join-fixed-btn" bindtap="goToJoinUs">
         <text>加入我们</text>

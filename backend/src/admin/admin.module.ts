@@ -26,7 +26,7 @@ import { AdminStationApplicationsService } from './admin-station-applications.se
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>(
           'ADMIN_JWT_SECRET',
-          configService.get<string>('JWT_SECRET', 'plant-wander-jwt-secret-key-2024'),
+          configService.get<string>('JWT_SECRET', 'plant-show-jwt-secret-key-2024'),
         ),
         signOptions: {
           expiresIn: configService.get<string>('ADMIN_JWT_EXPIRES_IN', '1d'),

@@ -3,18 +3,17 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: plant-wander-mysql
-    ports:
-      - "3306:3306"
+    container_name: plant-show-mysql
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: plant123
-      MYSQL_DATABASE: plant_wander
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-plant_show}
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - plant-wander-network
+      - plant-show-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,23 +21,31 @@ services:
 
   backend:
     build: ./backend
-    container_name: plant-wander-backend
-    ports:
-      - "3000:3000"
+    container_name: plant-show-backend
+    restart: unless-stopped
+    env_file: .env
     environment:
-      DATABASE_URL: mysql://root:plant123@mysql:3306/plant_wander
-      JWT_SECRET: plant-wander-jwt-secret-key-2024
-      JWT_EXPIRES_IN: 7d
-      ADMIN_JWT_SECRET: plant-wander-admin-jwt-secret-2024
-      ADMIN_JWT_EXPIRES_IN: 1d
-      PORT: 3000
+      DATABASE_URL: mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-plant_show}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      ADMIN_JWT_EXPIRES_IN: ${ADMIN_JWT_EXPIRES_IN:-1d}
+      PORT: ${PORT:-3000}
+      NODE_ENV: ${NODE_ENV:-production}
+      DISABLE_DEV_LOGIN: ${DISABLE_DEV_LOGIN:-true}
+      RUN_SEED: ${RUN_SEED:-false}
+      WECHAT_APPID: ${WECHAT_APPID:-}
+      WECHAT_SECRET: ${WECHAT_SECRET:-}
+      AMAP_KEY: ${AMAP_KEY:-}
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - plant-wander-network
+      - plant-show-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/stations"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/stations']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -48,18 +55,38 @@ services:
     build:
       context: .
       dockerfile: nginx/Dockerfile
-    container_name: plant-wander-nginx
+    container_name: plant-show-nginx
+    restart: unless-stopped
     ports:
-      - "80:80"
+      - '80:80'
+      - '443:443'
+    volumes:
+      - certbot-www:/var/www/certbot:ro
+      - certbot-conf:/etc/letsencrypt:ro
     depends_on:
       backend:
         condition: service_healthy
     networks:
-      - plant-wander-network
+      - plant-show-network
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: plant-show-certbot
+    profiles:
+      - certbot
+    volumes:
+      - certbot-www:/var/www/certbot
+      - certbot-conf:/etc/letsencrypt
+    networks:
+      - plant-show-network
+    entrypoint: '/bin/sh -c "trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;"'
 
 volumes:
   mysql_data:
+  uploads_data:
+  certbot-www:
+  certbot-conf:
 
 networks:
-  plant-wander-network:
+  plant-show-network:
     driver: bridge

@@ -14,7 +14,7 @@ import { WechatService } from './wechat.service';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET', 'plant-wander-jwt-secret-key-2024'),
+        secret: configService.get<string>('JWT_SECRET', 'plant-show-jwt-secret-key-2024'),
         signOptions: {
           expiresIn: configService.get<string>('JWT_EXPIRES_IN', '7d'),
         },

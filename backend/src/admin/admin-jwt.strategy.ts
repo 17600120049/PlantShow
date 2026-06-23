@@ -15,7 +15,7 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
       ignoreExpiration: false,
       secretOrKey: configService.get<string>(
         'ADMIN_JWT_SECRET',
-        configService.get<string>('JWT_SECRET', 'plant-wander-jwt-secret-key-2024'),
+        configService.get<string>('JWT_SECRET', 'plant-show-jwt-secret-key-2024'),
       ),
     });
   }
