@@ -10,7 +10,14 @@ RUN npm run build
 
 FROM docker.m.daocloud.io/library/nginx:alpine
 
-RUN apk add --no-cache openssl
+RUN cp /etc/apk/repositories /etc/apk/repositories.bak \
+ && ok=0 \
+ && for mirror in mirrors.tuna.tsinghua.edu.cn mirrors.ustc.edu.cn mirrors.aliyun.com; do \
+      cp /etc/apk/repositories.bak /etc/apk/repositories; \
+      sed -i "s/dl-cdn.alpinelinux.org/${mirror}/g" /etc/apk/repositories; \
+      if apk update && apk add --no-cache openssl; then ok=1; break; fi; \
+    done \
+ && test "$ok" -eq 1
 
 COPY nginx/conf.d-templates /etc/nginx/conf.d-templates
 COPY nginx/snippets /etc/nginx/snippets
