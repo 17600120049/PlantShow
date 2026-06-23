@@ -25,6 +25,7 @@ async function main() {
       avatar: null,
       city: '杭州',
       points: 0,
+      referralCode: 'DEMO0001',
     },
   });
 
