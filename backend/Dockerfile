@@ -1,8 +1,7 @@
-# 国内服务器：DaoCloud 基础镜像 + npmmirror npm + 阿里云 apk + Prisma 二进制镜像
+# 国内服务器：DaoCloud 基础镜像 + npmmirror npm + Prisma 二进制镜像
 FROM docker.m.daocloud.io/library/node:18-alpine AS builder
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
- && apk add --no-cache openssl
+RUN apk add --no-cache openssl
 
 ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
 
@@ -17,8 +16,6 @@ RUN npm run build
 RUN npm run build:seed
 
 FROM docker.m.daocloud.io/library/node:18-alpine
-
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
 
