@@ -1,4 +1,4 @@
-const { initStatusBarHeight, setTabBarSelected, showComingSoon } = require('../../utils/system');
+const { initStatusBarHeight, setTabBarSelected } = require('../../utils/system');
 const plantStore = require('../../utils/plantStore');
 const auth = require('../../utils/auth');
 const request = require('../../utils/request');
@@ -130,10 +130,6 @@ Page({
     wx.navigateTo({
       url: '/pages/scan-adopt/index'
     });
-  },
-
-  goToSettings: function () {
-    showComingSoon('设置功能开发中');
   },
 
   goToDonations: function () {

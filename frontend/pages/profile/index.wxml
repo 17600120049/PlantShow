@@ -78,13 +78,6 @@
         <text class="menu-text">营业状态</text>
         <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
       </view>
-      <view class="menu-item" bindtap="goToSettings">
-        <view class="menu-icon-wrap settings">
-          <pw-icon name="settings" size="36" color="#9C9690" strokeWidth="2" />
-        </view>
-        <text class="menu-text">设置</text>
-        <pw-icon name="chevron-right" size="32" color="#CCCCCC" strokeWidth="2" />
-      </view>
     </view>
   </view>
 </view>
