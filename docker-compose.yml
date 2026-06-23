@@ -49,8 +49,8 @@ services:
       test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/stations']
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 40s
+      retries: 8
+      start_period: 90s
 
   nginx:
     build:
