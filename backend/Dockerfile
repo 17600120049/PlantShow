@@ -12,6 +12,7 @@ RUN cp /etc/apk/repositories /etc/apk/repositories.bak \
  && test "$ok" -eq 1
 
 ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
+ENV NODE_OPTIONS=--max-old-space-size=512
 
 WORKDIR /app
 
@@ -26,6 +27,7 @@ RUN npm run build:seed
 FROM docker.m.daocloud.io/library/node:18-alpine
 
 ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
+ENV NODE_OPTIONS=--max-old-space-size=512
 
 WORKDIR /app
 
