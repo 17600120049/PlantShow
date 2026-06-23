@@ -1,17 +1,19 @@
 FROM docker.m.daocloud.io/library/node:18-alpine AS admin-build
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
 WORKDIR /app
 
-COPY admin-frontend/package*.json ./
-RUN npm config set registry https://registry.npmmirror.com \
- && npm install
+COPY admin-frontend/package*.json admin-frontend/.npmrc ./
+RUN npm install
 
 COPY admin-frontend/ .
 RUN npm run build
 
 FROM docker.m.daocloud.io/library/nginx:alpine
 
-RUN apk add --no-cache openssl
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+ && apk add --no-cache openssl
 
 COPY nginx/conf.d-templates /etc/nginx/conf.d-templates
 COPY nginx/snippets /etc/nginx/snippets

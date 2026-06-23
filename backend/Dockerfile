@@ -1,11 +1,14 @@
-# 国内服务器直连 DaoCloud，避免 registry-mirrors 误配为 google_containers
+# 国内服务器：DaoCloud 基础镜像 + npmmirror npm + 阿里云 apk + Prisma 二进制镜像
 FROM docker.m.daocloud.io/library/node:18-alpine AS builder
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
+ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm config set registry https://registry.npmmirror.com \
- && npm install
+COPY package*.json .npmrc ./
+RUN npm install
 
 COPY . .
 RUN npx prisma generate
@@ -14,13 +17,16 @@ RUN npm run build:seed
 
 FROM docker.m.daocloud.io/library/node:18-alpine
 
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
+ENV PRISMA_ENGINES_MIRROR=https://registry.npmmirror.com/-/binary/prisma
+
 WORKDIR /app
 
 RUN apk add --no-cache curl
 
-COPY package*.json ./
-RUN npm config set registry https://registry.npmmirror.com \
- && npm install --omit=dev
+COPY package*.json .npmrc ./
+RUN npm install --omit=dev
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma

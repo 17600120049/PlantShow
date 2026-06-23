@@ -10,7 +10,7 @@ function loadAppFonts() {
     wx.loadFontFace({
       global: true,
       family: 'Noto Sans SC',
-      source: `url("https://cdn.jsdelivr.net/fontsource/fonts/noto-sans-sc@5.2.5/${file}")`,
+      source: `url("https://registry.npmmirror.com/@fontsource/noto-sans-sc/5.2.5/files/${file}")`,
       desc: { weight: String(weight), style: 'normal' },
       fail: function (err) {
         console.warn('[font] Noto Sans SC ' + weight + ' 加载失败，将使用系统字体', err);

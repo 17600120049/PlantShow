@@ -32,6 +32,7 @@ services:
       ADMIN_JWT_EXPIRES_IN: ${ADMIN_JWT_EXPIRES_IN:-1d}
       PORT: ${PORT:-3000}
       NODE_ENV: ${NODE_ENV:-production}
+      PRISMA_ENGINES_MIRROR: https://registry.npmmirror.com/-/binary/prisma
       DISABLE_DEV_LOGIN: ${DISABLE_DEV_LOGIN:-true}
       RUN_SEED: ${RUN_SEED:-false}
       WECHAT_APPID: ${WECHAT_APPID:-}
