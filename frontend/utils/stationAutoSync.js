@@ -16,7 +16,7 @@ function runOnAppActive() {
   }
 
   syncPromise = auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return plantStore.getManagedStations();
     })

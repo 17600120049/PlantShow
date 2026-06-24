@@ -1,6 +1,7 @@
 const { setupDetailNav } = require('../../utils/system');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
+const auth = require('../../utils/auth');
 
 Page({
   data: {
@@ -20,10 +21,15 @@ Page({
 
   onLoad: function (options) {
     setupDetailNav(this);
-    if (options && options.id) {
-      this.plantId = options.id;
-      this.loadPlant(options.id);
-    }
+    const that = this;
+    auth.requireLogin().then(function () {
+      if (options && options.id) {
+        that.plantId = options.id;
+        that.loadPlant(options.id);
+      }
+    }).catch(function () {
+      wx.navigateBack();
+    });
   },
 
   loadPlant: function (plantId) {

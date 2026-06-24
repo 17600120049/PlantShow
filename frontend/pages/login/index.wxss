@@ -1,0 +1,140 @@
+.page {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48rpx 40rpx;
+  background: rgba(26, 46, 36, 0.52);
+  backdrop-filter: blur(8rpx);
+  -webkit-backdrop-filter: blur(8rpx);
+}
+
+.modal {
+  width: 100%;
+  max-width: 640rpx;
+  padding: 48rpx 40rpx 36rpx;
+  border-radius: var(--radius-xl);
+}
+
+.brand-wrap {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.brand-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 12rpx;
+}
+
+.brand-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-tertiary);
+  line-height: 1.6;
+}
+
+.referral-field {
+  margin-bottom: 28rpx;
+}
+
+.field-label {
+  display: block;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  margin-bottom: 12rpx;
+}
+
+.referral-input {
+  height: 80rpx;
+  padding: 0 24rpx;
+  background: rgba(139, 134, 128, 0.08);
+  border-radius: var(--radius-md);
+  font-size: 28rpx;
+  color: var(--color-text);
+}
+
+.referral-placeholder {
+  color: var(--color-text-tertiary);
+  font-size: 24rpx;
+}
+
+.agreement-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 32rpx;
+}
+
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid rgba(45, 71, 57, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+  font-size: 22rpx;
+  color: #fff;
+}
+
+.checkbox.checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.agreement-text {
+  flex: 1;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+
+.link {
+  color: var(--color-primary);
+}
+
+.wechat-login-btn {
+  height: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  background: #07C160;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.28);
+}
+
+.wechat-login-btn::after {
+  border: none;
+}
+
+.wechat-login-btn[disabled] {
+  opacity: 0.45;
+}
+
+.cancel-btn {
+  margin-top: 24rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: var(--color-text-tertiary);
+  padding: 12rpx 0;
+}

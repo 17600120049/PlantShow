@@ -5,6 +5,8 @@ import {
   DONATE_POINTS,
   formatDate,
   formatDateTime,
+  getEffectivePoints,
+  getLockedPoints,
   toPlantDto,
 } from '../common/mappers';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -56,7 +58,9 @@ export class UsersService {
     return {
       donatedCount,
       adoptedCount,
-      points: user.points,
+      points: getEffectivePoints(user),
+      lockedPoints: getLockedPoints(user),
+      inviteUnlocked: user.inviteUnlocked,
     };
   }
 
@@ -102,18 +106,39 @@ export class UsersService {
       orderBy: { timestamp: 'desc' },
     });
 
-    return {
-      totalPoints: user.points,
-      records: histories.map((history) => ({
-        id: history.id,
+    const records = histories.map((history) => ({
+      id: history.id,
+      type: 'earn',
+      delta: DONATE_POINTS,
+      title: '送养植物',
+      description: `送养「${history.plant.name}」`,
+      note: history.note || '',
+      time: formatDate(history.timestamp),
+      timeDetail: formatDateTime(history.timestamp),
+    }));
+
+    const earnedFromDonations = histories.length * DONATE_POINTS;
+    const welcomePoints = Math.max(0, user.points - earnedFromDonations);
+    if (welcomePoints > 0) {
+      records.unshift({
+        id: 'welcome-bonus',
         type: 'earn',
-        delta: DONATE_POINTS,
-        title: '送养植物',
-        description: `送养「${history.plant.name}」`,
-        note: history.note || '',
-        time: formatDate(history.timestamp),
-        timeDetail: formatDateTime(history.timestamp),
-      })),
+        delta: welcomePoints,
+        title: '新用户注册奖励',
+        description: user.inviteUnlocked
+          ? '欢迎加入 PlantShow'
+          : '邀请好友注册后解锁',
+        note: user.inviteUnlocked ? '' : '待解锁',
+        time: formatDate(user.createdAt),
+        timeDetail: formatDateTime(user.createdAt),
+      });
+    }
+
+    return {
+      totalPoints: getEffectivePoints(user),
+      lockedPoints: getLockedPoints(user),
+      inviteUnlocked: user.inviteUnlocked,
+      records,
     };
   }
 }

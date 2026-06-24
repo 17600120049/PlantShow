@@ -121,6 +121,57 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
+.locked-points-hint {
+  margin-top: 12rpx;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.6;
+}
+
+.referral-code {
+  display: block;
+  margin-top: 8rpx;
+  color: #D4E8D8;
+  text-decoration: underline;
+}
+
+.guest-main {
+  display: flex;
+  align-items: center;
+}
+
+.guest-avatar {
+  flex-shrink: 0;
+}
+
+.guest-title {
+  display: block;
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+}
+
+.guest-desc {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 20rpx;
+}
+
+.guest-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 64rpx;
+  padding: 0 28rpx;
+  background: #07C160;
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+}
+
 .stats-card {
   margin: -56rpx 32rpx 32rpx;
   display: flex;

@@ -3,18 +3,28 @@ const plantStore = require('../../utils/plantStore');
 const auth = require('../../utils/auth');
 const request = require('../../utils/request');
 
-function mapUserInfo(user, points) {
+function mapUserInfo(user, stats) {
+  const points = stats && typeof stats.points === 'number'
+    ? stats.points
+    : (typeof user.points === 'number' ? user.points : 0);
+  const lockedPoints = stats && typeof stats.lockedPoints === 'number'
+    ? stats.lockedPoints
+    : (typeof user.lockedPoints === 'number' ? user.lockedPoints : 0);
   return {
     avatar: user.avatar || '',
     avatarUrl: user.avatar ? request.resolveMediaUrl(user.avatar) : '',
     nickname: user.nickname || '微信用户',
-    points: typeof points === 'number' ? points : (user.points || 0)
+    points: points,
+    lockedPoints: lockedPoints,
+    inviteUnlocked: !!(user.inviteUnlocked || (stats && stats.inviteUnlocked)),
+    referralCode: user.referralCode || ''
   };
 }
 
 Page({
   data: {
     statusBarHeight: 44,
+    loggedIn: false,
     userInfo: {
       avatar: '',
       avatarUrl: '',
@@ -36,7 +46,20 @@ Page({
 
   onShow: function () {
     setTabBarSelected(this, 2);
+    if (!auth.isLoggedIn()) {
+      this.setData({ loggedIn: false });
+      return;
+    }
+    this.setData({ loggedIn: true });
     this.refreshStats();
+  },
+
+  onLoginTap: function () {
+    const that = this;
+    auth.requireLogin().then(function () {
+      that.setData({ loggedIn: true });
+      that.refreshStats();
+    });
   },
 
   refreshStats: function () {
@@ -59,12 +82,25 @@ Page({
       });
       that.setData({
         stats: stats,
-        userInfo: mapUserInfo(user, stats.points),
+        userInfo: mapUserInfo(user, stats),
         managedStations: managedStations,
         flexibleManagedStations: flexibleManagedStations
       });
     }).catch(function () {
       // 积分加载失败时保留当前展示
+    });
+  },
+
+  copyReferralCode: function () {
+    const code = (this.data.userInfo && this.data.userInfo.referralCode) || '';
+    if (!code) {
+      return;
+    }
+    wx.setClipboardData({
+      data: code,
+      success: function () {
+        wx.showToast({ title: '邀请码已复制', icon: 'success' });
+      }
     });
   },
 
@@ -83,7 +119,7 @@ Page({
       })
       .then(function (user) {
         that.setData({
-          userInfo: mapUserInfo(user, that.data.userInfo.points)
+          userInfo: mapUserInfo(user, that.data.stats)
         });
         wx.showToast({ title: '头像已更新', icon: 'success' });
       })
@@ -108,7 +144,7 @@ Page({
     auth.updateProfile({ nickname: nickname })
       .then(function (user) {
         that.setData({
-          userInfo: mapUserInfo(user, that.data.userInfo.points)
+          userInfo: mapUserInfo(user, that.data.stats)
         });
         wx.showToast({ title: '昵称已更新', icon: 'success' });
       })
@@ -121,60 +157,58 @@ Page({
   },
 
   goToScanDonate: function () {
-    wx.navigateTo({
-      url: '/pages/scan-donate/index'
-    });
+    auth.navigateWithLogin('/pages/scan-donate/index');
   },
 
   goToScanAdopt: function () {
-    wx.navigateTo({
-      url: '/pages/scan-adopt/index'
-    });
+    auth.navigateWithLogin('/pages/scan-adopt/index');
   },
 
   goToDonations: function () {
-    wx.navigateTo({
-      url: '/pages/my-donations/index'
+    auth.requireLogin().then(function () {
+      wx.navigateTo({ url: '/pages/my-donations/index' });
     });
   },
 
   goToAdoptions: function () {
-    wx.navigateTo({
-      url: '/pages/my-adoptions/index'
+    auth.requireLogin().then(function () {
+      wx.navigateTo({ url: '/pages/my-adoptions/index' });
     });
   },
 
-
-
   goToPoints: function () {
-    wx.navigateTo({
-      url: '/pages/points-history/index'
+    auth.requireLogin().then(function () {
+      wx.navigateTo({ url: '/pages/points-history/index' });
     });
   },
 
   goToStationManage: function () {
-    const stations = this.data.managedStations || [];
-    if (stations.length === 1) {
+    auth.requireLogin().then(function () {
+      const stations = this.data.managedStations || [];
+      if (stations.length === 1) {
+        wx.navigateTo({
+          url: '/pages/station-manage/index?id=' + stations[0].id
+        });
+        return;
+      }
       wx.navigateTo({
-        url: '/pages/station-manage/index?id=' + stations[0].id
+        url: '/pages/station-manage/index'
       });
-      return;
-    }
-    wx.navigateTo({
-      url: '/pages/station-manage/index'
-    });
+    }.bind(this));
   },
 
   goToStationOpen: function () {
-    const stations = this.data.flexibleManagedStations || [];
-    if (stations.length === 1) {
+    auth.requireLogin().then(function () {
+      const stations = this.data.flexibleManagedStations || [];
+      if (stations.length === 1) {
+        wx.navigateTo({
+          url: '/pages/station-open/index?id=' + stations[0].id
+        });
+        return;
+      }
       wx.navigateTo({
-        url: '/pages/station-open/index?id=' + stations[0].id
+        url: '/pages/station-open/index'
       });
-      return;
-    }
-    wx.navigateTo({
-      url: '/pages/station-open/index'
-    });
+    }.bind(this));
   }
 });

@@ -15,7 +15,11 @@
     "pages/station-manage-plant/index",
     "pages/my-donations/index",
     "pages/my-adoptions/index",
-    "pages/points-history/index"
+    "pages/points-history/index",
+    "pages/profile-setup/index",
+    "pages/login/index",
+    "pages/privacy-policy/index",
+    "pages/user-agreement/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -54,9 +58,7 @@
     }
   },
   "requiredPrivateInfos": [
-    "getLocation",
-    "startLocationUpdate",
-    "onLocationChange"
+    "getLocation"
   ],
   "usingComponents": {
     "pw-icon": "/components/icon/index"

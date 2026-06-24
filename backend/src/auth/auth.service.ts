@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
+import { HistoryAction, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { WELCOME_POINTS, getEffectivePoints, getLockedPoints } from '../common/mappers';
 import { WechatService } from './wechat.service';
 
 function generateReferralCode(): string {
@@ -30,6 +31,25 @@ export class AuthService {
     throw new Error('无法生成有效的邀请码');
   }
 
+  /** 确保新用户账户内有待解锁的欢迎积分余额（不自动解锁） */
+  async ensureWelcomePointsBalance(user: User): Promise<User> {
+    if (user.points >= WELCOME_POINTS) {
+      return user;
+    }
+
+    const donatedCount = await this.prisma.plantHistory.count({
+      where: { ownerId: user.id, action: HistoryAction.GIFT },
+    });
+    if (donatedCount > 0) {
+      return user;
+    }
+
+    return this.prisma.user.update({
+      where: { id: user.id },
+      data: { points: WELCOME_POINTS },
+    });
+  }
+
   async wxLogin(code: string, referralCode?: string) {
     const session = await this.wechatService.code2Session(code);
 
@@ -39,20 +59,22 @@ export class AuthService {
       create: {
         openid: session.openid,
         nickname: '微信用户',
-        points: 10,
+        points: WELCOME_POINTS,
         inviteUnlocked: false,
         referralCode: await this.getValidReferralCode(),
       },
     });
 
+    const userWithWelcomePoints = await this.ensureWelcomePointsBalance(user);
+
     // 处理邀请逻辑
-    if (referralCode && user.referredById === null) {
+    if (referralCode && userWithWelcomePoints.referredById === null) {
       const referrer = await this.prisma.user.findUnique({
         where: { referralCode },
       });
-      if (referrer && referrer.id !== user.id) {
+      if (referrer && referrer.id !== userWithWelcomePoints.id) {
         await this.prisma.user.update({
-          where: { id: user.id },
+          where: { id: userWithWelcomePoints.id },
           data: { referredById: referrer.id },
         });
         // 解锁邀请人的积分
@@ -65,7 +87,7 @@ export class AuthService {
       }
     }
 
-    return this.issueAuthResponse(user);
+    return this.issueAuthResponse(userWithWelcomePoints);
   }
 
   async devLogin(openid = 'dev-user-openid', nickname = '叶子先生', referralCode?: string) {
@@ -75,20 +97,22 @@ export class AuthService {
       create: {
         openid,
         nickname,
-        points: 10,
+        points: WELCOME_POINTS,
         inviteUnlocked: false,
         referralCode: await this.getValidReferralCode(),
       },
     });
 
+    const userWithWelcomePoints = await this.ensureWelcomePointsBalance(user);
+
     // 处理邀请逻辑
-    if (referralCode && user.referredById === null) {
+    if (referralCode && userWithWelcomePoints.referredById === null) {
       const referrer = await this.prisma.user.findUnique({
         where: { referralCode },
       });
-      if (referrer && referrer.id !== user.id) {
+      if (referrer && referrer.id !== userWithWelcomePoints.id) {
         await this.prisma.user.update({
-          where: { id: user.id },
+          where: { id: userWithWelcomePoints.id },
           data: { referredById: referrer.id },
         });
         if (!referrer.inviteUnlocked) {
@@ -100,7 +124,7 @@ export class AuthService {
       }
     }
 
-    return this.issueAuthResponse(user);
+    return this.issueAuthResponse(userWithWelcomePoints);
   }
 
   async validateUser(userId: string) {
@@ -129,7 +153,9 @@ export class AuthService {
       openid: user.openid,
       nickname: user.nickname,
       avatar: user.avatar,
-      points: user.points,
+      points: getEffectivePoints(user),
+      lockedPoints: getLockedPoints(user),
+      totalPoints: user.points,
       inviteUnlocked: user.inviteUnlocked,
       referralCode: user.referralCode,
       city: user.city,

@@ -2,7 +2,7 @@
   <view class="header-bg" style="padding-top: {{statusBarHeight}}px;">
     <view class="header-pattern"></view>
     <view class="user-section">
-      <view class="user-main">
+      <view class="user-main" wx:if="{{ loggedIn }}">
         <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
           <view class="avatar-wrap">
             <image wx:if="{{ userInfo.avatarUrl }}" class="avatar-img" src="{{ userInfo.avatarUrl }}" mode="aspectFill" />
@@ -24,12 +24,26 @@
             <text class="points-count">{{ userInfo.points }}</text>
             <text class="points-label">积分</text>
           </view>
+          <view class="locked-points-hint" wx:if="{{ userInfo.lockedPoints > 0 }}">
+            <text>{{ userInfo.lockedPoints }} 积分待解锁，邀请好友注册后可用</text>
+            <text class="referral-code" bindtap="copyReferralCode">复制邀请码 {{ userInfo.referralCode }}</text>
+          </view>
+        </view>
+      </view>
+      <view class="guest-main" wx:else>
+        <view class="avatar-wrap guest-avatar">
+          <pw-icon name="user" size="56" color="#FFFFFF" strokeWidth="2" />
+        </view>
+        <view class="user-info">
+          <text class="guest-title">登录 PlantShow</text>
+          <text class="guest-desc">登录后管理送养、领养与积分</text>
+          <view class="guest-login-btn" bindtap="onLoginTap">微信快捷登录</view>
         </view>
       </view>
     </view>
   </view>
 
-  <view class="stats-card glass">
+  <view class="stats-card glass" wx:if="{{ loggedIn }}">
     <view class="stat-item" bindtap="goToDonations">
       <text class="stat-count">{{ stats.donatedCount }}</text>
       <text class="stat-label">累计送养</text>
@@ -41,7 +55,7 @@
     </view>
   </view>
 
-  <view class="menu-section">
+  <view class="menu-section" wx:if="{{ loggedIn }}">
     <view class="menu-card glass">
       <view class="menu-item" bindtap="goToDonations">
         <view class="menu-icon-wrap donate">

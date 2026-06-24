@@ -94,34 +94,40 @@ function collectDetectionSignals() {
   });
 }
 
+let locationWatchTimer = null;
+let locationWatchHandler = null;
+const LOCATION_POLL_INTERVAL_MS = 30000;
+
 function startForegroundLocationWatch(onChange) {
-  if (!wx.startLocationUpdate || !wx.onLocationChange) {
+  if (typeof onChange !== 'function') {
     return Promise.resolve(false);
   }
   return requestLocationPermission().then(function (granted) {
     if (!granted) {
       return false;
     }
-    return new Promise(function (resolve) {
-      wx.startLocationUpdate({
-        success: function () {
-          wx.onLocationChange(onChange);
-          resolve(true);
-        },
-        fail: function () {
-          resolve(false);
-        }
-      });
-    });
+    locationWatchHandler = onChange;
+    if (locationWatchTimer) {
+      return true;
+    }
+    const poll = function () {
+      if (locationWatchHandler) {
+        locationWatchHandler();
+      }
+    };
+    poll();
+    locationWatchTimer = setInterval(poll, LOCATION_POLL_INTERVAL_MS);
+    return true;
   });
 }
 
 function stopForegroundLocationWatch(handler) {
-  if (handler && wx.offLocationChange) {
-    wx.offLocationChange(handler);
+  if (handler && locationWatchHandler === handler) {
+    locationWatchHandler = null;
   }
-  if (wx.stopLocationUpdate) {
-    wx.stopLocationUpdate({});
+  if (!locationWatchHandler && locationWatchTimer) {
+    clearInterval(locationWatchTimer);
+    locationWatchTimer = null;
   }
 }
 

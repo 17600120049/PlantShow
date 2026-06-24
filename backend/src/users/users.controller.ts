@@ -33,8 +33,9 @@ export class UsersController {
 
   @Get('me/stats')
   @UseGuards(JwtAuthGuard)
-  getStats(@CurrentUser() user: User) {
-    return this.usersService.getStats(user);
+  async getStats(@CurrentUser() user: User) {
+    const freshUser = await this.authService.ensureWelcomePointsBalance(user);
+    return this.usersService.getStats(freshUser);
   }
 
   @Get('me/donations')
@@ -51,14 +52,16 @@ export class UsersController {
 
   @Get('me/points')
   @UseGuards(JwtAuthGuard)
-  getPointsHistory(@CurrentUser() user: User) {
-    return this.usersService.getPointsHistory(user);
+  async getPointsHistory(@CurrentUser() user: User) {
+    const freshUser = await this.authService.ensureWelcomePointsBalance(user);
+    return this.usersService.getPointsHistory(freshUser);
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  getProfile(@CurrentUser() user: User) {
-    return this.authService.toUserDto(user);
+  async getProfile(@CurrentUser() user: User) {
+    const freshUser = await this.authService.ensureWelcomePointsBalance(user);
+    return this.authService.toUserDto(freshUser);
   }
 
   @Patch('me')

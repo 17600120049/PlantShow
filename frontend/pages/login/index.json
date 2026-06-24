@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "disableSwipeBack": true,
+  "usingComponents": {
+    "pw-icon": "/components/icon/index"
+  }
+}

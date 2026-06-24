@@ -1,0 +1,21 @@
+<view class="page">
+  <view class="content">
+    <text class="title">PlantShow 用户协议</text>
+    <text class="updated">更新日期：2025年1月1日</text>
+
+    <text class="section-title">一、服务说明</text>
+    <text class="paragraph">PlantShow 是一款连接植物送养人与领养人的公益服务平台。使用本小程序即表示您同意遵守本协议及隐私政策。</text>
+
+    <text class="section-title">二、账号与登录</text>
+    <text class="paragraph">您可通过微信快捷登录使用本服务。您应保证所填写的昵称、头像等信息真实、合法，不侵犯他人权益。</text>
+
+    <text class="section-title">三、用户行为规范</text>
+    <text class="paragraph">您不得利用本平台发布违法、虚假或侵权信息，不得干扰平台正常运营。送养与领养行为应基于真实意愿，并遵守中转站现场规则。</text>
+
+    <text class="section-title">四、免责声明</text>
+    <text class="paragraph">平台提供信息展示与撮合服务，植物健康状况、交接过程等由送养人与领养人自行确认。因不可抗力或第三方原因导致的服务中断，平台不承担相应责任。</text>
+
+    <text class="section-title">五、协议变更</text>
+    <text class="paragraph">我们可能适时修订本协议，修订后将通过小程序内公告等方式通知。继续使用服务即视为接受修订后的协议。</text>
+  </view>
+</view>

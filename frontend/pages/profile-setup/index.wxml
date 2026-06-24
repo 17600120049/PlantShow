@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="overlay" catchtouchmove="preventMove">
+    <view class="modal glass">
+      <view class="modal-header">
+        <text class="modal-title">完善个人信息</text>
+        <text class="modal-subtitle">设置头像和昵称，让领养伙伴认识你</text>
+      </view>
+
+      <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <view class="avatar-wrap">
+          <image wx:if="{{ avatarDisplay }}" class="avatar-img" src="{{ avatarDisplay }}" mode="aspectFill" />
+          <pw-icon wx:else name="user" size="64" color="#2D4739" strokeWidth="2" />
+        </view>
+        <text class="avatar-hint">{{ avatarDisplay ? '点击更换头像' : '点击选择头像' }}</text>
+      </button>
+
+      <view class="nickname-field">
+        <text class="field-label">昵称</text>
+        <input
+          class="nickname-input"
+          type="nickname"
+          value="{{ nickname }}"
+          placeholder="点击填写昵称"
+          placeholder-class="nickname-placeholder"
+          bindinput="onNicknameInput"
+          bindblur="onNicknameBlur"
+          maxlength="32"
+        />
+      </view>
+
+      <button
+        class="primary-btn {{ canSubmit && !saving ? '' : 'primary-btn--inactive' }}"
+        bindtap="onSave"
+        loading="{{ saving }}"
+        disabled="{{ saving }}"
+      >
+        <text class="primary-btn-text">完成</text>
+      </button>
+      <view class="skip-btn" bindtap="onSkip">稍后设置</view>
+    </view>
+  </view>
+</view>

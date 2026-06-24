@@ -2,6 +2,7 @@ const { setupDetailNav } = require('../../utils/system');
 const { parseQrResult } = require('../../utils/qr');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
+const auth = require('../../utils/auth');
 
 Page({
   data: {
@@ -26,6 +27,9 @@ Page({
 
   onLoad: function () {
     setupDetailNav(this);
+    auth.requireLogin().catch(function () {
+      wx.navigateBack();
+    });
   },
 
   goBack: function () {

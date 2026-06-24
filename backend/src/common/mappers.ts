@@ -11,7 +11,16 @@ import {
 import { parsePlantPhotos, getPlantCoverPhoto } from './plant-photos';
 
 export const DONATE_POINTS = 10;
+export const WELCOME_POINTS = 10;
 export const QR_PREFIX = 'plantshow://';
+
+export function getEffectivePoints(user: { points: number; inviteUnlocked: boolean }) {
+  return user.inviteUnlocked ? user.points : 0;
+}
+
+export function getLockedPoints(user: { points: number; inviteUnlocked: boolean }) {
+  return user.inviteUnlocked ? 0 : user.points;
+}
 
 export type PlantWithStation = Plant & {
   station?: Station | null;

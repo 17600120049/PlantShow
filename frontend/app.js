@@ -20,19 +20,22 @@ function loadAppFonts() {
 }
 
 App({
-  onLaunch: function () {
+  onLaunch: function (options) {
     const config = require('./config');
     this.globalData.apiBaseUrl = config.getApiBaseUrl();
     console.log('[api] baseUrl =', this.globalData.apiBaseUrl);
 
+    if (options && options.query && options.query.referral) {
+      this.globalData.pendingReferralCode = options.query.referral;
+    }
+
     const auth = require('./utils/auth');
     const plantStore = require('./utils/plantStore');
     const stationAutoSync = require('./utils/stationAutoSync');
-    auth.ensureLogin(this).then(function () {
+    auth.initSession(this);
+    if (auth.isLoggedIn(this)) {
       stationAutoSync.runOnAppActive();
-    }).catch(function (err) {
-      console.warn('[auth] 自动登录失败', err);
-    });
+    }
     plantStore.probeApi().then(function (online) {
       if (!online) {
         console.warn('[api] 无法连接后端，请确认 apiBaseUrl 配置正确且后端已启动');
@@ -42,13 +45,17 @@ App({
   },
 
   onShow: function () {
+    const auth = require('./utils/auth');
     const stationAutoSync = require('./utils/stationAutoSync');
-    stationAutoSync.runOnAppActive();
+    if (auth.isLoggedIn()) {
+      stationAutoSync.runOnAppActive();
+    }
   },
 
   globalData: {
     userInfo: null,
     token: '',
-    apiBaseUrl: ''
+    apiBaseUrl: '',
+    pendingReferralCode: ''
   }
 });

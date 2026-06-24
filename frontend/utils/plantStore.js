@@ -150,7 +150,7 @@ function donatePlant(payload) {
 
   return photoPromise
     .then(function (photoUrl) {
-      return auth.ensureLogin().then(function () {
+      return auth.requireSession().then(function () {
         return request.post('/plants/donate', {
           plantCode: payload.plantCode,
           name: payload.name,
@@ -174,7 +174,7 @@ function donatePlant(payload) {
 
 function adoptPlant(plantId) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.post('/plants/' + plantId + '/adopt', {});
     })
@@ -185,7 +185,7 @@ function adoptPlant(plantId) {
 
 function getUserStats() {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/stats');
     })
@@ -196,7 +196,7 @@ function getUserStats() {
 
 function getMyDonations() {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/donations');
     })
@@ -214,7 +214,7 @@ function getMyDonations() {
 
 function getMyAdoptions() {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/adoptions');
     })
@@ -232,7 +232,7 @@ function getMyAdoptions() {
 
 function getPointsHistory() {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/points');
     })
@@ -243,7 +243,7 @@ function getPointsHistory() {
 
 function getFavorites() {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/favorites');
     })
@@ -260,7 +260,7 @@ function getFavorites() {
 
 function checkPlantFavorite(plantId) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/favorites/check', { plantId: plantId });
     })
@@ -274,7 +274,7 @@ function checkPlantFavorite(plantId) {
 
 function checkStationFavorite(stationId) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/favorites/check', { stationId: stationId });
     })
@@ -288,7 +288,7 @@ function checkStationFavorite(stationId) {
 
 function addFavorite(payload) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.post('/users/me/favorites', payload);
     })
@@ -299,7 +299,7 @@ function addFavorite(payload) {
 
 function removeFavorite(payload) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       const query = { targetType: payload.targetType };
       if (payload.plantId) {
@@ -350,7 +350,7 @@ function scanCode() {
 
 function submitStationApplication(data) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.post('/station-applications', data);
     })
@@ -361,7 +361,7 @@ function submitStationApplication(data) {
 
 function getManagedStations() {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/users/me/managed-stations');
     })
@@ -375,7 +375,7 @@ function getManagedStations() {
 
 function getStationManagerAccess(stationId) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/stations/' + stationId + '/manager-access');
     })
@@ -389,7 +389,7 @@ function getStationManagerAccess(stationId) {
 
 function setStationOpenStatus(stationId, isActive) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return apiPatch('/stations/' + stationId + '/open-status', { isActive: isActive });
     })
@@ -403,7 +403,7 @@ function setStationOpenStatus(stationId, isActive) {
 
 function updateManagedStation(stationId, data) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return apiPatch('/stations/' + stationId + '/managed', data);
     })
@@ -417,7 +417,7 @@ function updateManagedStation(stationId, data) {
 
 function getManagedPlants(stationId) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.get('/stations/' + stationId + '/managed-plants');
     })
@@ -431,7 +431,7 @@ function getManagedPlants(stationId) {
 
 function updateManagedPlant(stationId, plantId, data) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return apiPatch('/stations/' + stationId + '/plants/' + plantId, data);
     })
@@ -445,7 +445,7 @@ function updateManagedPlant(stationId, plantId, data) {
 
 function syncStationOpenStatus(stationId, signals) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.post('/stations/' + stationId + '/open-status/sync', signals || {});
     })
@@ -461,7 +461,7 @@ function syncStationOpenStatus(stationId, signals) {
 
 function syncManagedOpenStatus(signals) {
   return auth
-    .ensureLogin()
+    .requireSession()
     .then(function () {
       return request.post('/users/me/managed-stations/open-status/sync', signals || {});
     })

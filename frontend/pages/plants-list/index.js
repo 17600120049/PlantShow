@@ -1,6 +1,7 @@
 const { setupDetailNav } = require('../../utils/system');
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
+const auth = require('../../utils/auth');
 
 function buildStationOptions(plants) {
   const stationMap = {};
@@ -58,7 +59,12 @@ Page({
 
   onLoad: function () {
     setupDetailNav(this);
-    this.loadPlants();
+    const that = this;
+    auth.requireLogin().then(function () {
+      that.loadPlants();
+    }).catch(function () {
+      wx.navigateBack();
+    });
   },
 
   loadPlants: function () {

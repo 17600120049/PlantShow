@@ -11,7 +11,7 @@ import {
 } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { resolveStationIsActive } from '../common/station-hours';
-import { DONATE_POINTS, toPlantDto } from '../common/mappers';
+import { DONATE_POINTS, getEffectivePoints, toPlantDto } from '../common/mappers';
 import { photosToPrismaJson, normalizePhotosInput, getPlantCoverPhoto } from '../common/plant-photos';
 import { DonatePlantDto } from './dto/donate-plant.dto';
 
@@ -192,7 +192,8 @@ export class PlantsService {
         address: station.address,
       },
       points: DONATE_POINTS,
-      totalPoints: result.updatedUser.points,
+      totalPoints: getEffectivePoints(result.updatedUser),
+      lockedPoints: result.updatedUser.inviteUnlocked ? 0 : result.updatedUser.points,
       qrPath: `/api/qr/plant/${result.plant.plantCode}`,
     };
   }

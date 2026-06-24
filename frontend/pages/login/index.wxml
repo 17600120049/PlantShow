@@ -1,0 +1,46 @@
+<view class="page">
+  <view class="overlay" catchtouchmove="preventMove">
+    <view class="modal glass">
+      <view class="brand-wrap">
+        <text class="brand-title">PlantShow</text>
+        <text class="brand-subtitle">登录后查看植物详情、使用扫码送养与领养</text>
+      </view>
+
+      <view class="referral-field">
+        <text class="field-label">邀请码（选填）</text>
+        <input
+          class="referral-input"
+          value="{{ referralCode }}"
+          placeholder="填写好友邀请码，帮助对方解锁积分"
+          placeholder-class="referral-placeholder"
+          maxlength="8"
+          bindinput="onReferralInput"
+        />
+      </view>
+
+      <view class="agreement-row" bindtap="toggleAgreement">
+        <view class="checkbox {{ agreed ? 'checked' : '' }}">
+          <text wx:if="{{ agreed }}">✓</text>
+        </view>
+        <view class="agreement-text">
+          <text>我已阅读并同意</text>
+          <text class="link" catchtap="openUserAgreement">《用户协议》</text>
+          <text>和</text>
+          <text class="link" catchtap="openPrivacyPolicy">《隐私政策》</text>
+        </view>
+      </view>
+
+      <button
+        class="wechat-login-btn"
+        bindtap="onWechatLogin"
+        loading="{{ loggingIn }}"
+        disabled="{{ loggingIn || !agreed }}"
+      >
+        <pw-icon name="user" size="40" color="#FFFFFF" strokeWidth="2" />
+        <text>微信快捷登录</text>
+      </button>
+
+      <view class="cancel-btn" bindtap="onCancel">暂不登录</view>
+    </view>
+  </view>
+</view>

@@ -2,6 +2,7 @@ const { initStatusBarHeight, setTabBarSelected } = require('../../utils/system')
 const plantStore = require('../../utils/plantStore');
 const media = require('../../utils/media');
 const navigation = require('../../utils/navigation');
+const auth = require('../../utils/auth');
 
 const HOME_STATIONS_LIMIT = 3;
 
@@ -71,9 +72,7 @@ Page({
 
   goToStationDetail: function (e) {
     const id = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: `/pages/station-detail/index?id=${id}`
-    });
+    auth.navigateWithLogin('/pages/station-detail/index?id=' + id);
   },
 
   openStationNavigation: function (e) {
@@ -85,33 +84,23 @@ Page({
   },
 
   goToScanDonate: function () {
-    wx.navigateTo({
-      url: '/pages/scan-donate/index'
-    });
+    auth.navigateWithLogin('/pages/scan-donate/index');
   },
 
   goToScanAdopt: function () {
-    wx.navigateTo({
-      url: '/pages/scan-adopt/index'
-    });
+    auth.navigateWithLogin('/pages/scan-adopt/index');
   },
 
   goToPlantDetail: function (e) {
     const id = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: `/pages/plant-detail/index?id=${id}`
-    });
+    auth.navigateWithLogin('/pages/plant-detail/index?id=' + id);
   },
 
   viewAllStations: function () {
-    wx.navigateTo({
-      url: '/pages/stations-list/index'
-    });
+    auth.navigateWithLogin('/pages/stations-list/index');
   },
 
   viewAllPlants: function () {
-    wx.navigateTo({
-      url: '/pages/plants-list/index'
-    });
+    auth.navigateWithLogin('/pages/plants-list/index');
   }
 });
