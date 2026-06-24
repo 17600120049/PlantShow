@@ -17,6 +17,10 @@
     "docker:down": "docker compose down",
     "docker:deploy": "docker compose up -d --build",
     "docker:prod": "bash scripts/deploy-prod.sh",
+    "docker:upgrade": "bash scripts/upgrade-prod.sh",
+    "docker:upgrade:all": "bash scripts/upgrade-prod.sh --all",
+    "deploy:upgrade": "powershell -ExecutionPolicy Bypass -File scripts/push-upgrade.ps1",
+    "deploy:push": "git push gitee main",
     "docker:ssl": "bash scripts/init-ssl.sh",
     "docker:logs": "docker compose logs -f"
   }

@@ -13,6 +13,7 @@ build/
 .env
 .env.local
 .env.*.local
+scripts/deploy.env
 
 # Editor directories and files
 .vscode/
