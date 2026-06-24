@@ -23,12 +23,12 @@ export default function LoginPage() {
         <Typography.Paragraph type="secondary">
           管理用户、积分、中转站与植物数据
         </Typography.Paragraph>
-        <Form form={form} layout="vertical" onFinish={onFinish} initialValues={{ username: 'admin' }}>
+        <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item name="username" label="用户名" rules={[{ required: true, message: '请输入用户名' }]}>
-            <Input size="large" placeholder="admin" />
+            <Input size="large" />
           </Form.Item>
           <Form.Item name="password" label="密码" rules={[{ required: true, message: '请输入密码' }]}>
-            <Input.Password size="large" placeholder="admin123" />
+            <Input.Password size="large" />
           </Form.Item>
           <Button type="primary" htmlType="submit" size="large" block>
             登录

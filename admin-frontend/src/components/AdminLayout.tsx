@@ -1,12 +1,14 @@
-﻿import { Layout, Menu } from 'antd';
+﻿import { Button, Layout, Menu } from 'antd';
 import {
   DashboardOutlined,
   UserOutlined,
   ShopOutlined,
   EnvironmentOutlined,
   FormOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { clearToken } from '../api';
 
 const { Header, Sider, Content } = Layout;
 
@@ -22,6 +24,11 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleLogout = () => {
+    clearToken();
+    navigate('/login');
+  };
+
   return (
     <Layout className="admin-layout">
       <Sider className="admin-sider" width={168} theme="dark" style={{ background: '#1a2e24' }}>
@@ -36,8 +43,19 @@ export default function AdminLayout() {
         />
       </Sider>
       <Layout>
-        <Header style={{ background: '#fff', padding: '0 24px', fontWeight: 600 }}>
-          管理后台
+        <Header
+          style={{
+            background: '#fff',
+            padding: '0 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>管理后台</span>
+          <Button type="text" icon={<LogoutOutlined />} onClick={handleLogout}>
+            退出登录
+          </Button>
         </Header>
         <Content className="admin-content">
           <Outlet />

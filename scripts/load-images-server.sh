@@ -36,4 +36,4 @@ docker compose logs backend --tail=30
 
 echo ""
 echo "成功标志: plant-show-backend 为 Up (healthy)"
-echo "访问: http://你的公网IP/admin/"
+echo "访问: http://123.57.244.162/admin/"
